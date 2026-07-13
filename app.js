@@ -8,10 +8,14 @@ const byName = new Map(PALS.map(p => [p.name, p]));
 const dexOrder = new Map(PALS.map((p, i) => [p.name, i]));
 const ELEMENTS = ['Neutral', 'Fire', 'Water', 'Grass', 'Electric', 'Ground', 'Rock', 'Ice', 'Dragon', 'Dark'];
 const CREW_SOFT_CAP = 15;
+// auto-fill: a 2nd worker on the same job counts half as much as the 1st, a 3rd a quarter, …
+const AUTOFILL_DIMINISH = 0.5;
+const AUTOFILL_MIN_GAIN = 0.9;
 
 /* ================= state ================= */
-const LS_ROSTER = 'palplanner.roster.v1';
-const LS_BASES = 'palplanner.bases.v1';
+const LS_ROSTER_V1 = 'palplanner.roster.v1'; // legacy: array of owned names
+const LS_ROSTER = 'palplanner.roster.v2';    // { name: copies }
+const LS_BASES = 'palplanner.bases.v1';      // crew: [{name, qty}] (legacy: array of names)
 const LS_UI = 'palplanner.ui.v1';
 
 function lsLoad(key, fallback) {
@@ -21,15 +25,41 @@ function lsLoad(key, fallback) {
   } catch { return fallback; }
 }
 
-let roster = new Set(lsLoad(LS_ROSTER, []).filter(n => byName.has(n)));
-let bases = lsLoad(LS_BASES, []).filter(b => b && Array.isArray(b.crew));
+// roster: { name: copies owned }
+let roster = (() => {
+  const v2 = lsLoad(LS_ROSTER, null);
+  const src = v2 !== null ? v2
+    : Object.fromEntries(lsLoad(LS_ROSTER_V1, []).map(n => [n, 1]));
+  const clean = {};
+  for (const [n, q] of Object.entries(src)) {
+    const qty = Math.floor(Number(q));
+    if (byName.has(n) && qty > 0) clean[n] = qty;
+  }
+  return clean;
+})();
+
+// accepts legacy ["A","B"] and current [{name, qty}]; merges duplicates
+function normalizeCrew(crew) {
+  const m = new Map();
+  for (const item of crew) {
+    const name = typeof item === 'string' ? item : item && item.name;
+    const qty = typeof item === 'string' ? 1 : Math.max(1, Math.floor(Number(item && item.qty) || 1));
+    if (byName.has(name)) m.set(name, (m.get(name) || 0) + qty);
+  }
+  return [...m].map(([name, qty]) => ({ name, qty }));
+}
+
+let bases = lsLoad(LS_BASES, [])
+  .filter(b => b && b.id && Array.isArray(b.crew))
+  .map(b => ({ id: String(b.id), name: String(b.name || 'Base'), crew: normalizeCrew(b.crew) }));
+
 let ui = Object.assign(
   { view: 'roster', baseId: null, search: '', element: '', work: '', ownedOnly: false, sort: 'dex' },
   lsLoad(LS_UI, {})
 );
 
 function persist() {
-  localStorage.setItem(LS_ROSTER, JSON.stringify([...roster]));
+  localStorage.setItem(LS_ROSTER, JSON.stringify(roster));
   localStorage.setItem(LS_BASES, JSON.stringify(bases));
   localStorage.setItem(LS_UI, JSON.stringify(ui));
 }
@@ -50,6 +80,30 @@ function el(tag, attrs = {}, ...children) {
   }
   return node;
 }
+
+const copiesOf = name => roster[name] || 0;
+const isOwned = name => copiesOf(name) > 0;
+function setCopies(name, n) {
+  if (n > 0) roster[name] = n; else delete roster[name];
+  persist();
+}
+const uniqueOwned = () => Object.keys(roster).length;
+const totalCopies = () => Object.values(roster).reduce((a, b) => a + b, 0);
+
+const crewEntry = (base, name) => base.crew.find(e => e.name === name);
+const crewTotal = base => base.crew.reduce((s, e) => s + e.qty, 0);
+const crewQty = (base, name) => (crewEntry(base, name) || { qty: 0 }).qty;
+function addToCrew(base, name, n = 1) {
+  const e = crewEntry(base, name);
+  if (e) e.qty += n; else base.crew.push({ name, qty: n });
+}
+function setCrewQty(base, name, qty) {
+  if (qty <= 0) base.crew = base.crew.filter(e => e.name !== name);
+  else crewEntry(base, name).qty = qty;
+}
+// how many copies of this crew entry you still have to catch
+const shortfallOf = (base, name) => Math.max(0, crewQty(base, name) - copiesOf(name));
+const baseShortfall = base => base.crew.reduce((s, e) => s + shortfallOf(base, e.name), 0);
 
 const isNight = p => p.elements.includes('Dark');
 const dexLabel = p => p.paldex ? '#' + p.paldex : '★';
@@ -74,22 +128,39 @@ function elementChips(p) {
   );
 }
 
-function coverage(crewNames) {
-  const cov = {};
+// − n + stepper; get()/set() own the value, onAfter re-renders
+function qtyStepper(get, set, onAfter) {
+  const qty = el('span', { class: 'qty' + (get() ? '' : ' zero') }, String(get()));
+  const refresh = () => { qty.textContent = String(get()); qty.classList.toggle('zero', !get()); };
+  return el('span', { class: 'qty-step' },
+    el('button', { title: 'One less', onclick: e => { e.stopPropagation(); set(Math.max(0, get() - 1)); refresh(); onAfter(); } }, '−'),
+    qty,
+    el('button', { title: 'One more', onclick: e => { e.stopPropagation(); set(get() + 1); refresh(); onAfter(); } }, '+')
+  );
+}
+
+/* per work type: who in this crew contributes, and the full stack of levels (copies expanded) */
+function coverageDetail(base) {
+  const det = {};
   for (const w of WORKS) {
-    let level = 0, by = null;
-    for (const name of crewNames) {
-      const p = byName.get(name);
-      if (p && (p.works[w] || 0) > level) { level = p.works[w]; by = p.name; }
+    const contributors = [];
+    for (const e of base.crew) {
+      const p = byName.get(e.name);
+      if (!p) continue;
+      const lv = p.works[w] || 0;
+      if (!lv) continue;
+      contributors.push({ name: e.name, level: lv, qty: e.qty, short: shortfallOf(base, e.name) });
     }
-    cov[w] = { level, by };
+    contributors.sort((a, b) => b.level - a.level || b.qty - a.qty);
+    const levels = contributors.flatMap(c => Array(c.qty).fill(c.level)).sort((a, b) => b - a);
+    det[w] = { contributors, levels };
   }
-  return cov;
+  return det;
 }
 
 function renderHeaderStats() {
   $('#header-stats').textContent =
-    `v1.0 data · ${roster.size} / ${PALS.length} pals owned · ${bases.length} base${bases.length === 1 ? '' : 's'} saved`;
+    `v1.0 data · ${uniqueOwned()} / ${PALS.length} pals owned · ${bases.length} base${bases.length === 1 ? '' : 's'} saved`;
 }
 
 /* ================= roster view ================= */
@@ -102,7 +173,7 @@ function matchesFilters(p) {
   }
   if (ui.element && !p.elements.includes(ui.element)) return false;
   if (ui.work && !(ui.work in p.works)) return false;
-  if (ui.ownedOnly && !roster.has(p.name)) return false;
+  if (ui.ownedOnly && !isOwned(p.name)) return false;
   return true;
 }
 
@@ -161,7 +232,8 @@ function renderRoster() {
   function renderList() {
     const pals = sortPals(PALS.filter(matchesFilters));
     countPill.innerHTML = '';
-    countPill.append('Own ', el('b', {}, String(roster.size)), ` / ${PALS.length}`,
+    countPill.append('Own ', el('b', {}, String(uniqueOwned())), ` / ${PALS.length}`,
+      totalCopies() > uniqueOwned() ? ` · ${totalCopies()} copies` : '',
       pals.length !== PALS.length ? ` · showing ${pals.length}` : '');
     listWrap.innerHTML = '';
     if (!pals.length) {
@@ -169,23 +241,28 @@ function renderRoster() {
       return;
     }
     for (const p of pals) {
-      const owned = roster.has(p.name);
-      listWrap.append(el('div', { class: 'pal-row' + (owned ? ' owned' : '') },
+      const owned = isOwned(p.name);
+      const row = el('div', { class: 'pal-row' + (owned ? ' owned' : '') });
+      row.append(
         el('input', {
-          type: 'checkbox', class: 'own-toggle', title: owned ? 'Owned — click to remove' : 'Click when you catch one',
+          type: 'checkbox', class: 'own-toggle',
+          title: owned ? 'Owned — uncheck to set copies to 0' : 'Check when you catch one',
           ...(owned ? { checked: '' } : {}),
           onchange: e => {
-            e.target.checked ? roster.add(p.name) : roster.delete(p.name);
-            persist(); renderHeaderStats(); renderList();
+            setCopies(p.name, e.target.checked ? Math.max(1, copiesOf(p.name)) : 0);
+            renderHeaderStats(); renderList();
           }
         }),
+        qtyStepper(() => copiesOf(p.name), n => setCopies(p.name, n),
+          () => { renderHeaderStats(); renderList(); }),
         palIcon(p),
         el('span', { class: 'pal-id' }, dexLabel(p)),
         el('span', { class: 'pal-name' },
           el('a', { href: 'https://paldb.cc/en/' + p.slug, target: '_blank', rel: 'noopener' }, p.name)),
         elementChips(p),
         el('span', { class: 'work-chips' }, sortedWorks(p).map(([w, l]) => workChip(w, l)))
-      ));
+      );
+      listWrap.append(row);
     }
   }
   renderList();
@@ -207,15 +284,16 @@ function renderBases() {
 
   const grid = el('div', { class: 'grid-cards' });
   for (const b of bases) {
-    const missing = b.crew.filter(n => !roster.has(n));
-    const cov = coverage(b.crew);
-    const covered = WORKS.filter(w => cov[w].level > 0).length;
+    const total = crewTotal(b);
+    const missing = baseShortfall(b);
+    const det = coverageDetail(b);
+    const covered = WORKS.filter(w => det[w].levels.length > 0).length;
     grid.append(el('div', { class: 'base-card', onclick: () => { ui.baseId = b.id; persist(); render(); } },
       el('h3', {}, b.name),
-      el('div', { class: 'meta' }, `${b.crew.length} pal${b.crew.length === 1 ? '' : 's'} · covers ${covered}/12 work types`),
-      missing.length
-        ? el('div', { class: 'missing' }, `⚠ ${missing.length} still to catch`)
-        : el('div', { class: 'meta', style: 'color: var(--ok)' }, b.crew.length ? '✓ full crew owned' : 'empty')
+      el('div', { class: 'meta' }, `${total} pal${total === 1 ? '' : 's'} · covers ${covered}/12 work types`),
+      missing
+        ? el('div', { class: 'missing' }, `⚠ ${missing} cop${missing === 1 ? 'y' : 'ies'} still to catch`)
+        : el('div', { class: 'meta', style: 'color: var(--ok)' }, total ? '✓ full crew owned' : 'empty')
     ));
   }
   grid.append(el('div', { class: 'base-card new', onclick: newBase }, '+ New base'));
@@ -248,16 +326,14 @@ function renderEditor(view, base) {
   const right = el('div', {});
   view.append(head, el('div', { class: 'editor-cols' }, left, right));
 
-  /* ---- crew panel (left) ---- */
   function refresh() { left.innerHTML = ''; right.innerHTML = ''; buildLeft(); buildRight(); }
 
-  function addPal(name) {
-    if (!base.crew.includes(name)) { base.crew.push(name); persist(); refresh(); }
-  }
+  function addPal(name) { addToCrew(base, name, 1); persist(); refresh(); }
 
+  /* ---- crew panel (left) ---- */
   function buildLeft() {
     const crewPanel = el('div', { class: 'panel' });
-    crewPanel.append(el('h3', {}, `Crew (${base.crew.length})`));
+    crewPanel.append(el('h3', {}, `Crew (${crewTotal(base)})`));
 
     // pal picker
     const input = el('input', { type: 'search', placeholder: 'Add a pal — type name or #paldex…', autocomplete: 'off' });
@@ -268,11 +344,11 @@ function renderEditor(view, base) {
       drop.innerHTML = '';
       if (!q) { drop.hidden = true; return; }
       const matches = PALS.filter(p =>
-        !base.crew.includes(p.name) &&
-        (p.name.toLowerCase().includes(q) || (p.paldex && ('#' + p.paldex.toLowerCase()).includes(q)))
+        p.name.toLowerCase().includes(q) || (p.paldex && ('#' + p.paldex.toLowerCase()).includes(q))
       ).slice(0, 9);
       if (!matches.length) { drop.hidden = true; return; }
       for (const p of matches) {
+        const inCrew = crewQty(base, p.name);
         drop.append(el('div', {
           class: 'pick-row',
           onmousedown: e => { e.preventDefault(); input.value = ''; drop.hidden = true; addPal(p.name); }
@@ -280,9 +356,10 @@ function renderEditor(view, base) {
           palIcon(p, 'pal-icon'),
           el('span', { class: 'pal-id' }, dexLabel(p)),
           el('b', {}, p.name),
-          roster.has(p.name)
-            ? el('span', { class: 'status have' }, 'owned')
+          isOwned(p.name)
+            ? el('span', { class: 'status have' }, `owned ×${copiesOf(p.name)}`)
             : el('span', { class: 'status need' }, 'not owned'),
+          inCrew ? el('span', { class: 'status increw' }, `in crew ×${inCrew}`) : null,
           el('span', { class: 'works-mini' }, sortedWorks(p).slice(0, 3).map(([w, l]) => `${w} ${l}`).join(' · '))
         ));
       }
@@ -298,77 +375,104 @@ function renderEditor(view, base) {
     if (!base.crew.length) {
       list.append(el('div', { class: 'empty-note' }, 'No pals yet — search above, or click a work tile to see the best pals for that job.'));
     }
-    for (const name of base.crew) {
-      const p = byName.get(name);
+    for (const entry of base.crew) {
+      const p = byName.get(entry.name);
       if (!p) continue;
-      const owned = roster.has(name);
-      list.append(el('div', { class: 'crew-row ' + (owned ? 'have' : 'need') },
+      const have = copiesOf(entry.name);
+      const short = shortfallOf(base, entry.name);
+      const status = short === 0
+        ? el('span', { class: 'status have' }, 'owned')
+        : (have > 0
+          ? el('span', { class: 'status need' }, `have ${have} / ${entry.qty}`)
+          : el('span', { class: 'status need' }, 'to catch' + (entry.qty > 1 ? ` ×${entry.qty}` : '')));
+      list.append(el('div', { class: 'crew-row ' + (short === 0 ? 'have' : 'need') },
         palIcon(p),
         el('b', {}, p.name),
         isNight(p) ? el('span', { class: 'night', title: 'Works through the night' }, '🌙') : null,
-        el('span', { class: 'status ' + (owned ? 'have' : 'need') }, owned ? 'owned' : 'to catch'),
+        status,
+        qtyStepper(() => crewQty(base, entry.name), n => { setCrewQty(base, entry.name, n); persist(); }, refresh),
         el('span', { class: 'work-chips' }, sortedWorks(p).map(([w, l]) => workChip(w, l))),
-        el('button', { class: 'rm', title: 'Remove from crew', onclick: () => { base.crew = base.crew.filter(n => n !== name); persist(); refresh(); } }, '✕')
+        el('button', { class: 'rm', title: 'Remove from crew', onclick: () => { setCrewQty(base, entry.name, 0); persist(); refresh(); } }, '✕')
       ));
     }
     crewPanel.append(list);
 
-    if (base.crew.length > CREW_SOFT_CAP) {
+    if (crewTotal(base) > CREW_SOFT_CAP) {
       crewPanel.append(el('div', { class: 'crew-cap' },
-        `⚠ ${base.crew.length} pals — check your in-game base worker cap before planning this many.`));
+        `⚠ ${crewTotal(base)} pals — check your in-game base worker cap before planning this many.`));
     }
 
-    // autofill from roster
     crewPanel.append(el('div', { style: 'margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;' },
-      el('button', { class: 'btn', onclick: () => { autofill(base); refresh(); } }, 'Auto-fill gaps from my roster'),
+      el('button', { class: 'btn', onclick: () => { autofill(base); refresh(); } }, 'Auto-fill from my roster'),
       el('button', { class: 'ghost', onclick: () => { base.crew = []; persist(); refresh(); } }, 'Clear crew')
     ));
     crewPanel.append(el('div', { class: 'tips' },
-      'Auto-fill greedily adds your best owned pals until every work type this crew can improve is covered.'));
+      `Auto-fill adds your best spare copies up to ${CREW_SOFT_CAP} workers. Extra workers on the same job count for less (2nd counts half, 3rd a quarter…), so it covers empty jobs first, then stacks your strongest pals.`));
 
     left.append(crewPanel);
   }
 
-  /* ---- coverage + needed (right) ---- */
+  /* ---- coverage + catch list (right) ---- */
   function buildRight() {
-    const cov = coverage(base.crew);
+    const det = coverageDetail(base);
 
     const covPanel = el('div', { class: 'panel' });
     covPanel.append(el('h3', {}, 'Work coverage ', el('span', { class: 'hint' }, '— click a tile for the best pals for that job')));
     const grid = el('div', { class: 'cov-grid' });
+    const MAX_BADGES = 8, MAX_PROVIDERS = 3;
     for (const w of WORKS) {
-      const { level, by } = cov[w];
-      const provider = by ? byName.get(by) : null;
-      const providerOwned = by ? roster.has(by) : true;
-      grid.append(el('div', { class: 'cov-tile' + (level ? '' : ' zero'), onclick: () => openWorkModal(w, base, refresh) },
-        el('div', { class: 'w-name' }, w),
-        el('div', { class: `w-lv lv${level}` }, level ? el('b', {}, String(level)) : '—'),
-        el('div', { class: 'w-by' + (providerOwned ? '' : ' need') },
-          by ? (providerOwned ? by : `${by} (to catch)`) : 'uncovered')
-      ));
+      const { contributors, levels } = det[w];
+      const tile = el('div', { class: 'cov-tile' + (levels.length ? '' : ' zero'), onclick: () => openWorkModal(w, base, refresh) });
+      tile.append(el('div', { class: 'w-name' }, w + (levels.length > 1 ? ` · ${levels.length} workers` : '')));
+
+      const badges = el('div', { class: 'lv-badges' });
+      if (!levels.length) badges.append(el('span', { class: 'w-dash' }, '—'));
+      for (const lv of levels.slice(0, MAX_BADGES)) {
+        badges.append(el('span', { class: `lv-badge lv${lv}` }, el('b', {}, String(lv))));
+      }
+      if (levels.length > MAX_BADGES) badges.append(el('span', { class: 'w-dash' }, `+${levels.length - MAX_BADGES}`));
+      tile.append(badges);
+
+      if (!contributors.length) {
+        tile.append(el('div', { class: 'w-by' }, 'uncovered'));
+      } else {
+        for (const c of contributors.slice(0, MAX_PROVIDERS)) {
+          tile.append(el('div', { class: 'w-by' + (c.short ? ' need' : '') },
+            `${c.name}${c.qty > 1 ? ` ×${c.qty}` : ''}${c.short ? ' (to catch)' : ''}`));
+        }
+        if (contributors.length > MAX_PROVIDERS) {
+          tile.append(el('div', { class: 'w-by' }, `+${contributors.length - MAX_PROVIDERS} more`));
+        }
+      }
+      grid.append(tile);
     }
     covPanel.append(grid);
 
-    const needed = base.crew.filter(n => !roster.has(n));
+    // catch list: per pal, how many copies you're short
+    const needed = base.crew
+      .map(e => ({ ...e, short: shortfallOf(base, e.name) }))
+      .filter(e => e.short > 0);
+    const totalShort = needed.reduce((s, e) => s + e.short, 0);
     const needPanel = el('div', { class: 'panel', style: 'margin-top:14px;' });
-    needPanel.append(el('h3', {}, `Catch list (${needed.length})`));
+    needPanel.append(el('h3', {}, `Catch list (${totalShort})`));
     if (!needed.length) {
       needPanel.append(el('div', { class: 'tips' }, base.crew.length
-        ? '✓ You own everyone in this crew — this base is ready to build.'
+        ? '✓ You own every copy this crew needs — this base is ready to build.'
         : 'Add pals to the crew to see what you still need to catch.'));
     } else {
       const list = el('div', { class: 'needed-list' });
-      for (const name of needed) {
-        const p = byName.get(name);
+      for (const e of needed) {
+        const p = byName.get(e.name);
         list.append(el('div', { class: 'crew-row need' },
           palIcon(p),
           el('b', {},
             el('a', { href: 'https://paldb.cc/en/' + p.slug, target: '_blank', rel: 'noopener', title: 'Open on paldb.cc (habitat, breeding combos)' }, p.name)),
+          el('span', { class: 'status need' }, `need ${e.qty} · have ${copiesOf(e.name)}`),
           el('span', { class: 'work-chips' }, sortedWorks(p).slice(0, 3).map(([w, l]) => workChip(w, l))),
           el('button', {
-            class: 'add-btn', title: 'Mark as caught — adds to your roster',
-            onclick: () => { roster.add(name); persist(); renderHeaderStats(); refresh(); }
-          }, 'Caught it!')
+            class: 'add-btn', title: 'Caught one — adds a copy to your roster',
+            onclick: () => { setCopies(e.name, copiesOf(e.name) + 1); renderHeaderStats(); refresh(); }
+          }, 'Caught one!')
         ));
       }
       needPanel.append(list);
@@ -381,19 +485,34 @@ function renderEditor(view, base) {
   refresh();
 }
 
-/* greedy: add owned pals that raise this crew's coverage the most */
+/* ================= auto-fill =================
+   Greedy: repeatedly add the spare owned copy that raises the crew's weighted
+   score the most. A job's workers are sorted by level; the i-th worker counts
+   level * DIMINISH^i, so empty jobs get covered first and strong duplicates
+   still help. Stops at the soft cap or when the best gain is negligible. */
+function weightedWorkScore(levelsDesc) {
+  let s = 0;
+  for (let i = 0; i < levelsDesc.length; i++) s += levelsDesc[i] * Math.pow(AUTOFILL_DIMINISH, i);
+  return s;
+}
+function baseScore(base) {
+  const det = coverageDetail(base);
+  return WORKS.reduce((s, w) => s + weightedWorkScore(det[w].levels), 0);
+}
 function autofill(base) {
-  while (base.crew.length < CREW_SOFT_CAP) {
-    const cov = coverage(base.crew);
-    let best = null, bestGain = 0;
+  while (crewTotal(base) < CREW_SOFT_CAP) {
+    const current = baseScore(base);
+    let best = null, bestGain = AUTOFILL_MIN_GAIN;
     for (const p of PALS) {
-      if (!roster.has(p.name) || base.crew.includes(p.name)) continue;
-      let gain = 0;
-      for (const w of WORKS) gain += Math.max(0, (p.works[w] || 0) - cov[w].level);
+      const spare = copiesOf(p.name) - crewQty(base, p.name);
+      if (spare <= 0) continue;
+      addToCrew(base, p.name, 1);
+      const gain = baseScore(base) - current;
+      setCrewQty(base, p.name, crewQty(base, p.name) - 1);
       if (gain > bestGain) { best = p; bestGain = gain; }
     }
     if (!best) break;
-    base.crew.push(best.name);
+    addToCrew(base, best.name, 1);
   }
   persist();
 }
@@ -419,7 +538,7 @@ function openWorkModal(work, base, onChange) {
   function renderList() {
     listWrap.innerHTML = '';
     const candidates = PALS
-      .filter(p => (p.works[work] || 0) > 0 && (!ownedOnly || roster.has(p.name)))
+      .filter(p => (p.works[work] || 0) > 0 && (!ownedOnly || isOwned(p.name)))
       .sort((a, b) => (b.works[work] - a.works[work]) || (totalLevels(b) - totalLevels(a)))
       .slice(0, 25);
     if (!candidates.length) {
@@ -427,21 +546,27 @@ function openWorkModal(work, base, onChange) {
       return;
     }
     for (const p of candidates) {
-      const inCrew = base.crew.includes(p.name);
-      listWrap.append(el('div', { class: 'pal-row' + (roster.has(p.name) ? ' owned' : '') },
+      const crewChip = el('span', { class: 'status increw', ...(crewQty(base, p.name) ? {} : { hidden: '' }) },
+        `in crew ×${crewQty(base, p.name)}`);
+      listWrap.append(el('div', { class: 'pal-row' + (isOwned(p.name) ? ' owned' : '') },
         palIcon(p),
         el('span', { class: 'pal-id' }, dexLabel(p)),
         el('span', { class: 'pal-name' }, p.name),
         isNight(p) ? el('span', { class: 'night', title: 'Works through the night' }, '🌙') : null,
         el('span', { class: `wchip lv${p.works[work]}` }, `${work} `, el('b', {}, String(p.works[work]))),
-        roster.has(p.name)
-          ? el('span', { class: 'status have' }, 'owned')
+        isOwned(p.name)
+          ? el('span', { class: 'status have' }, `owned ×${copiesOf(p.name)}`)
           : el('span', { class: 'status need' }, 'not owned'),
+        crewChip,
         el('span', { class: 'spacer', style: 'flex:1' }),
         el('button', {
-          class: 'add-btn', ...(inCrew ? { disabled: '' } : {}),
-          onclick: e => { base.crew.push(p.name); persist(); onChange(); e.target.disabled = true; e.target.textContent = 'In crew'; }
-        }, inCrew ? 'In crew' : '+ Add')
+          class: 'add-btn',
+          onclick: () => {
+            addToCrew(base, p.name, 1); persist(); onChange();
+            crewChip.hidden = false;
+            crewChip.textContent = `in crew ×${crewQty(base, p.name)}`;
+          }
+        }, '+ Add')
       ));
     }
   }
@@ -470,9 +595,9 @@ $('#modal-close').addEventListener('click', closeModal);
 $('#modal-root').addEventListener('click', e => { if (e.target.classList.contains('modal-backdrop')) closeModal(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-/* export / import */
+/* export / import — accepts both current and pre-count backup formats */
 $('#btn-export').addEventListener('click', () => {
-  const blob = new Blob([JSON.stringify({ exportedAt: new Date().toISOString(), roster: [...roster], bases }, null, 2)],
+  const blob = new Blob([JSON.stringify({ exportedAt: new Date().toISOString(), roster, bases }, null, 2)],
     { type: 'application/json' });
   const a = el('a', { href: URL.createObjectURL(blob), download: 'palworld-base-planner-backup.json' });
   document.body.append(a); a.click(); a.remove();
@@ -484,11 +609,23 @@ $('#import-file').addEventListener('change', async e => {
   if (!file) return;
   try {
     const data = JSON.parse(await file.text());
-    if (!Array.isArray(data.roster) || !Array.isArray(data.bases)) throw new Error('bad shape');
-    if (!confirm(`Import ${data.roster.length} owned pals and ${data.bases.length} bases? This replaces your current data.`)) return;
-    roster = new Set(data.roster.filter(n => byName.has(n)));
-    bases = data.bases.filter(b => b && b.id && Array.isArray(b.crew))
-      .map(b => ({ id: String(b.id), name: String(b.name || 'Base'), crew: b.crew.filter(n => byName.has(n)) }));
+    let newRoster;
+    if (Array.isArray(data.roster)) {
+      newRoster = Object.fromEntries(data.roster.filter(n => byName.has(n)).map(n => [n, 1]));
+    } else if (data.roster && typeof data.roster === 'object') {
+      newRoster = {};
+      for (const [n, q] of Object.entries(data.roster)) {
+        const qty = Math.floor(Number(q));
+        if (byName.has(n) && qty > 0) newRoster[n] = qty;
+      }
+    } else throw new Error('bad shape');
+    if (!Array.isArray(data.bases)) throw new Error('bad shape');
+    const newBases = data.bases.filter(b => b && b.id && Array.isArray(b.crew))
+      .map(b => ({ id: String(b.id), name: String(b.name || 'Base'), crew: normalizeCrew(b.crew) }));
+    const copies = Object.values(newRoster).reduce((a, b) => a + b, 0);
+    if (!confirm(`Import ${Object.keys(newRoster).length} owned pals (${copies} copies) and ${newBases.length} bases? This replaces your current data.`)) return;
+    roster = newRoster;
+    bases = newBases;
     ui.baseId = null;
     persist(); render();
   } catch {

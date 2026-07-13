@@ -7,10 +7,14 @@ A little planning tool for [Palworld](https://www.pocketpair.jp/palworld) v1.0 b
 ## Features
 
 - Full v1.0 paldex (299 pals) with the rebalanced 1–10 work suitability scale
-- Roster tracker — check off pals as you catch them
-- Base builder — combined work coverage per crew, with the best provider per job
-- Catch list with paldb.cc links (spawn locations, breeding combos)
-- "Auto-fill from my roster" — best base you can build with what you own right now
+- Roster tracker — count how many copies of each pal you own
+- Base builder — per-base worker cap, duplicate crew members, and stacked work
+  coverage (every worker's level per job, not just the best)
+- Cross-base allocation — a copy assigned to one base isn't available to others
+  (copies are claimed in base list order)
+- Catch list with per-pal shortfalls and paldb.cc links (spawns, breeding combos)
+- "Auto-fill from my roster" — best base you can build from your free copies,
+  with diminishing returns for stacking the same job
 - Everything saves to localStorage; Export/Import for JSON backups
 
 No build step, no dependencies — plain HTML/CSS/JS. Open `index.html` from any static server (or double-click it).

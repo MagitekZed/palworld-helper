@@ -153,6 +153,11 @@ main { flex: 1; width: 100%; max-width: 1180px; margin: 0 auto; padding: 18px 22
   background: var(--panel-2); border: 1px solid var(--border); border-radius: 8px;
   color: var(--text); padding: 9px 14px; font-size: 17px; font-weight: 600; flex: 1; min-width: 200px;
 }
+.cap-field { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 13.5px; white-space: nowrap; }
+.cap-field input {
+  width: 66px; background: var(--panel-2); border: 1px solid var(--border); border-radius: 8px;
+  color: var(--text); padding: 8px 10px; text-align: center;
+}
 .editor-cols { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 14px; align-items: start; }
 @media (max-width: 900px) { .editor-cols { grid-template-columns: 1fr; } }
 .panel {

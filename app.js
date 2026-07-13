@@ -7,7 +7,8 @@ const PALS = DATA.pals; // sorted by paldex, collab pals last
 const byName = new Map(PALS.map(p => [p.name, p]));
 const dexOrder = new Map(PALS.map((p, i) => [p.name, i]));
 const ELEMENTS = ['Neutral', 'Fire', 'Water', 'Grass', 'Electric', 'Ground', 'Rock', 'Ice', 'Dragon', 'Dark'];
-const CREW_SOFT_CAP = 15;
+const CAP_DEFAULT = 15; // default per-base worker cap; editable per base
+const CAP_MAX = 50;
 // auto-fill: a 2nd worker on the same job counts half as much as the 1st, a 3rd a quarter, …
 const AUTOFILL_DIMINISH = 0.5;
 const AUTOFILL_MIN_GAIN = 0.9;
@@ -49,9 +50,14 @@ function normalizeCrew(crew) {
   return [...m].map(([name, qty]) => ({ name, qty }));
 }
 
+function clampCap(n) {
+  const v = Math.floor(Number(n));
+  return Number.isFinite(v) && v >= 1 ? Math.min(v, CAP_MAX) : CAP_DEFAULT;
+}
+
 let bases = lsLoad(LS_BASES, [])
   .filter(b => b && b.id && Array.isArray(b.crew))
-  .map(b => ({ id: String(b.id), name: String(b.name || 'Base'), crew: normalizeCrew(b.crew) }));
+  .map(b => ({ id: String(b.id), name: String(b.name || 'Base'), crew: normalizeCrew(b.crew), cap: clampCap(b.cap) }));
 
 let ui = Object.assign(
   { view: 'roster', baseId: null, search: '', element: '', work: '', ownedOnly: false, sort: 'dex' },
@@ -101,8 +107,29 @@ function setCrewQty(base, name, qty) {
   if (qty <= 0) base.crew = base.crew.filter(e => e.name !== name);
   else crewEntry(base, name).qty = qty;
 }
-// how many copies of this crew entry you still have to catch
-const shortfallOf = (base, name) => Math.max(0, crewQty(base, name) - copiesOf(name));
+/* Owned copies are allocated to bases in list order (the first base on the
+   Bases screen gets first claim). A copy assigned to one base is never
+   counted as available to another. */
+function allocatedTo(base, name) {
+  let remaining = copiesOf(name);
+  for (const b of bases) {
+    const take = Math.min(crewQty(b, name), remaining);
+    if (b.id === base.id) return take;
+    remaining -= take;
+  }
+  return 0;
+}
+// copies of `name` other bases actually hold (after allocation)
+const heldElsewhere = (base, name) =>
+  bases.reduce((s, b) => s + (b.id === base.id ? 0 : allocatedTo(b, name)), 0);
+// total demand for `name` from bases other than `base`
+const demandElsewhere = (base, name) =>
+  bases.reduce((s, b) => s + (b.id === base.id ? 0 : crewQty(b, name)), 0);
+// owned copies not assigned to any base
+const globalFree = name =>
+  Math.max(0, copiesOf(name) - bases.reduce((s, b) => s + crewQty(b, name), 0));
+// copies this base wants but cannot get (not owned, or claimed by an earlier base)
+const shortfallOf = (base, name) => Math.max(0, crewQty(base, name) - allocatedTo(base, name));
 const baseShortfall = base => base.crew.reduce((s, e) => s + shortfallOf(base, e.name), 0);
 
 const isNight = p => p.elements.includes('Dark');
@@ -270,7 +297,7 @@ function renderRoster() {
 
 /* ================= bases view ================= */
 function newBase() {
-  const base = { id: 'b' + Date.now().toString(36), name: `Base ${bases.length + 1}`, crew: [] };
+  const base = { id: 'b' + Date.now().toString(36), name: `Base ${bases.length + 1}`, crew: [], cap: CAP_DEFAULT };
   bases.push(base);
   ui.baseId = base.id;
   persist(); renderHeaderStats(); render();
@@ -290,7 +317,7 @@ function renderBases() {
     const covered = WORKS.filter(w => det[w].levels.length > 0).length;
     grid.append(el('div', { class: 'base-card', onclick: () => { ui.baseId = b.id; persist(); render(); } },
       el('h3', {}, b.name),
-      el('div', { class: 'meta' }, `${total} pal${total === 1 ? '' : 's'} · covers ${covered}/12 work types`),
+      el('div', { class: 'meta' }, `${total} / ${b.cap} pals · covers ${covered}/12 work types`),
       missing
         ? el('div', { class: 'missing' }, `⚠ ${missing} cop${missing === 1 ? 'y' : 'ies'} still to catch`)
         : el('div', { class: 'meta', style: 'color: var(--ok)' }, total ? '✓ full crew owned' : 'empty')
@@ -312,6 +339,13 @@ function renderEditor(view, base) {
       class: 'base-name', value: base.name, maxlength: '40',
       onchange: e => { base.name = e.target.value.trim() || 'Unnamed base'; e.target.value = base.name; persist(); renderHeaderStats(); }
     }),
+    el('label', { class: 'cap-field', title: 'Maximum workers at this base — raise it as you upgrade the base in-game' },
+      'Max workers',
+      el('input', {
+        type: 'number', min: '1', max: String(CAP_MAX), value: String(base.cap),
+        onchange: e => { base.cap = clampCap(e.target.value); e.target.value = String(base.cap); persist(); refresh(); }
+      })
+    ),
     el('button', {
       class: 'btn warn-btn', onclick: () => {
         if (confirm(`Delete "${base.name}"? This cannot be undone.`)) {
@@ -332,8 +366,9 @@ function renderEditor(view, base) {
 
   /* ---- crew panel (left) ---- */
   function buildLeft() {
+    const total = crewTotal(base);
     const crewPanel = el('div', { class: 'panel' });
-    crewPanel.append(el('h3', {}, `Crew (${crewTotal(base)})`));
+    crewPanel.append(el('h3', {}, `Crew (${total} / ${base.cap})`));
 
     // pal picker
     const input = el('input', { type: 'search', placeholder: 'Add a pal — type name or #paldex…', autocomplete: 'off' });
@@ -357,7 +392,8 @@ function renderEditor(view, base) {
           el('span', { class: 'pal-id' }, dexLabel(p)),
           el('b', {}, p.name),
           isOwned(p.name)
-            ? el('span', { class: 'status have' }, `owned ×${copiesOf(p.name)}`)
+            ? el('span', { class: 'status have' },
+              `owned ×${copiesOf(p.name)}` + (globalFree(p.name) < copiesOf(p.name) ? ` · ${globalFree(p.name)} free` : ''))
             : el('span', { class: 'status need' }, 'not owned'),
           inCrew ? el('span', { class: 'status increw' }, `in crew ×${inCrew}`) : null,
           el('span', { class: 'works-mini' }, sortedWorks(p).slice(0, 3).map(([w, l]) => `${w} ${l}`).join(' · '))
@@ -378,13 +414,20 @@ function renderEditor(view, base) {
     for (const entry of base.crew) {
       const p = byName.get(entry.name);
       if (!p) continue;
-      const have = copiesOf(entry.name);
+      const alloc = allocatedTo(base, entry.name);
       const short = shortfallOf(base, entry.name);
-      const status = short === 0
-        ? el('span', { class: 'status have' }, 'owned')
-        : (have > 0
-          ? el('span', { class: 'status need' }, `have ${have} / ${entry.qty}`)
-          : el('span', { class: 'status need' }, 'to catch' + (entry.qty > 1 ? ` ×${entry.qty}` : '')));
+      const elsewhere = heldElsewhere(base, entry.name);
+      let status;
+      if (short === 0) {
+        status = el('span', { class: 'status have' }, 'owned');
+      } else if (alloc > 0 || elsewhere > 0) {
+        status = el('span', {
+          class: 'status need',
+          title: `You own ${copiesOf(entry.name)}; ${elsewhere} assigned to other bases`
+        }, `have ${alloc} / ${entry.qty}` + (elsewhere ? ` · ${elsewhere} elsewhere` : ''));
+      } else {
+        status = el('span', { class: 'status need' }, 'to catch' + (entry.qty > 1 ? ` ×${entry.qty}` : ''));
+      }
       list.append(el('div', { class: 'crew-row ' + (short === 0 ? 'have' : 'need') },
         palIcon(p),
         el('b', {}, p.name),
@@ -397,9 +440,9 @@ function renderEditor(view, base) {
     }
     crewPanel.append(list);
 
-    if (crewTotal(base) > CREW_SOFT_CAP) {
+    if (total > base.cap) {
       crewPanel.append(el('div', { class: 'crew-cap' },
-        `⚠ ${crewTotal(base)} pals — check your in-game base worker cap before planning this many.`));
+        `⚠ ${total} workers planned, but this base's max is ${base.cap}.`));
     }
 
     crewPanel.append(el('div', { style: 'margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;' },
@@ -407,7 +450,7 @@ function renderEditor(view, base) {
       el('button', { class: 'ghost', onclick: () => { base.crew = []; persist(); refresh(); } }, 'Clear crew')
     ));
     crewPanel.append(el('div', { class: 'tips' },
-      `Auto-fill adds your best spare copies up to ${CREW_SOFT_CAP} workers. Extra workers on the same job count for less (2nd counts half, 3rd a quarter…), so it covers empty jobs first, then stacks your strongest pals.`));
+      `Auto-fill adds your best free copies (owned and not assigned to any base) up to this base's max of ${base.cap}. Extra workers on the same job count for less (2nd counts half, 3rd a quarter…), so it covers empty jobs first, then stacks your strongest pals.`));
 
     left.append(crewPanel);
   }
@@ -463,11 +506,15 @@ function renderEditor(view, base) {
       const list = el('div', { class: 'needed-list' });
       for (const e of needed) {
         const p = byName.get(e.name);
+        const elsewhere = heldElsewhere(base, e.name);
         list.append(el('div', { class: 'crew-row need' },
           palIcon(p),
           el('b', {},
             el('a', { href: 'https://paldb.cc/en/' + p.slug, target: '_blank', rel: 'noopener', title: 'Open on paldb.cc (habitat, breeding combos)' }, p.name)),
-          el('span', { class: 'status need' }, `need ${e.qty} · have ${copiesOf(e.name)}`),
+          el('span', {
+            class: 'status need',
+            title: elsewhere ? `You own ${copiesOf(e.name)}, but ${elsewhere} are assigned to other bases` : null
+          }, `need ${e.qty} · have ${allocatedTo(base, e.name)}` + (elsewhere ? ` · ${elsewhere} elsewhere` : '')),
           el('span', { class: 'work-chips' }, sortedWorks(p).slice(0, 3).map(([w, l]) => workChip(w, l))),
           el('button', {
             class: 'add-btn', title: 'Caught one — adds a copy to your roster',
@@ -476,7 +523,8 @@ function renderEditor(view, base) {
         ));
       }
       needPanel.append(list);
-      needPanel.append(el('div', { class: 'tips' }, 'Pal names link to paldb.cc for spawn locations and breeding combos.'));
+      needPanel.append(el('div', { class: 'tips' },
+        'Pal names link to paldb.cc for spawn locations and breeding combos. Owned copies are assigned to bases in the order they appear on the Bases screen — "elsewhere" means an earlier base has claimed them.'));
     }
 
     right.append(covPanel, needPanel);
@@ -500,11 +548,12 @@ function baseScore(base) {
   return WORKS.reduce((s, w) => s + weightedWorkScore(det[w].levels), 0);
 }
 function autofill(base) {
-  while (crewTotal(base) < CREW_SOFT_CAP) {
+  while (crewTotal(base) < base.cap) {
     const current = baseScore(base);
     let best = null, bestGain = AUTOFILL_MIN_GAIN;
     for (const p of PALS) {
-      const spare = copiesOf(p.name) - crewQty(base, p.name);
+      // only copies no base has claimed: owned − in this crew − demanded by other bases
+      const spare = copiesOf(p.name) - crewQty(base, p.name) - demandElsewhere(base, p.name);
       if (spare <= 0) continue;
       addToCrew(base, p.name, 1);
       const gain = baseScore(base) - current;
@@ -555,7 +604,8 @@ function openWorkModal(work, base, onChange) {
         isNight(p) ? el('span', { class: 'night', title: 'Works through the night' }, '🌙') : null,
         el('span', { class: `wchip lv${p.works[work]}` }, `${work} `, el('b', {}, String(p.works[work]))),
         isOwned(p.name)
-          ? el('span', { class: 'status have' }, `owned ×${copiesOf(p.name)}`)
+          ? el('span', { class: 'status have' },
+            `owned ×${copiesOf(p.name)}` + (globalFree(p.name) < copiesOf(p.name) ? ` · ${globalFree(p.name)} free` : ''))
           : el('span', { class: 'status need' }, 'not owned'),
         crewChip,
         el('span', { class: 'spacer', style: 'flex:1' }),
@@ -621,7 +671,7 @@ $('#import-file').addEventListener('change', async e => {
     } else throw new Error('bad shape');
     if (!Array.isArray(data.bases)) throw new Error('bad shape');
     const newBases = data.bases.filter(b => b && b.id && Array.isArray(b.crew))
-      .map(b => ({ id: String(b.id), name: String(b.name || 'Base'), crew: normalizeCrew(b.crew) }));
+      .map(b => ({ id: String(b.id), name: String(b.name || 'Base'), crew: normalizeCrew(b.crew), cap: clampCap(b.cap) }));
     const copies = Object.values(newRoster).reduce((a, b) => a + b, 0);
     if (!confirm(`Import ${Object.keys(newRoster).length} owned pals (${copies} copies) and ${newBases.length} bases? This replaces your current data.`)) return;
     roster = newRoster;

@@ -12,6 +12,7 @@ A little planning tool for [Palworld](https://www.pocketpair.jp/palworld) v1.0 b
   coverage (every worker's level per job, not just the best)
 - Cross-base allocation — a copy assigned to one base isn't available to others
   (copies are claimed in base list order)
+- Ranch produce — the Farming tile shows what materials your ranch pals drop
 - Catch list with per-pal shortfalls and paldb.cc links (spawns, breeding combos)
 - "Auto-fill from my roster" — best base you can build from your free copies,
   with diminishing returns for stacking the same job

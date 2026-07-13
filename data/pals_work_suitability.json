@@ -34,7 +34,14 @@
     "Transporting": 1,
     "Farming": 1
    },
-   "crossover": false
+   "crossover": false,
+   "ranch": [
+    {
+     "name": "Wool",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_Material_Wool.webp",
+     "slug": "Wool"
+    }
+   ]
   },
   {
    "paldex": "2",
@@ -66,7 +73,14 @@
     "Gathering": 1,
     "Farming": 1
    },
-   "crossover": false
+   "crossover": false,
+   "ranch": [
+    {
+     "name": "Egg",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_Food_Egg.webp",
+     "slug": "Egg"
+    }
+   ]
   },
   {
    "paldex": "4",
@@ -133,7 +147,39 @@
     "Gathering": 1,
     "Farming": 1
    },
-   "crossover": false
+   "crossover": false,
+   "ranch": [
+    {
+     "name": "Pal Sphere",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_PalSphere.webp",
+     "slug": "Pal_Sphere"
+    },
+    {
+     "name": "Arrow",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_Ammo_Arrow.webp",
+     "slug": "Arrow"
+    },
+    {
+     "name": "Bone",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_Material_Bone.webp",
+     "slug": "Bone"
+    },
+    {
+     "name": "Mega Sphere",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_PalSphere_Mega.webp",
+     "slug": "Mega_Sphere"
+    },
+    {
+     "name": "Giga Sphere",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_PalSphere_Giga.webp",
+     "slug": "Giga_Sphere"
+    },
+    {
+     "name": "Hyper Sphere",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_PalSphere_Tera.webp",
+     "slug": "Hyper_Sphere"
+    }
+   ]
   },
   {
    "paldex": "7",
@@ -180,7 +226,14 @@
     "Gathering": 1,
     "Farming": 2
    },
-   "crossover": false
+   "crossover": false,
+   "ranch": [
+    {
+     "name": "Wool",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_Material_Wool.webp",
+     "slug": "Wool"
+    }
+   ]
   },
   {
    "paldex": "9",
@@ -338,7 +391,14 @@
     "Transporting": 1,
     "Farming": 1
    },
-   "crossover": false
+   "crossover": false,
+   "ranch": [
+    {
+     "name": "Venom Gland",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_Material_Venom.webp",
+     "slug": "Venom_Gland"
+    }
+   ]
   },
   {
    "paldex": "17",
@@ -440,7 +500,14 @@
    "works": {
     "Farming": 2
    },
-   "crossover": false
+   "crossover": false,
+   "ranch": [
+    {
+     "name": "Wool",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_Material_Wool.webp",
+     "slug": "Wool"
+    }
+   ]
   },
   {
    "paldex": "21",
@@ -551,7 +618,14 @@
     "Transporting": 1,
     "Farming": 1
    },
-   "crossover": false
+   "crossover": false,
+   "ranch": [
+    {
+     "name": "Flame Organ",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_Material_FireOrgan.webp",
+     "slug": "Flame_Organ"
+    }
+   ]
   },
   {
    "paldex": "26",
@@ -566,7 +640,14 @@
     "Kindling": 1,
     "Farming": 1
    },
-   "crossover": false
+   "crossover": false,
+   "ranch": [
+    {
+     "name": "Flame Organ",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_Material_FireOrgan.webp",
+     "slug": "Flame_Organ"
+    }
+   ]
   },
   {
    "paldex": "27",
@@ -581,7 +662,14 @@
     "Gathering": 1,
     "Farming": 1
    },
-   "crossover": false
+   "crossover": false,
+   "ranch": [
+    {
+     "name": "Gold Coin",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_Material_Money.webp",
+     "slug": "Gold_Coin"
+    }
+   ]
   },
   {
    "paldex": "27B",
@@ -596,7 +684,14 @@
     "Cooling": 1,
     "Farming": 1
    },
-   "crossover": false
+   "crossover": false,
+   "ranch": [
+    {
+     "name": "Ice Organ",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_Material_IceOrgan.webp",
+     "slug": "Ice_Organ"
+    }
+   ]
   },
   {
    "paldex": "28",
@@ -745,7 +840,14 @@
     "Planting": 2,
     "Farming": 1
    },
-   "crossover": false
+   "crossover": false,
+   "ranch": [
+    {
+     "name": "Red Berries",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_Food_Berries.webp",
+     "slug": "Red_Berries"
+    }
+   ]
   },
   {
    "paldex": "34B",
@@ -760,7 +862,14 @@
     "Planting": 2,
     "Farming": 1
    },
-   "crossover": false
+   "crossover": false,
+   "ranch": [
+    {
+     "name": "Venom Gland",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_Material_Venom.webp",
+     "slug": "Venom_Gland"
+    }
+   ]
   },
   {
    "paldex": "35",
@@ -870,7 +979,14 @@
    "works": {
     "Farming": 1
    },
-   "crossover": false
+   "crossover": false,
+   "ranch": [
+    {
+     "name": "Cotton Candy",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_Food_Sweet.webp",
+     "slug": "Cotton_Candy"
+    }
+   ]
   },
   {
    "paldex": "39B",
@@ -884,7 +1000,14 @@
    "works": {
     "Farming": 1
    },
-   "crossover": false
+   "crossover": false,
+   "ranch": [
+    {
+     "name": "Caramel Cotton Candy",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_Food_Sweet_Caramel.webp",
+     "slug": "Caramel_Cotton_Candy"
+    }
+   ]
   },
   {
    "paldex": "40",
@@ -898,7 +1021,14 @@
    "works": {
     "Farming": 2
    },
-   "crossover": false
+   "crossover": false,
+   "ranch": [
+    {
+     "name": "Milk",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_Food_Milk.webp",
+     "slug": "Milk"
+    }
+   ]
   },
   {
    "paldex": "41",
@@ -945,7 +1075,14 @@
     "Transporting": 1,
     "Farming": 1
    },
-   "crossover": false
+   "crossover": false,
+   "ranch": [
+    {
+     "name": "Electric Organ",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_Material_ElectricOrgan.webp",
+     "slug": "Electric_Organ"
+    }
+   ]
   },
   {
    "paldex": "43",
@@ -960,7 +1097,14 @@
     "Watering": 1,
     "Farming": 1
    },
-   "crossover": false
+   "crossover": false,
+   "ranch": [
+    {
+     "name": "Aquatic Pal Fluids",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_Material_PalFluid.webp",
+     "slug": "Aquatic_Pal_Fluids"
+    }
+   ]
   },
   {
    "paldex": "43B",
@@ -975,7 +1119,14 @@
     "Kindling": 1,
     "Farming": 1
    },
-   "crossover": false
+   "crossover": false,
+   "ranch": [
+    {
+     "name": "Flame Organ",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_Material_FireOrgan.webp",
+     "slug": "Flame_Organ"
+    }
+   ]
   },
   {
    "paldex": "44",
@@ -1273,7 +1424,14 @@
     "Lumbering": 2,
     "Farming": 1
    },
-   "crossover": false
+   "crossover": false,
+   "ranch": [
+    {
+     "name": "Bone",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_Material_Bone.webp",
+     "slug": "Bone"
+    }
+   ]
   },
   {
    "paldex": "58",
@@ -1447,7 +1605,39 @@
     "Transporting": 2,
     "Farming": 2
    },
-   "crossover": false
+   "crossover": false,
+   "ranch": [
+    {
+     "name": "Tomato Seeds",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_Material_TomatoSeeds.webp",
+     "slug": "Tomato_Seeds"
+    },
+    {
+     "name": "Wheat Seeds",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_Material_WheatSeeds.webp",
+     "slug": "Wheat_Seeds"
+    },
+    {
+     "name": "Potato Seeds",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_Material_PotatoSeeds.webp",
+     "slug": "Potato_Seeds"
+    },
+    {
+     "name": "Carrot Seeds",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_Material_CarrotSeeds.webp",
+     "slug": "Carrot_Seeds"
+    },
+    {
+     "name": "Onion Seeds",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_Material_OnionSeeds.webp",
+     "slug": "Onion_Seeds"
+    },
+    {
+     "name": "Lettuce Seeds",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_Material_LettuceSeeds.webp",
+     "slug": "Lettuce_Seeds"
+    }
+   ]
   },
   {
    "paldex": "67",
@@ -1467,7 +1657,14 @@
     "Transporting": 2,
     "Farming": 3
    },
-   "crossover": false
+   "crossover": false,
+   "ranch": [
+    {
+     "name": "Honey",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_Food_Honey.webp",
+     "slug": "Honey"
+    }
+   ]
   },
   {
    "paldex": "68",
@@ -1645,7 +1842,14 @@
     "Watering": 3,
     "Farming": 2
    },
-   "crossover": false
+   "crossover": false,
+   "ranch": [
+    {
+     "name": "Leather",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_Material_Leather.webp",
+     "slug": "Leather"
+    }
+   ]
   },
   {
    "paldex": "75B",
@@ -2244,7 +2448,14 @@
     "Cooling": 4,
     "Farming": 3
    },
-   "crossover": false
+   "crossover": false,
+   "ranch": [
+    {
+     "name": "Ice Organ",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_Material_IceOrgan.webp",
+     "slug": "Ice_Organ"
+    }
+   ]
   },
   {
    "paldex": "96",
@@ -2606,7 +2817,14 @@
     "Transporting": 1,
     "Farming": 1
    },
-   "crossover": false
+   "crossover": false,
+   "ranch": [
+    {
+     "name": "High Quality Pal Oil",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_Material_PalOil.webp",
+     "slug": "High_Quality_Pal_Oil"
+    }
+   ]
   },
   {
    "paldex": "109B",
@@ -2624,7 +2842,14 @@
     "Transporting": 1,
     "Farming": 4
    },
-   "crossover": false
+   "crossover": false,
+   "ranch": [
+    {
+     "name": "High Quality Pal Oil",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_Material_PalOil.webp",
+     "slug": "High_Quality_Pal_Oil"
+    }
+   ]
   },
   {
    "paldex": "110",
@@ -2783,7 +3008,14 @@
     "Cooling": 3,
     "Farming": 3
    },
-   "crossover": false
+   "crossover": false,
+   "ranch": [
+    {
+     "name": "High Quality Cloth",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_Material_Cloth.webp",
+     "slug": "High_Quality_Cloth"
+    }
+   ]
   },
   {
    "paldex": "116B",
@@ -2798,7 +3030,14 @@
     "Medicine Production": 3,
     "Farming": 4
    },
-   "crossover": false
+   "crossover": false,
+   "ranch": [
+    {
+     "name": "High Quality Cloth",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_Material_Cloth.webp",
+     "slug": "High_Quality_Cloth"
+    }
+   ]
   },
   {
    "paldex": "117",
@@ -2831,7 +3070,14 @@
     "Lumbering": 2,
     "Farming": 3
    },
-   "crossover": false
+   "crossover": false,
+   "ranch": [
+    {
+     "name": "Cavern Mushroom",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_Food_HealingMushroom.webp",
+     "slug": "Cavern_Mushroom"
+    }
+   ]
   },
   {
    "paldex": "118B",
@@ -3263,7 +3509,14 @@
     "Mining": 3,
     "Farming": 2
    },
-   "crossover": false
+   "crossover": false,
+   "ranch": [
+    {
+     "name": "Bone",
+     "icon": "https://cdn.paldb.cc/image/Others/InventoryItemIcon/Texture/T_itemicon_Material_Bone.webp",
+     "slug": "Bone"
+    }
+   ]
   },
   {
    "paldex": "136",

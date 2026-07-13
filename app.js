@@ -144,8 +144,12 @@ function palIcon(p, cls = 'pal-icon') {
   return img;
 }
 
-function workChip(work, lv) {
-  return el('span', { class: `wchip lv${lv}` }, `${work} `, el('b', {}, String(lv)));
+function workChip(work, lv, pal) {
+  const attrs = { class: `wchip lv${lv}` };
+  if (work === 'Farming' && pal && pal.ranch) {
+    attrs.title = 'Ranch produce: ' + pal.ranch.map(i => i.name).join(', ');
+  }
+  return el('span', attrs, `${work} `, el('b', {}, String(lv)));
 }
 
 function elementChips(p) {
@@ -287,7 +291,7 @@ function renderRoster() {
         el('span', { class: 'pal-name' },
           el('a', { href: 'https://paldb.cc/en/' + p.slug, target: '_blank', rel: 'noopener' }, p.name)),
         elementChips(p),
-        el('span', { class: 'work-chips' }, sortedWorks(p).map(([w, l]) => workChip(w, l)))
+        el('span', { class: 'work-chips' }, sortedWorks(p).map(([w, l]) => workChip(w, l, p)))
       );
       listWrap.append(row);
     }
@@ -434,7 +438,7 @@ function renderEditor(view, base) {
         isNight(p) ? el('span', { class: 'night', title: 'Works through the night' }, '🌙') : null,
         status,
         qtyStepper(() => crewQty(base, entry.name), n => { setCrewQty(base, entry.name, n); persist(); }, refresh),
-        el('span', { class: 'work-chips' }, sortedWorks(p).map(([w, l]) => workChip(w, l))),
+        el('span', { class: 'work-chips' }, sortedWorks(p).map(([w, l]) => workChip(w, l, p))),
         el('button', { class: 'rm', title: 'Remove from crew', onclick: () => { setCrewQty(base, entry.name, 0); persist(); refresh(); } }, '✕')
       ));
     }
@@ -487,6 +491,24 @@ function renderEditor(view, base) {
           tile.append(el('div', { class: 'w-by' }, `+${contributors.length - MAX_PROVIDERS} more`));
         }
       }
+      // the Farming tile also shows what this crew's ranch will produce
+      if (w === 'Farming' && contributors.length) {
+        const seen = new Set(), items = [];
+        for (const c of contributors) {
+          for (const it of (byName.get(c.name).ranch || [])) {
+            if (!seen.has(it.name)) { seen.add(it.name); items.push(it); }
+          }
+        }
+        if (items.length) {
+          const strip = el('div', { class: 'ranch-items' });
+          for (const it of items) {
+            const img = it.icon ? el('img', { src: it.icon, alt: '', loading: 'lazy' }) : null;
+            if (img) img.addEventListener('error', () => { img.style.display = 'none'; });
+            strip.append(el('span', { class: 'ranch-item', title: it.name }, img, it.name));
+          }
+          tile.append(strip);
+        }
+      }
       grid.append(tile);
     }
     covPanel.append(grid);
@@ -515,7 +537,7 @@ function renderEditor(view, base) {
             class: 'status need',
             title: elsewhere ? `You own ${copiesOf(e.name)}, but ${elsewhere} are assigned to other bases` : null
           }, `need ${e.qty} · have ${allocatedTo(base, e.name)}` + (elsewhere ? ` · ${elsewhere} elsewhere` : '')),
-          el('span', { class: 'work-chips' }, sortedWorks(p).slice(0, 3).map(([w, l]) => workChip(w, l))),
+          el('span', { class: 'work-chips' }, sortedWorks(p).slice(0, 3).map(([w, l]) => workChip(w, l, p))),
           el('button', {
             class: 'add-btn', title: 'Caught one — adds a copy to your roster',
             onclick: () => { setCopies(e.name, copiesOf(e.name) + 1); renderHeaderStats(); refresh(); }
@@ -603,6 +625,10 @@ function openWorkModal(work, base, onChange) {
         el('span', { class: 'pal-name' }, p.name),
         isNight(p) ? el('span', { class: 'night', title: 'Works through the night' }, '🌙') : null,
         el('span', { class: `wchip lv${p.works[work]}` }, `${work} `, el('b', {}, String(p.works[work]))),
+        work === 'Farming' && p.ranch
+          ? el('span', { class: 'ranch-mini', title: p.ranch.map(i => i.name).join(', ') },
+            '→ ' + p.ranch.map(i => i.name).join(', '))
+          : null,
         isOwned(p.name)
           ? el('span', { class: 'status have' },
             `owned ×${copiesOf(p.name)}` + (globalFree(p.name) < copiesOf(p.name) ? ` · ${globalFree(p.name)} free` : ''))

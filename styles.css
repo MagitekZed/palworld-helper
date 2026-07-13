@@ -219,6 +219,17 @@ main { flex: 1; width: 100%; max-width: 1180px; margin: 0 auto; padding: 18px 22
 }
 .lv-badge b { font-weight: 700; }
 .w-dash { color: #55637a; font-size: 15px; font-weight: 600; }
+.ranch-items { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 7px; }
+.ranch-item {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11.5px; padding: 2px 8px 2px 4px; border-radius: 999px;
+  background: #26221a; border: 1px solid #4a3f28; color: #e7cf9e;
+}
+.ranch-item img { width: 18px; height: 18px; }
+.ranch-mini {
+  color: #e7cf9e; font-size: 12px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 210px;
+}
 
 .needed-list { display: flex; flex-direction: column; gap: 6px; }
 .tips { color: var(--muted); font-size: 13px; margin-top: 8px; }

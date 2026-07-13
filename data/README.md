@@ -23,6 +23,14 @@ News coverage cites "287 obtainable pals" for 1.0; paldb's data-mined list has 2
 - **Each pal rank-up (Pal Essence Condenser) now raises one work suitability level by +1**, which is how you push past base values toward 10.
 - The 12 work types are unchanged: Kindling, Watering, Planting, Generating Electricity, Handiwork, Gathering, Lumbering, Mining, Medicine Production, Cooling, Transporting, Farming.
 
+## Ranch produce
+
+Pals with the Farming suitability carry a `ranch` field in the JSON listing the
+items they produce when assigned to a Ranch (name, icon URL, paldb slug), e.g.
+Lamball → Wool, Mau → Gold Coin, Vixy → spheres/arrows/bones. Scraped from each
+pal's paldb.cc page (the per-partner-skill-level produce table, deduplicated
+across levels; Mau's comes from its partner-skill text). Retrieved 2026-07-13.
+
 ## Sources
 
 - Primary: [paldb.cc/en/Pals](https://paldb.cc/en/Pals) (data-mined from game files, retrieved 2026-07-13) — parsed from each card's `data-filters` attribute.

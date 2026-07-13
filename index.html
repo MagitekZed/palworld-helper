@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Palworld Base Planner</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏕️</text></svg>">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-icon">🏕️</span>
+    <div>
+      <h1>Palworld Base Planner</h1>
+      <div class="sub" id="header-stats"></div>
+    </div>
+  </div>
+  <nav class="tabs" id="tabs">
+    <button data-view="roster" class="tab">My Roster</button>
+    <button data-view="bases" class="tab">Bases</button>
+  </nav>
+  <div class="top-actions">
+    <button id="btn-export" class="ghost" title="Download roster + bases as a JSON backup">Export</button>
+    <button id="btn-import" class="ghost" title="Restore from a JSON backup">Import</button>
+    <input type="file" id="import-file" accept="application/json" hidden>
+  </div>
+</header>
+
+<main id="view"></main>
+
+<div id="modal-root" hidden>
+  <div class="modal-backdrop"></div>
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <h2 id="modal-title"></h2>
+      <button id="modal-close" class="ghost">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<footer class="foot">
+  Data: Palworld v1.0 work suitability (paldb.cc, 2026-07-13) · 299 pals · levels are base values (condenser rank-ups add +1 each) · 🌙 = Dark-type, works through the night
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

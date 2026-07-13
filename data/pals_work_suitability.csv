@@ -1,0 +1,300 @@
+﻿Paldex,Name,Elements,Kindling,Watering,Planting,Generating Electricity,Handiwork,Gathering,Lumbering,Mining,Medicine Production,Cooling,Transporting,Farming,WorkTypeCount,TotalLevels
+1,Lamball,Neutral,,,,,1,,,,,,1,1,3,3
+2,Cattiva,Neutral,,,,,1,1,,1,,,1,,4,4
+3,Chikipi,Neutral,,,,,,1,,,,,,1,2,2
+4,Lifmunk,Grass,,,1,,1,1,1,,1,,,,5,5
+5,Fuack,Water,,1,,,1,,,,,,1,,3,3
+5B,Fuack Ignis,Water/Fire,2,2,,,1,,,,,,1,,4,6
+6,Vixy,Neutral,,,,,,1,,,,,,1,2,2
+7,Celaray,Water,,1,,,,,,,,,1,,2,2
+7B,Celaray Lux,Water/Electric,,1,,2,,,,,,,1,,3,4
+8,Cremis,Neutral,,,,,,1,,,,,,2,2,3
+9,Croajiro,Water,,1,,,1,1,,,,,1,,4,4
+9B,Croajiro Noct,Water/Dark,,1,,,2,1,,,,,1,,4,5
+10,Herbil,Grass/Neutral,,,1,,,1,,,,,1,,3,3
+11,Teafant,Water,,1,,,,,,,,,,,1,1
+12,Gumoss,Grass/Ground,,,1,,,,,,,,,,1,1
+13,Pupperai,Ground,,,,,,1,1,,,,1,,3,3
+14,Clovee,Grass/Neutral,,,1,,,1,,,,,,,2,2
+15,Jolthog,Electric,,,,1,,,,,,,,,1,1
+15B,Jolthog Cryst,Ice,,,,,,,,,,1,,,1,1
+16,Depresso,Dark,,,,,1,,,1,,,1,1,4,4
+17,Pengullet,Water/Ice,,1,,,1,,,,,1,1,,4,4
+17B,Pengullet Lux,Water/Electric,,1,,2,1,,,,,,1,,4,5
+18,Penking,Water/Ice,,2,,,2,,,3,,2,3,,5,12
+18B,Penking Lux,Water/Electric,,2,,3,2,,,3,,,3,,5,13
+19,Hoocrates,Dark,,,,,,1,,,,,,,1,1
+20,Melpaca,Neutral,,,,,,,,,,,,2,1,2
+21,Kingpaca,Neutral,,,,,,2,,,,,,,1,2
+21B,Kingpaca Cryst,Ice,,,,,,2,,,,4,,,2,6
+22,Daedream,Dark,,,,,1,1,,,,,1,,3,3
+23,Tanzee,Grass,,,1,,1,1,1,,,,1,,5,5
+23B,Tanzee Ignis,Fire,1,,,,1,,1,,,,1,,4,4
+24,Nox,Dark,,,,,,1,,,,,,,1,1
+25,Flambelle,Fire,1,,,,1,,,,,,1,1,4,4
+26,Rooby,Fire,1,,,,,,,,,,,1,2,2
+27,Mau,Dark,,,,,,1,,,,,,1,2,2
+27B,Mau Cryst,Ice,,,,,,,,,,1,,1,2,2
+28,Rushoar,Ground,,,,,,,,1,,,,,1,1
+29,Foxparks,Fire,1,,,,,,,,,,,,1,1
+29B,Foxparks Cryst,Ice,,,,,,,,,,2,,,1,2
+30,Killamari,Dark/Water,,1,,,,1,,,,,2,,3,4
+30B,Killamari Primo,Neutral/Water,,1,,,,1,,,,,2,,3,4
+31,Fuddler,Ground,,,,,1,,,1,,,1,,3,3
+32,Eikthyrdeer,Neutral,,,,,,,2,,,,,,1,2
+32B,Eikthyrdeer Terra,Ground,,,,,,,2,,,,,,1,2
+33,Direhowl,Neutral,,,,,,1,,,,,,,1,1
+34,Caprity,Grass,,,2,,,,,,,,,1,2,3
+34B,Caprity Noct,Dark,,,2,,,,,,,,,1,2,3
+35,Swee,Ice,,,,,,1,,,,1,,,2,2
+36,Sweepa,Ice,,,,,,2,,,,3,,,2,5
+37,Turtacle,Water,,2,,,,,,1,,,1,,3,4
+37B,Turtacle Terra,Water/Ground,,2,,,,,,3,,,1,,3,6
+38,Hangyu,Ground,,,,,1,1,,,,,2,,3,4
+38B,Hangyu Cryst,Ice,,,,,3,2,,,,2,3,,4,10
+39,Woolipop,Neutral,,,,,,,,,,,,1,1,1
+39B,Woolipop Terra,Ground,,,,,,,,,,,,1,1,1
+40,Mozzarina,Neutral,,,,,,,,,,,,2,1,2
+41,Azurobe,Water/Dragon,,4,,,,,,,,,,,1,4
+41B,Azurobe Cryst,Ice/Dragon,,,,,,,,,,4,,,1,4
+42,Sparkit,Electric,,,,1,1,,,,,,1,1,4,4
+43,Kelpsea,Water,,1,,,,,,,,,,1,2,2
+43B,Kelpsea Ignis,Fire,1,,,,,,,,,,,1,2,2
+44,Ribbuny,Neutral,,,,,1,1,,,,,1,,3,3
+44B,Ribbuny Botan,Grass,,,2,,2,2,,,,,1,,4,7
+45,Jelliette,Water,,2,,,1,,,,,,1,,3,4
+46,Jellroy,Water/Dark,,2,,,1,,,,1,,1,,4,5
+47,Amione,Water,,1,,,2,,,,,,1,,3,4
+48,Gloopie,Water/Dark,,2,,,2,,,,,,2,,3,6
+48B,Gloopie Primo,Water/Neutral,,2,,,2,,,,,,2,,3,6
+49,Galeclaw,Neutral,,,,,,2,,,,,,,1,2
+50,Wispaw,Dark,,,,,2,,1,,1,,1,,4,5
+51,Nitewing,Neutral,,,,,,2,,,,,,,1,2
+52,Tombat,Dark,,,,,,2,,3,,,2,,3,7
+53,Tocotoco,Neutral,,,,,,1,,,,,,,1,1
+54,Univolt,Electric,,,,3,,,1,,,,,,2,4
+54B,Univolt Cryst,Ice,,,,,,,3,,,6,,,2,9
+55,Gobfin,Water,,2,,,2,,,,,,1,,3,5
+55B,Gobfin Ignis,Fire,2,,,,2,,,,,,1,,3,5
+56,Loupmoon,Dark,,,,,2,,,,,,,,1,2
+56B,Loupmoon Cryst,Ice,,,,,4,,,,,4,,,2,8
+57,Cawgnito,Dark,,,,,,,2,,,,,1,2,3
+58,Arsox,Fire,3,,,,,,2,,,,,,2,5
+59,Muffly,Ice,,,,,,,,,,2,1,,2,3
+60,Bristla,Grass,,,2,,2,2,,,2,,1,,5,9
+61,Cinnamoth,Grass,,,2,,,2,,,2,,,,3,6
+62,Puffolt,Electric,,,,2,,,,,,,1,,2,3
+63,Elphidran,Dragon,,,,,,,3,,,,,,1,3
+63B,Elphidran Aqua,Dragon/Water,,4,,,,,3,,,,,,2,7
+64,Vanwyrm,Fire/Dark,2,,,,,,,,,,3,,2,5
+64B,Vanwyrm Cryst,Ice/Dark,,,,,,,,,,2,3,,2,5
+65,Felbat,Dark,,,,,,,,,3,,,,1,3
+66,Vaelet,Grass,,,3,,3,3,,,3,,2,2,6,16
+67,Beegarde,Grass,,,2,,2,3,2,,2,,2,3,7,16
+68,Elizabee,Grass,,,4,,4,4,3,,4,,,,5,19
+69,Lovander,Dark,,,,,3,,,2,3,,2,,4,10
+70,Grintale,Neutral,,,,,,3,,,,,,,1,3
+71,Tarantriss,Dark,,,,,3,3,,,2,,2,,4,10
+72,Polapup,Ice/Water,,3,,,,,,,,4,,,2,7
+72B,Polapup Terra,Ice/Ground,,,,,,,,4,,4,,,2,8
+73,Leezpunk,Dark,,,,,2,1,,,,,1,,3,4
+73B,Leezpunk Ignis,Fire,2,,,,2,1,,,,,1,,4,6
+74,Gorirat,Neutral,,,,,2,,3,,,,3,,3,8
+74B,Gorirat Terra,Ground,,,,,2,,,3,,,3,,3,8
+75,Surfent,Water,,3,,,,,,,,,,2,2,5
+75B,Surfent Terra,Ground,,,,,,3,,,,,,,1,3
+76,Robinquill,Grass,,,2,,3,3,2,,1,,2,,6,13
+76B,Robinquill Terra,Grass/Ground,,,,,3,3,2,,2,,2,,5,12
+77,Flopie,Grass,,,2,,2,2,,,1,,1,,5,8
+78,Wixen,Fire,3,,,,3,,,,,,2,,3,8
+78B,Wixen Noct,Fire/Dark,4,,,,4,,,,,,2,,3,10
+79,Katress,Dark,,,,,3,,,,3,,2,,3,8
+79B,Katress Ignis,Dark/Fire,3,,,,3,,,,3,,2,,4,11
+80,Helzephyr,Dark,,,,,,,,,,,4,,1,4
+80B,Helzephyr Lux,Dark/Electric,,,,4,,,,,,,5,,2,9
+81,Elgrove,Grass,,,3,,,2,3,2,,,3,,5,13
+81B,Elgrove Cryst,Ice,,,,,,,3,3,,5,3,,4,14
+82,Lunaris,Neutral,,,,,4,2,,,,,2,,3,8
+83,Fenglope,Neutral,,,,,,,3,,,,,,1,3
+83B,Fenglope Lux,Electric,,,,5,,,4,,,,,,2,9
+84,Dinossom,Grass/Dragon,,,3,,,,3,,,,,,2,6
+84B,Dinossom Lux,Electric/Dragon,,,,3,,,4,,,,,,2,7
+85,Bushi,Fire,2,,,,2,1,3,,,,2,,5,10
+85B,Bushi Noct,Fire/Dark,2,,,,2,1,5,,,,2,,5,12
+86,Munchill,Ice/Water,,2,,,,,,,,3,1,,3,6
+87,Mammorest,Grass/Ground,,,4,,,,4,4,,,,,3,12
+87B,Mammorest Cryst,Ice/Ground,,,,,,,5,4,,5,,,3,14
+88,Finsider,Water,,2,,,,,,,,,1,,2,3
+88B,Finsider Ignis,Water/Fire,2,2,,,,,,,,,1,,3,5
+89,Petallia,Grass,,,4,,3,3,,,4,,2,,5,16
+89B,Petallia Ignis,Grass/Fire,4,,,,3,3,,,4,,2,,5,16
+90,Leafan,Grass,,,3,,3,3,,,,,2,,4,11
+91,Incineram,Fire/Dark,3,,,,2,,,3,,,2,,4,10
+91B,Incineram Noct,Dark,,,,,3,,,4,,,3,,3,10
+92,Dazzi,Electric,,,,3,2,,,,,,2,,3,7
+92B,Dazzi Noct,Dark/Electric,,,,1,1,,,,1,,2,,4,5
+93,Pyrin,Fire,4,,,,,,2,,,,,,2,6
+93B,Pyrin Noct,Fire/Dark,4,,,,,,3,,,,,,2,7
+94,Relaxaurus,Dragon/Water,,3,,,,,,,,,3,,2,6
+94B,Relaxaurus Lux,Dragon/Electric,,,,4,,,,,,,3,,2,7
+95,Foxcicle,Ice,,,,,,,,,,4,,3,2,7
+96,Beakon,Electric,,,,4,,2,,,,,5,,3,11
+96B,Beakon Cryst,Ice,,,,,,2,,,,5,5,,3,12
+97,Ghangler,Dark/Water,,5,,,,,,,,,2,,2,7
+97B,Ghangler Ignis,Fire/Water,5,5,,,,,,,,,2,,3,12
+98,Rayhound,Electric,,,,4,,,,,,,,,1,4
+98B,Rayhound Cryst,Ice,,,,,,,,,,3,,,1,3
+99,Menasting,Dark/Ground,,,,,,,3,5,,,,,2,8
+99B,Menasting Terra,Ground,,,,,,,3,6,,,,,2,9
+100,Needoll,Grass,,,3,,,3,,,,,1,,3,7
+100B,Needoll Noct,Dark/Grass,,,3,,,3,,,,,1,,3,7
+101,Reindrix,Ice,,,,,,,3,,,3,,,2,6
+102,Mossanda,Grass,,,3,,2,,4,,,,4,,4,13
+102B,Mossanda Lux,Electric,,,,4,3,,4,,,,4,,4,15
+103,Chillet,Ice/Dragon,,,,,,1,,,,2,,,2,3
+103B,Chillet Ignis,Fire/Dragon,4,,,,,3,,,,,,,2,7
+104,Ragnahawk,Fire,4,,,,,,,,,,5,,2,9
+105,Moldron,Fire/Ground,5,,,,,,,5,,,,,2,10
+105B,Moldron Cryst,Ice/Ground,,,,,,,,5,,5,,,2,10
+106,Palumba,Grass,,,4,,,4,,5,,,,,3,13
+107,Digtoise,Ground,,,,,,,,4,,,,,1,4
+108,Broncherry,Grass,,,5,,,,,,,,,,1,5
+108B,Broncherry Aqua,Grass/Water,,5,,,,,,,,,,,1,5
+109,Dumud,Ground/Water,,2,,,,,,2,,,1,1,4,6
+109B,Dumud Gild,Ground/Water,,2,,,,,,2,,,1,4,4,9
+110,Braloha,Grass/Ground,,,5,,,5,,3,,,,,3,13
+111,Kitsun,Fire,3,,,,,,,,,,,,1,3
+111B,Kitsun Noct,Dark,4,,,,,,,,,,,,1,4
+112,Blazehowl,Fire,5,,,,,,3,,,,,,2,8
+112B,Blazehowl Noct,Fire/Dark,5,,,,,,3,,,,,,2,8
+113,Warsect,Ground/Grass,,,3,,3,,4,,,,5,,4,15
+113B,Warsect Terra,Ground,,,,,2,,,5,,,5,,3,12
+114,Frostplume,Ice,,,,,,2,,,,4,,,2,6
+115,Majex,Dark/Fire,4,,,,5,,,,3,,2,,4,14
+116,Sibelyx,Ice,,,,,,,,,3,3,,3,3,9
+116B,Sibelyx Primo,Neutral,,,,,,,,,3,,,4,2,7
+117,Maraith,Dark,,,,,,4,,4,,,,,2,8
+118,Shroomer,Grass,,,3,,2,3,2,,,,,3,5,13
+118B,Shroomer Noct,Grass/Dark,,,3,,3,3,2,,,,,,4,11
+119,Icelyn,Ice,,,,,5,,,,4,5,2,,4,16
+120,Gildra,Dark/Ground,,,,,5,,,,4,,2,,3,11
+121,Jormuntide,Dragon/Water,,7,,,,,,,,,,,1,7
+121B,Jormuntide Ignis,Dragon/Fire,7,,,,,,,,,,,,1,7
+122,Suzaku,Fire,5,,,,,,,,,,,,1,5
+122B,Suzaku Aqua,Water,,6,,,,,,,,,,,1,6
+123,Dazemu,Ground,,,,,,2,,,,,,,1,2
+124,Quivern,Dragon,,,,,2,3,,4,,,5,,4,14
+124B,Quivern Botan,Dragon/Grass,,,5,,2,4,,3,,,4,,5,18
+125,Lullu,Grass,,,3,,3,2,,,3,,,,4,11
+126,Kikit,Ground,,,,,,,,1,,,,,1,1
+127,Yakumo,Neutral,,,,,,2,,,,,,,1,2
+128,Skutlass,Water,,4,,,,1,4,,,,,,3,9
+128B,Skutlass Ignis,Water/Fire,3,2,,,,2,3,,,,,,4,10
+129,Reptyro,Fire/Ground,5,,,,,,,5,,,,,2,10
+129B,Reptyro Cryst,Ice/Ground,,,,,,,,5,,5,,,2,10
+130,Starryon,Dark,,,,,,5,,,,,,,1,5
+130B,Starryon Primo,Neutral,,,,,,7,,,,,,,1,7
+131,Pierdon,Ground,,,,,,,,5,,,,,1,5
+131B,Pierdon Cryst,Ice,,,,,,,,5,,6,,,2,11
+132,Cryolinx,Ice,,,,,3,,4,,,4,4,,4,15
+132B,Cryolinx Terra,Ground,,,,,2,,6,5,,,4,,4,17
+133,Snugloo,Ice,,,,,2,,,3,,3,2,,4,10
+134,Wumpo,Ice,,,,,3,,5,,,5,6,,4,19
+134B,Wumpo Botan,Grass,,,3,,3,,5,,,,6,,4,17
+135,Sootseer,Dark/Fire,3,,,,3,2,,3,,,,2,5,13
+136,Carnibora,Grass,,,6,,4,4,,,,,2,,4,16
+137,Blazamut,Fire,6,,,,,,,7,,,,,2,13
+137B,Blazamut Ryu,Dragon/Fire,6,,,,,,,7,,,,,2,13
+138,Dualith,Ground/Grass,,,3,,,3,5,6,,,6,,5,23
+138B,Dualith Noct,Ground/Dark,,,3,,,3,5,6,,,6,,5,23
+139,Anubis,Ground,,,,,6,,,6,,,4,,3,16
+140,Sekhmet,Ground,,,,,6,,,3,,,2,,3,11
+141,Prixter,Dark/Ground,,,,,,2,4,,2,,,,3,8
+141B,Prixter Lux,Electric/Ground,,,,3,,2,4,,2,,,,4,11
+142,Tetroise,Ground,,,,,,,,4,,,,,1,4
+142B,Tetroise Primo,Neutral,,,,,,,,6,,,,,1,6
+143,Nyafia,Dark,,,,,4,4,2,,,,3,,4,13
+144,Mimog,Neutral,,,,,,1,,,,,2,,2,3
+145,Xenovader,Dark,,,,,,,3,,,,2,,2,5
+146,Xenogard,Dragon,,,,,,,,4,,,,,1,4
+147,Prunelia,Grass/Dark,,,3,,1,2,,,3,,1,,5,10
+148,Nitemary,Dark,,,,,4,,,,,,2,,2,6
+148B,Nitemary Botan,Grass,,,3,,4,,,,,,2,,3,9
+149,Smokie,Dark,,,,,,2,,,,,,,1,2
+149B,Smokie Cryst,Dark/Ice,,,,,,2,,,,2,,,2,4
+150,Omascul,Dark,,,,,,5,,,,,,,1,5
+151,Whalaska,Ice/Water,,5,,,,,,,,6,,,2,11
+151B,Whalaska Ignis,Ice/Fire,5,,,,,,,,,6,,,2,11
+152,Verdash,Grass,,,4,,5,5,3,,,,3,,5,20
+153,Splatterina,Dark,,,,,6,,3,,5,,2,,4,16
+154,Gildane,Ground,,,,,,5,,,,,,,1,5
+155,Dogen,Neutral,,,,,4,3,3,,2,,3,,5,15
+156,Bulldosu,Ground,,,,,,,,4,,,3,,2,7
+157,Celesdir,Neutral,,,,,,4,7,,,,,,2,11
+157B,Celesdir Noct,Dark,,,,,,4,8,,,,,,2,12
+158,Astegon,Dragon/Dark,,,,,3,,,7,,,,,2,10
+159,Knocklem,Ground,,,,,,4,,7,,,7,,3,18
+159B,Knocklem Ignis,Fire,5,,,,,,,7,,,7,,3,19
+160,Silvegis,Dragon,,,,,,,6,,,,,,1,6
+161,Azurmane,Electric,,,,5,,,,,,,,,1,5
+162,Valentail,Neutral,,,,,,2,,,,,,,1,2
+163,Snock,Electric,,,,4,,,,,,,,,1,4
+163B,Snock Lux,Electric/Ground,,,,4,,,,,,,,,1,4
+164,Souffline,Grass,,,2,,,,,,,,2,,2,4
+165,Lapiron,Ground,,,,,3,4,,2,,,1,,4,10
+166,Hoodle,Dark,,,,,1,,,,,,1,,2,2
+167,Slowatt,Electric,,,,3,,,,,,,,,1,3
+168,Bakemi,Dark,,,,,3,,,,4,,2,,3,9
+169,Solmora,Water,,4,,,,,,,,,,,1,4
+169B,Solmora Lux,Water/Electric,,4,,6,,,,,,,,,2,10
+170,Lapure,Neutral,,,,,6,5,,,,,,,2,11
+171,Eidrolon,Dragon/Dark,,,,,,,,,,,6,,1,6
+171B,Eidrolon Ignis,Dragon/Fire,6,,,,,,,,,,6,,2,12
+172,Dynamoff,Electric,,,,6,,3,,,,,3,,3,12
+173,Tropicaw,Grass,,,5,,,5,,,,,,,2,10
+174,Flaracle,Fire,7,,,,6,,,,,,2,,3,15
+175,Ophydia,Grass/Water,,5,7,,,,,,,,,,2,12
+176,Dupin,Fire,7,,,,5,,,,4,,2,,4,18
+177,Roujay,Dark,,,,,,5,,,,,5,,2,10
+178,Venusa,Dark,,,,,6,6,,,5,,2,,4,19
+179,Mycora,Grass,,,6,,4,4,,,6,,,,4,20
+180,Loomen,Dark/Fire,4,,,,4,,,,4,,,,3,12
+181,Wistella,Dark,,,,,6,,,,6,,1,,3,13
+182,Solenne,Dark/Neutral,,,,,8,4,,,,,2,,3,14
+183,Renjishi,Fire,8,,,,6,5,,,,,5,,4,24
+184,Aegidron,Dragon/Ground,,,,,,,,8,,,,,1,8
+185,Grizzbolt,Electric,,,,5,4,,3,,,,5,,4,17
+186,Lyleen,Grass,,,7,,5,6,,,5,,,,4,23
+186B,Lyleen Noct,Dark,,,,,5,6,,,7,,,,3,18
+187,Orserk,Dragon/Electric,,,,8,3,,,,,,4,,3,15
+188,Faleris,Fire,6,,,,,,,,,,3,,2,9
+188B,Faleris Aqua,Water,,6,,,,,,,,,5,,2,11
+189,Shadowbeak,Dark,,,,,,2,,,,,,,1,2
+190,Selyne,Dark/Neutral,,,,,7,,,,6,,3,,3,16
+191,Bastigor,Ice,,,,,,,6,5,,8,,,3,19
+192,Shaolong,Dragon/Water,,8,,,,5,,,,,,,2,13
+193,Silvance,Grass,,,6,,6,4,,,8,,2,,5,26
+194,Dandilord,Grass/Dark,,,8,,6,5,,,6,,3,,5,28
+195,Bellanoir,Dark,,,,,5,,,,5,,4,,3,14
+195B,Bellanoir Libero,Dark,,,,,6,,,,7,,4,,3,17
+196,Xenolord,Dark/Dragon,,,,,,2,,,,,,,1,2
+197,Hartalis,Neutral,,,,,,7,7,,,,,,2,14
+198,Paladius,Neutral,,,,,,,6,6,,,,,2,12
+199,Necromus,Dark,,,,,,,6,6,,,,,2,12
+200,Frostallion,Ice,,,,,,,,,,7,,,1,7
+200B,Frostallion Noct,Dark,,,,,,7,,,,,,,1,7
+201,Neptilius,Water,,7,,,,,,,,,,,1,7
+202,Jetragon,Dragon,,,,,,8,,,,,,,1,8
+203,Panthalus,Water,,,,,,,,,,,,,0,0
+204,Astralym,,,,,,,,,,,,,,0,0
+collab,Blue Slime,Water,,,,,,,,,,,1,,1,1
+collab,Cave Bat,Neutral,,,,,,1,,,,,,,1,1
+collab,Demon Eye,Dark,,,,,,,,,,,1,,1,1
+collab,Enchanted Sword,Neutral,,,,,,,1,,,,,,1,1
+collab,Eye of Cthulhu,Dark,,,,,,,,,,,4,,1,4
+collab,Green Slime,Grass,,,,,,,,,,,1,,1,1
+collab,Illuminant Bat,Neutral,,,,,,1,,,,,,,1,1
+collab,Illuminant Slime,Neutral,,,,,,,,,,,1,,1,1
+collab,Purple Slime,Dark,,,,,,,,,,,1,,1,1
+collab,Rainbow Slime,Neutral,,,,,,,,,,,1,,1,1
+collab,Red Slime,Fire,,,,,,,,,,,1,,1,1

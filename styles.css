@@ -129,6 +129,29 @@ main { flex: 1; width: 100%; max-width: 1180px; margin: 0 auto; padding: 18px 22
 .lv5 b, .lv6 b { color: #60a5fa; }
 .lv7 b { color: #c084fc; }
 .lv8 b, .lv9 b, .lv10 b { color: #fbbf24; }
+.wchip.hl { border-color: var(--accent-dim); background: #16302c; color: var(--text); }
+
+/* ---------- work multiselect ---------- */
+.multi-wrap { position: relative; }
+.multi-btn {
+  background: var(--panel-2); border: 1px solid var(--border); border-radius: 8px;
+  color: var(--text); padding: 8px 12px; display: inline-flex; align-items: center; gap: 8px;
+}
+.multi-btn:hover { border-color: #3d5066; }
+.multi-btn .caret { color: var(--muted); font-size: 11px; }
+.multi-panel {
+  position: absolute; top: calc(100% + 4px); left: 0; z-index: 35;
+  background: var(--panel-2); border: 1px solid var(--border); border-radius: 10px;
+  padding: 8px; min-width: 210px; box-shadow: 0 12px 30px rgba(0,0,0,.45);
+  display: flex; flex-direction: column; gap: 2px;
+}
+.multi-row {
+  display: flex; align-items: center; gap: 8px; padding: 5px 8px;
+  border-radius: 7px; cursor: pointer; font-size: 14px;
+}
+.multi-row:hover { background: #223041; }
+.multi-row input { accent-color: var(--accent); }
+.multi-clear { margin-top: 6px; }
 
 /* ---------- base cards ---------- */
 .grid-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px; }

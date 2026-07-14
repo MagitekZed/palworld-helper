@@ -60,9 +60,14 @@ let bases = lsLoad(LS_BASES, [])
   .map(b => ({ id: String(b.id), name: String(b.name || 'Base'), crew: normalizeCrew(b.crew), cap: clampCap(b.cap) }));
 
 let ui = Object.assign(
-  { view: 'roster', baseId: null, search: '', element: '', work: '', ownedOnly: false, sort: 'dex' },
+  { view: 'roster', baseId: null, search: '', element: '', works: [], ownedOnly: false, sort: 'dex' },
   lsLoad(LS_UI, {})
 );
+// migrate the old single-work filter (ui.work: string) to ui.works: []
+if (typeof ui.work === 'string' && ui.work) ui.works = [ui.work];
+delete ui.work;
+if (!Array.isArray(ui.works)) ui.works = [];
+ui.works = ui.works.filter(w => WORKS.includes(w));
 
 function persist() {
   localStorage.setItem(LS_ROSTER, JSON.stringify(roster));
@@ -203,10 +208,13 @@ function matchesFilters(p) {
     if (!hitName && !hitDex) return false;
   }
   if (ui.element && !p.elements.includes(ui.element)) return false;
-  if (ui.work && !(ui.work in p.works)) return false;
+  if (ui.works.length && !ui.works.every(w => w in p.works)) return false;
   if (ui.ownedOnly && !isOwned(p.name)) return false;
   return true;
 }
+
+// combined level across the selected work filters (for sorting)
+const selectedWorksTotal = p => ui.works.reduce((s, w) => s + (p.works[w] || 0), 0);
 
 function sortPals(list) {
   const s = ui.sort;
@@ -215,8 +223,8 @@ function sortPals(list) {
   else if (s === 'total') copy.sort((a, b) => totalLevels(b) - totalLevels(a));
   else if (s === 'best') copy.sort((a, b) => bestLevel(b) - bestLevel(a) || totalLevels(b) - totalLevels(a));
   else copy.sort((a, b) => dexOrder.get(a.name) - dexOrder.get(b.name));
-  // when filtering by a work type, sort that work to the top regardless
-  if (ui.work) copy.sort((a, b) => (b.works[ui.work] || 0) - (a.works[ui.work] || 0));
+  // when filtering by work types, sort the strongest at those works to the top
+  if (ui.works.length) copy.sort((a, b) => selectedWorksTotal(b) - selectedWorksTotal(a));
   return copy;
 }
 
@@ -235,11 +243,41 @@ function renderRoster() {
     el('option', { value: '' }, 'Any element'),
     ELEMENTS.map(x => el('option', { value: x, selected: ui.element === x ? '' : null }, x))
   );
-  const workSel = el('select',
-    { onchange: e => { ui.work = e.target.value; persist(); renderList(); } },
-    el('option', { value: '' }, 'Any work'),
-    WORKS.map(x => el('option', { value: x, selected: ui.work === x ? '' : null }, x))
-  );
+  // multiselect: show only pals that have ALL checked work suitabilities
+  const workSel = (() => {
+    const wrap = el('div', { class: 'multi-wrap' });
+    const btnLabel = () =>
+      ui.works.length === 0 ? 'Any work'
+        : ui.works.length <= 2 ? ui.works.join(' + ')
+          : `${ui.works.length} works`;
+    const btn = el('button', { class: 'multi-btn', type: 'button' }, btnLabel(), el('span', { class: 'caret' }, '▾'));
+    const panel = el('div', { class: 'multi-panel', hidden: '' });
+    btn.addEventListener('click', () => { panel.hidden = !panel.hidden; });
+    for (const w of WORKS) {
+      const cb = el('input', { type: 'checkbox', ...(ui.works.includes(w) ? { checked: '' } : {}) });
+      cb.addEventListener('change', () => {
+        ui.works = cb.checked ? [...ui.works, w] : ui.works.filter(x => x !== w);
+        btn.firstChild.textContent = btnLabel();
+        persist(); renderList();
+      });
+      panel.append(el('label', { class: 'multi-row' }, cb, ' ', w));
+    }
+    panel.append(el('button', {
+      class: 'ghost multi-clear', type: 'button',
+      onclick: () => {
+        ui.works = [];
+        panel.querySelectorAll('input').forEach(c => { c.checked = false; });
+        btn.firstChild.textContent = btnLabel();
+        persist(); renderList();
+      }
+    }, 'Clear'));
+    wrap.append(btn, panel);
+    document.addEventListener('mousedown', function outside(e) {
+      if (!wrap.isConnected) { document.removeEventListener('mousedown', outside); return; }
+      if (!wrap.contains(e.target)) panel.hidden = true;
+    });
+    return wrap;
+  })();
   const sortSel = el('select',
     { onchange: e => { ui.sort = e.target.value; persist(); renderList(); } },
     [['dex', 'Sort: Paldex'], ['name', 'Sort: Name'], ['total', 'Sort: Total levels'], ['best', 'Sort: Best level']]
@@ -291,7 +329,11 @@ function renderRoster() {
         el('span', { class: 'pal-name' },
           el('a', { href: 'https://paldb.cc/en/' + p.slug, target: '_blank', rel: 'noopener' }, p.name)),
         elementChips(p),
-        el('span', { class: 'work-chips' }, sortedWorks(p).map(([w, l]) => workChip(w, l, p)))
+        el('span', { class: 'work-chips' }, sortedWorks(p).map(([w, l]) => {
+          const chip = workChip(w, l, p);
+          if (ui.works.includes(w)) chip.classList.add('hl');
+          return chip;
+        }))
       );
       listWrap.append(row);
     }

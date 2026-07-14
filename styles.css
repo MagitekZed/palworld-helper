@@ -290,3 +290,59 @@ main { flex: 1; width: 100%; max-width: 1180px; margin: 0 auto; padding: 18px 22
 .add-btn:disabled { color: var(--muted); cursor: default; opacity: .5; }
 
 .empty-note { color: var(--muted); text-align: center; padding: 30px 10px; }
+
+/* ================= mobile ================= */
+@media (max-width: 700px) {
+  /* header: non-sticky, brand row then tabs + actions row */
+  .topbar { position: static; padding: 10px 14px; gap: 8px 10px; }
+  .brand { flex-basis: 100%; }
+  .brand h1 { font-size: 17px; }
+  .brand-icon { font-size: 24px; }
+  .tabs { margin-left: 0; }
+  .top-actions { margin-left: auto; }
+
+  main { padding: 12px 12px 32px; }
+
+  /* toolbar: search gets its own row; the work panel spans the toolbar */
+  .toolbar { position: relative; padding: 10px; gap: 8px; }
+  .toolbar input[type="search"] { min-width: 100%; }
+  .count-pill { margin-left: auto; }
+  .multi-wrap { position: static; }
+  .multi-panel { left: 10px; right: 10px; top: 100%; min-width: 0; }
+
+  /* pal rows: work chips drop to their own full-width line */
+  .pal-row { flex-wrap: wrap; row-gap: 8px; padding: 10px 12px; }
+  .pal-row .work-chips { flex-basis: 100%; margin-left: 0; justify-content: flex-start; }
+  .pal-id { width: auto; min-width: 30px; }
+
+  /* crew / catch rows: chips wrap below; controls stay on the top line */
+  .crew-row { flex-wrap: wrap; row-gap: 8px; }
+  .crew-row .work-chips { order: 5; flex-basis: 100%; margin-left: 0; justify-content: flex-start; }
+  .crew-row .rm { margin-left: auto; }
+  .crew-row .add-btn { margin-left: auto; }
+
+  /* editor: name field takes a full row */
+  .editor-head { gap: 8px; }
+  .editor-head input.base-name { flex-basis: 100%; min-width: 0; }
+
+  /* picker rows: the works preview wraps below */
+  .pick-row { flex-wrap: wrap; row-gap: 4px; }
+  .pick-row .works-mini { flex-basis: 100%; margin-left: 0; text-align: left; }
+
+  /* coverage: two compact columns instead of one long stack */
+  .cov-grid { grid-template-columns: repeat(2, 1fr); }
+
+  /* modal: use more of the screen */
+  .modal { top: 3vh; width: 96vw; max-height: 90vh; }
+  .modal-body .pal-row { row-gap: 6px; }
+  .ranch-mini { max-width: 100%; }
+
+  /* bigger touch targets */
+  .qty-step button { width: 34px; height: 34px; font-size: 17px; }
+  .crew-row .rm { font-size: 18px; padding: 4px 8px; }
+  .tab { padding: 8px 16px; }
+  .add-btn { padding: 6px 14px; }
+
+  /* prevent iOS zoom-on-focus (inputs must be >= 16px) */
+  input, select { font-size: 16px; }
+}

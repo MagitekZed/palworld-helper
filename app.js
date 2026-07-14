@@ -333,12 +333,68 @@ function renderRoster() {
           const chip = workChip(w, l, p);
           if (ui.works.includes(w)) chip.classList.add('hl');
           return chip;
-        }))
+        })),
+        el('button', {
+          class: 'add-btn qadd-btn', title: 'Quick-add to a base',
+          onclick: e => quickAddToBase(p, e.target)
+        }, '+ base')
       );
       listWrap.append(row);
     }
   }
   renderList();
+}
+
+/* ================= quick add to base ================= */
+function tryQuickAdd(base, p, btn) {
+  const total = crewTotal(base);
+  if (total >= base.cap) {
+    alert(`"${base.name}" is full (${total} / ${base.cap} workers).\nRaise its Max workers or remove someone first.`);
+    return false;
+  }
+  addToCrew(base, p.name, 1);
+  persist();
+  if (btn) {
+    const original = btn.textContent;
+    btn.textContent = `✓ ${base.name}`;
+    btn.disabled = true;
+    setTimeout(() => { btn.textContent = original; btn.disabled = false; }, 1400);
+  }
+  return true;
+}
+
+function quickAddToBase(p, btn) {
+  if (!bases.length) {
+    alert('No bases yet — create one on the Bases tab first.');
+    return;
+  }
+  if (bases.length === 1) { tryQuickAdd(bases[0], p, btn); return; }
+  openBasePickerModal(p, btn);
+}
+
+function openBasePickerModal(p, btn) {
+  $('#modal-title').textContent = `Add ${p.name} to…`;
+  const body = $('#modal-body');
+  body.innerHTML = '';
+  const list = el('div', { class: 'pal-list' });
+  for (const b of bases) {
+    const total = crewTotal(b);
+    const full = total >= b.cap;
+    const inCrew = crewQty(b, p.name);
+    list.append(el('div', { class: 'pal-row' },
+      el('b', {}, b.name),
+      el('span', { class: 'count-pill' }, `${total} / ${b.cap}`),
+      inCrew ? el('span', { class: 'status increw' }, `has ×${inCrew}`) : null,
+      full ? el('span', { class: 'status need' }, 'full') : null,
+      el('span', { class: 'spacer', style: 'flex:1' }),
+      el('button', {
+        class: 'add-btn',
+        onclick: () => { if (tryQuickAdd(b, p, btn)) closeModal(); }
+      }, '+ Add')
+    ));
+  }
+  body.append(list);
+  $('#modal-root').hidden = false;
 }
 
 /* ================= bases view ================= */

@@ -6,6 +6,7 @@ Work suitability for every pal in **Palworld v1.0** (released 2026-07-10).
 
 - `pals_work_suitability.json` — full structured data: paldex number, name, internal codename, elements, work suitabilities with levels.
 - `pals_work_suitability.csv` — same data as a matrix (one column per work type), Excel-friendly.
+- `pals_combat_stats.json` / `.csv` — raw HP / Attack / Defense for all 299 pals plus our derived combat tier (see below).
 
 ## Coverage
 
@@ -30,6 +31,22 @@ items they produce when assigned to a Ranch (name, icon URL, paldb slug), e.g.
 Lamball → Wool, Mau → Gold Coin, Vixy → spheres/arrows/bones. Scraped from each
 pal's paldb.cc page (the per-partner-skill-level produce table, deduplicated
 across levels; Mau's comes from its partner-skill text). Retrieved 2026-07-13.
+
+## Combat stats & tiers
+
+`pals_combat_stats.*` carry each pal's **Health, Attack, and Defense** (base values,
+before IVs / condenser / passives), scraped from each pal's paldb.cc page
+(retrieved 2026-07-16). "Attack" is paldb's ranged/shot attack value (equals melee
+for most pals). Astralym's page omits its Health bar; its raw values (200/200/200)
+were read directly.
+
+The **combat tier** (S / A / B / C / F) is *our own* objective grade, not a
+community list. For each stat we compute a rank-percentile across all 299 pals,
+average the three (equal weight), then bucket the composite into a pyramid:
+**S = top 10%, A = next 20%, B = middle 40%, C = next 20%, F = bottom 10%**
+(30 / 60 / 119 / 60 / 30 pals). It reflects raw stats only — element typing,
+partner skills, and mount abilities are deliberately excluded, so a great
+utility/work pal (e.g. Anubis) can grade below a raw stat monster.
 
 ## Sources
 

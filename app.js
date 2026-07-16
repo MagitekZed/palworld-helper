@@ -60,7 +60,7 @@ let bases = lsLoad(LS_BASES, [])
   .map(b => ({ id: String(b.id), name: String(b.name || 'Base'), crew: normalizeCrew(b.crew), cap: clampCap(b.cap) }));
 
 let ui = Object.assign(
-  { view: 'roster', baseId: null, search: '', element: '', works: [], ownedOnly: false, sort: 'dex' },
+  { view: 'roster', baseId: null, search: '', element: '', works: [], tier: '', ownedOnly: false, sort: 'dex' },
   lsLoad(LS_UI, {})
 );
 // migrate the old single-work filter (ui.work: string) to ui.works: []
@@ -164,6 +164,25 @@ function elementChips(p) {
   );
 }
 
+const TIER_NAMES = { S: 'S (top tier)', A: 'A (strong)', B: 'B (average)', C: 'C (weak)', F: 'F (bottom)' };
+function ordinal(n) {
+  const v = n % 100, s = ['th', 'st', 'nd', 'rd'];
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
+}
+// tier badge + HP/Atk/Def mini-bars (percentile fill), exact values in the tooltip
+function combatCluster(p) {
+  if (!p.stats || !p.tier) return null;
+  const st = p.stats, pc = p.pctl;
+  const bar = k => el('span', { class: 'cbar ' + k }, el('i', { style: `width:${pc[k]}%` }));
+  const title =
+    `Combat tier ${p.tier} — ${ordinal(p.combat)} percentile overall\n` +
+    `HP ${st.hp} (${ordinal(pc.hp)}) · ATK ${st.atk} (${ordinal(pc.atk)}) · DEF ${st.def} (${ordinal(pc.def)})`;
+  return el('span', { class: 'combat', title },
+    el('span', { class: 'tier tier-' + p.tier, 'aria-label': 'Tier ' + p.tier }, p.tier),
+    el('span', { class: 'cbars' }, bar('hp'), bar('atk'), bar('def'))
+  );
+}
+
 // − n + stepper; get()/set() own the value, onAfter re-renders
 function qtyStepper(get, set, onAfter) {
   const qty = el('span', { class: 'qty' + (get() ? '' : ' zero') }, String(get()));
@@ -209,6 +228,7 @@ function matchesFilters(p) {
   }
   if (ui.element && !p.elements.includes(ui.element)) return false;
   if (ui.works.length && !ui.works.every(w => w in p.works)) return false;
+  if (ui.tier && p.tier !== ui.tier) return false;
   if (ui.ownedOnly && !isOwned(p.name)) return false;
   return true;
 }
@@ -222,6 +242,7 @@ function sortPals(list) {
   if (s === 'name') copy.sort((a, b) => a.name.localeCompare(b.name));
   else if (s === 'total') copy.sort((a, b) => totalLevels(b) - totalLevels(a));
   else if (s === 'best') copy.sort((a, b) => bestLevel(b) - bestLevel(a) || totalLevels(b) - totalLevels(a));
+  else if (s === 'tier') copy.sort((a, b) => (b.combat || 0) - (a.combat || 0) || a.name.localeCompare(b.name));
   else copy.sort((a, b) => dexOrder.get(a.name) - dexOrder.get(b.name));
   // when filtering by work types, sort the strongest at those works to the top
   if (ui.works.length) copy.sort((a, b) => selectedWorksTotal(b) - selectedWorksTotal(a));
@@ -280,8 +301,13 @@ function renderRoster() {
   })();
   const sortSel = el('select',
     { onchange: e => { ui.sort = e.target.value; persist(); renderList(); } },
-    [['dex', 'Sort: Paldex'], ['name', 'Sort: Name'], ['total', 'Sort: Total levels'], ['best', 'Sort: Best level']]
+    [['dex', 'Sort: Paldex'], ['name', 'Sort: Name'], ['total', 'Sort: Total levels'], ['best', 'Sort: Best level'], ['tier', 'Sort: Combat tier']]
       .map(([v, t]) => el('option', { value: v, selected: ui.sort === v ? '' : null }, t))
+  );
+  const tierSel = el('select',
+    { onchange: e => { ui.tier = e.target.value; persist(); renderList(); } },
+    el('option', { value: '' }, 'Any tier'),
+    ['S', 'A', 'B', 'C', 'F'].map(t => el('option', { value: t, selected: ui.tier === t ? '' : null }, 'Tier ' + TIER_NAMES[t]))
   );
   const ownedChk = el('label', { class: 'check' },
     el('input', {
@@ -293,7 +319,7 @@ function renderRoster() {
   const countPill = el('span', { class: 'count-pill' });
 
   view.append(
-    el('div', { class: 'toolbar' }, searchInput, elementSel, workSel, sortSel, ownedChk,
+    el('div', { class: 'toolbar' }, searchInput, elementSel, workSel, tierSel, sortSel, ownedChk,
       el('span', { class: 'spacer' }), countPill),
     listWrap
   );
@@ -329,6 +355,7 @@ function renderRoster() {
         el('span', { class: 'pal-name' },
           el('a', { href: 'https://paldb.cc/en/' + p.slug, target: '_blank', rel: 'noopener' }, p.name)),
         elementChips(p),
+        combatCluster(p),
         el('span', { class: 'work-chips' }, sortedWorks(p).map(([w, l]) => {
           const chip = workChip(w, l, p);
           if (ui.works.includes(w)) chip.classList.add('hl');

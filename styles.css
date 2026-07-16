@@ -131,6 +131,25 @@ main { flex: 1; width: 100%; max-width: 1180px; margin: 0 auto; padding: 18px 22
 .lv8 b, .lv9 b, .lv10 b { color: #fbbf24; }
 .wchip.hl { border-color: var(--accent-dim); background: #16302c; color: var(--text); }
 
+/* ---------- combat tier + stats ---------- */
+.combat { display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; cursor: default; }
+.tier {
+  width: 25px; height: 25px; border-radius: 7px; flex-shrink: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 13px; color: #0b0f14; letter-spacing: .3px;
+}
+.tier-S { background: #f0b429; box-shadow: 0 0 0 1px #f0b42966, 0 0 9px #f0b42955; }
+.tier-A { background: #4ade80; }
+.tier-B { background: #60a5fa; }
+.tier-C { background: #9aa8ba; }
+.tier-F { background: #f87171; }
+.cbars { display: inline-flex; flex-direction: column; gap: 2px; width: 50px; }
+.cbar { height: 4px; border-radius: 3px; background: var(--panel-2); overflow: hidden; }
+.cbar i { display: block; height: 100%; border-radius: 3px; min-width: 2px; }
+.cbar.hp i  { background: #4ade80; }
+.cbar.atk i { background: #ff7a45; }
+.cbar.def i { background: #59a7ff; }
+
 /* ---------- work multiselect ---------- */
 .multi-wrap { position: relative; }
 .multi-btn {

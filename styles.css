@@ -131,6 +131,11 @@ main { flex: 1; width: 100%; max-width: 1180px; margin: 0 auto; padding: 18px 22
 .lv8 b, .lv9 b, .lv10 b { color: #fbbf24; }
 .wchip.hl { border-color: var(--accent-dim); background: #16302c; color: var(--text); }
 
+/* ---------- food (appetite) ---------- */
+.wchip.food { border-color: #4a3c2b; cursor: default; }
+.wchip.food b { color: #fbbf24; }
+.food-total { cursor: default; white-space: nowrap; }
+
 /* ---------- combat tier + stats ---------- */
 .combat { display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; cursor: default; }
 .tier {

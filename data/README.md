@@ -6,7 +6,7 @@ Work suitability for every pal in **Palworld v1.0** (released 2026-07-10).
 
 - `pals_work_suitability.json` — full structured data: paldex number, name, internal codename, elements, work suitabilities with levels.
 - `pals_work_suitability.csv` — same data as a matrix (one column per work type), Excel-friendly.
-- `pals_combat_stats.json` / `.csv` — raw HP / Attack / Defense for all 299 pals plus our derived combat tier (see below).
+- `pals_combat_stats.json` / `.csv` — raw HP / Attack / Defense / Food for all 299 pals plus our derived combat tier (see below).
 
 ## Coverage
 
@@ -54,6 +54,14 @@ utility/work pal (e.g. Anubis) can grade below a raw stat monster.
 - Cross-checked against: [1.0 patch notes](https://insider-gaming.com/palworld-1-0-adds-72-new-pals-world-improvements-story-overhaul-more-full-1-0-patch-notes/) (10-level rescale, rank-up mechanic) and [Phrasemaker's 1.0 pal list](https://thephrasemaker.com/2026/07/10/palworld-1-0-complete-pal-list-every-new-pal-elemental-type-and-work-suitability/) (new-pal values matched paldb on all 5 spot-checked pals).
 - Not used: Game8's aggregate work suitability table and the Fandom/wiki.gg pages — still showing stale pre-1.0 values as of 2026-07-13.
 
+## Food (appetite)
+
+Each pal also carries its **Food** stat (paldb.cc, retrieved 2026-07-16): a relative
+measure of how fast its hunger drains — higher = eats more. Range across all pals is
+100–730. The planner sums a crew's Food (× copies) on base cards and the base editor
+so you can compare how expensive crews are to feed.
+
 ## Not in this dataset
 
-Work *speed* stats, food consumption, partner-skill work bonuses, and day/night behavior (Dark-type pals work through the night) — all of which also affect real base throughput.
+Work *speed* stats, partner-skill work bonuses, and day/night behavior (Dark-type
+pals work through the night) — all of which also affect real base throughput.

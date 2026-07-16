@@ -136,6 +136,9 @@ const globalFree = name =>
 // copies this base wants but cannot get (not owned, or claimed by an earlier base)
 const shortfallOf = (base, name) => Math.max(0, crewQty(base, name) - allocatedTo(base, name));
 const baseShortfall = base => base.crew.reduce((s, e) => s + shortfallOf(base, e.name), 0);
+// combined Food stat of a crew (copies counted) — how much the base eats
+const crewFood = base => base.crew.reduce((s, e) => s + ((byName.get(e.name) || {}).food || 0) * e.qty, 0);
+const FOOD_TIP = 'Combined Food stat of this crew (higher = hunger drains faster, so the base needs more berry plots / feed)';
 
 const isNight = p => p.elements.includes('Dark');
 const dexLabel = p => p.paldex ? '#' + p.paldex : '★';
@@ -155,6 +158,12 @@ function workChip(work, lv, pal) {
     attrs.title = 'Ranch produce: ' + pal.ranch.map(i => i.name).join(', ');
   }
   return el('span', attrs, `${work} `, el('b', {}, String(lv)));
+}
+
+function foodChip(p) {
+  if (!p.food) return null;
+  return el('span', { class: 'wchip food', title: `Food ${p.food} — how fast its hunger drains; higher = eats more` },
+    '🍖 ', el('b', {}, String(p.food)));
 }
 
 function elementChips(p) {
@@ -446,7 +455,8 @@ function renderBases() {
     const covered = WORKS.filter(w => det[w].levels.length > 0).length;
     grid.append(el('div', { class: 'base-card', onclick: () => { ui.baseId = b.id; persist(); render(); } },
       el('h3', {}, b.name),
-      el('div', { class: 'meta' }, `${total} / ${b.cap} pals · covers ${covered}/12 work types`),
+      el('div', { class: 'meta', title: crewFood(b) ? FOOD_TIP : null },
+        `${total} / ${b.cap} pals · covers ${covered}/12 work types` + (crewFood(b) ? ` · 🍖 ${crewFood(b).toLocaleString()}` : '')),
       missing
         ? el('div', { class: 'missing' }, `⚠ ${missing} cop${missing === 1 ? 'y' : 'ies'} still to catch`)
         : el('div', { class: 'meta', style: 'color: var(--ok)' }, total ? '✓ full crew owned' : 'empty')
@@ -496,8 +506,10 @@ function renderEditor(view, base) {
   /* ---- crew panel (left) ---- */
   function buildLeft() {
     const total = crewTotal(base);
+    const food = crewFood(base);
     const crewPanel = el('div', { class: 'panel' });
-    crewPanel.append(el('h3', {}, `Crew (${total} / ${base.cap})`));
+    crewPanel.append(el('h3', {}, `Crew (${total} / ${base.cap})`,
+      food ? el('span', { class: 'hint food-total', title: FOOD_TIP }, ` · 🍖 ${food.toLocaleString()} food`) : null));
 
     // pal picker
     const input = el('input', { type: 'search', placeholder: 'Add a pal — type name or #paldex…', autocomplete: 'off' });
@@ -563,7 +575,7 @@ function renderEditor(view, base) {
         isNight(p) ? el('span', { class: 'night', title: 'Works through the night' }, '🌙') : null,
         status,
         qtyStepper(() => crewQty(base, entry.name), n => { setCrewQty(base, entry.name, n); persist(); }, refresh),
-        el('span', { class: 'work-chips' }, sortedWorks(p).map(([w, l]) => workChip(w, l, p))),
+        el('span', { class: 'work-chips' }, sortedWorks(p).map(([w, l]) => workChip(w, l, p)), foodChip(p)),
         el('button', { class: 'rm', title: 'Remove from crew', onclick: () => { setCrewQty(base, entry.name, 0); persist(); refresh(); } }, '✕')
       ));
     }
@@ -750,6 +762,7 @@ function openWorkModal(work, base, onChange) {
         el('span', { class: 'pal-name' }, p.name),
         isNight(p) ? el('span', { class: 'night', title: 'Works through the night' }, '🌙') : null,
         el('span', { class: `wchip lv${p.works[work]}` }, `${work} `, el('b', {}, String(p.works[work]))),
+        foodChip(p),
         work === 'Farming' && p.ranch
           ? el('span', { class: 'ranch-mini', title: p.ranch.map(i => i.name).join(', ') },
             '→ ' + p.ranch.map(i => i.name).join(', '))

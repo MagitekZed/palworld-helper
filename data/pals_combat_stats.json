@@ -1,7 +1,7 @@
 {
  "meta": {
   "game_version": "1.0 (released 2026-07-10)",
-  "stats_source": "paldb.cc/en/<pal> Health/Attack/Defense, retrieved 2026-07-16",
+  "stats_source": "paldb.cc/en/<pal> Health/Attack/Defense/Food, retrieved 2026-07-16",
   "tier_method": "mean of HP/Attack/Defense rank-percentiles, pyramid buckets (S top10% A20% B40% C20% F bottom10%)",
   "tier_thresholds": {
    "C": 13.5,
@@ -21,7 +21,8 @@
    "atk_pctl": 9,
    "def_pctl": 12,
    "combat_pctl": 11,
-   "tier": "F"
+   "tier": "F",
+   "food": 100
   },
   {
    "paldex": "2",
@@ -33,7 +34,8 @@
    "atk_pctl": 9,
    "def_pctl": 12,
    "combat_pctl": 11,
-   "tier": "F"
+   "tier": "F",
+   "food": 100
   },
   {
    "paldex": "3",
@@ -45,7 +47,8 @@
    "atk_pctl": 2,
    "def_pctl": 3,
    "combat_pctl": 2,
-   "tier": "F"
+   "tier": "F",
+   "food": 100
   },
   {
    "paldex": "4",
@@ -57,7 +60,8 @@
    "atk_pctl": 9,
    "def_pctl": 12,
    "combat_pctl": 14,
-   "tier": "C"
+   "tier": "C",
+   "food": 100
   },
   {
    "paldex": "5",
@@ -69,7 +73,8 @@
    "atk_pctl": 25,
    "def_pctl": 3,
    "combat_pctl": 10,
-   "tier": "F"
+   "tier": "F",
+   "food": 100
   },
   {
    "paldex": "5B",
@@ -81,7 +86,8 @@
    "atk_pctl": 33,
    "def_pctl": 3,
    "combat_pctl": 13,
-   "tier": "F"
+   "tier": "F",
+   "food": 100
   },
   {
    "paldex": "6",
@@ -93,7 +99,8 @@
    "atk_pctl": 9,
    "def_pctl": 12,
    "combat_pctl": 11,
-   "tier": "F"
+   "tier": "F",
+   "food": 100
   },
   {
    "paldex": "7",
@@ -105,7 +112,8 @@
    "atk_pctl": 9,
    "def_pctl": 29,
    "combat_pctl": 22,
-   "tier": "C"
+   "tier": "C",
+   "food": 150
   },
   {
    "paldex": "7B",
@@ -117,7 +125,8 @@
    "atk_pctl": 17,
    "def_pctl": 29,
    "combat_pctl": 25,
-   "tier": "C"
+   "tier": "C",
+   "food": 150
   },
   {
    "paldex": "8",
@@ -129,7 +138,8 @@
    "atk_pctl": 9,
    "def_pctl": 20,
    "combat_pctl": 13,
-   "tier": "F"
+   "tier": "F",
+   "food": 100
   },
   {
    "paldex": "9",
@@ -141,7 +151,8 @@
    "atk_pctl": 56,
    "def_pctl": 39,
    "combat_pctl": 41,
-   "tier": "B"
+   "tier": "B",
+   "food": 150
   },
   {
    "paldex": "9B",
@@ -153,7 +164,8 @@
    "atk_pctl": 74,
    "def_pctl": 48,
    "combat_pctl": 52,
-   "tier": "B"
+   "tier": "B",
+   "food": 150
   },
   {
    "paldex": "10",
@@ -165,7 +177,8 @@
    "atk_pctl": 17,
    "def_pctl": 20,
    "combat_pctl": 22,
-   "tier": "C"
+   "tier": "C",
+   "food": 100
   },
   {
    "paldex": "11",
@@ -177,7 +190,8 @@
    "atk_pctl": 2,
    "def_pctl": 12,
    "combat_pctl": 8,
-   "tier": "F"
+   "tier": "F",
+   "food": 100
   },
   {
    "paldex": "12",
@@ -189,7 +203,8 @@
    "atk_pctl": 9,
    "def_pctl": 12,
    "combat_pctl": 11,
-   "tier": "F"
+   "tier": "F",
+   "food": 100
   },
   {
    "paldex": "13",
@@ -201,7 +216,8 @@
    "atk_pctl": 25,
    "def_pctl": 12,
    "combat_pctl": 16,
-   "tier": "C"
+   "tier": "C",
+   "food": 100
   },
   {
    "paldex": "14",
@@ -213,7 +229,8 @@
    "atk_pctl": 4,
    "def_pctl": 4,
    "combat_pctl": 12,
-   "tier": "F"
+   "tier": "F",
+   "food": 100
   },
   {
    "paldex": "15",
@@ -225,7 +242,8 @@
    "atk_pctl": 17,
    "def_pctl": 12,
    "combat_pctl": 13,
-   "tier": "C"
+   "tier": "C",
+   "food": 100
   },
   {
    "paldex": "15B",
@@ -237,7 +255,8 @@
    "atk_pctl": 17,
    "def_pctl": 29,
    "combat_pctl": 19,
-   "tier": "C"
+   "tier": "C",
+   "food": 100
   },
   {
    "paldex": "16",
@@ -249,7 +268,8 @@
    "atk_pctl": 9,
    "def_pctl": 12,
    "combat_pctl": 11,
-   "tier": "F"
+   "tier": "F",
+   "food": 100
   },
   {
    "paldex": "17",
@@ -261,7 +281,8 @@
    "atk_pctl": 17,
    "def_pctl": 12,
    "combat_pctl": 13,
-   "tier": "C"
+   "tier": "C",
+   "food": 100
   },
   {
    "paldex": "17B",
@@ -273,7 +294,8 @@
    "atk_pctl": 25,
    "def_pctl": 12,
    "combat_pctl": 16,
-   "tier": "C"
+   "tier": "C",
+   "food": 100
   },
   {
    "paldex": "18",
@@ -285,7 +307,8 @@
    "atk_pctl": 48,
    "def_pctl": 56,
    "combat_pctl": 52,
-   "tier": "B"
+   "tier": "B",
+   "food": 270
   },
   {
    "paldex": "18B",
@@ -297,7 +320,8 @@
    "atk_pctl": 56,
    "def_pctl": 65,
    "combat_pctl": 60,
-   "tier": "B"
+   "tier": "B",
+   "food": 270
   },
   {
    "paldex": "19",
@@ -309,7 +333,8 @@
    "atk_pctl": 9,
    "def_pctl": 29,
    "combat_pctl": 16,
-   "tier": "C"
+   "tier": "C",
+   "food": 100
   },
   {
    "paldex": "20",
@@ -321,7 +346,8 @@
    "atk_pctl": 17,
    "def_pctl": 48,
    "combat_pctl": 36,
-   "tier": "B"
+   "tier": "B",
+   "food": 150
   },
   {
    "paldex": "21",
@@ -333,7 +359,8 @@
    "atk_pctl": 33,
    "def_pctl": 48,
    "combat_pctl": 57,
-   "tier": "B"
+   "tier": "B",
+   "food": 280
   },
   {
    "paldex": "21B",
@@ -345,7 +372,8 @@
    "atk_pctl": 33,
    "def_pctl": 48,
    "combat_pctl": 57,
-   "tier": "B"
+   "tier": "B",
+   "food": 280
   },
   {
    "paldex": "22",
@@ -357,7 +385,8 @@
    "atk_pctl": 17,
    "def_pctl": 3,
    "combat_pctl": 11,
-   "tier": "F"
+   "tier": "F",
+   "food": 100
   },
   {
    "paldex": "23",
@@ -369,7 +398,8 @@
    "atk_pctl": 9,
    "def_pctl": 12,
    "combat_pctl": 16,
-   "tier": "C"
+   "tier": "C",
+   "food": 100
   },
   {
    "paldex": "23B",
@@ -381,7 +411,8 @@
    "atk_pctl": 17,
    "def_pctl": 12,
    "combat_pctl": 19,
-   "tier": "C"
+   "tier": "C",
+   "food": 100
   },
   {
    "paldex": "24",
@@ -393,7 +424,8 @@
    "atk_pctl": 33,
    "def_pctl": 12,
    "combat_pctl": 22,
-   "tier": "C"
+   "tier": "C",
+   "food": 100
   },
   {
    "paldex": "25",
@@ -405,7 +437,8 @@
    "atk_pctl": 9,
    "def_pctl": 29,
    "combat_pctl": 13,
-   "tier": "F"
+   "tier": "F",
+   "food": 150
   },
   {
    "paldex": "26",
@@ -417,7 +450,8 @@
    "atk_pctl": 9,
    "def_pctl": 20,
    "combat_pctl": 16,
-   "tier": "C"
+   "tier": "C",
+   "food": 100
   },
   {
    "paldex": "27",
@@ -429,7 +463,8 @@
    "atk_pctl": 2,
    "def_pctl": 12,
    "combat_pctl": 8,
-   "tier": "F"
+   "tier": "F",
+   "food": 100
   },
   {
    "paldex": "27B",
@@ -441,7 +476,8 @@
    "atk_pctl": 4,
    "def_pctl": 12,
    "combat_pctl": 9,
-   "tier": "F"
+   "tier": "F",
+   "food": 100
   },
   {
    "paldex": "28",
@@ -453,7 +489,8 @@
    "atk_pctl": 9,
    "def_pctl": 12,
    "combat_pctl": 16,
-   "tier": "C"
+   "tier": "C",
+   "food": 100
   },
   {
    "paldex": "29",
@@ -465,7 +502,8 @@
    "atk_pctl": 17,
    "def_pctl": 12,
    "combat_pctl": 11,
-   "tier": "F"
+   "tier": "F",
+   "food": 100
   },
   {
    "paldex": "29B",
@@ -477,7 +515,8 @@
    "atk_pctl": 25,
    "def_pctl": 12,
    "combat_pctl": 14,
-   "tier": "C"
+   "tier": "C",
+   "food": 100
   },
   {
    "paldex": "30",
@@ -489,7 +528,8 @@
    "atk_pctl": 2,
    "def_pctl": 12,
    "combat_pctl": 5,
-   "tier": "F"
+   "tier": "F",
+   "food": 150
   },
   {
    "paldex": "30B",
@@ -501,7 +541,8 @@
    "atk_pctl": 2,
    "def_pctl": 12,
    "combat_pctl": 8,
-   "tier": "F"
+   "tier": "F",
+   "food": 150
   },
   {
    "paldex": "31",
@@ -513,7 +554,8 @@
    "atk_pctl": 25,
    "def_pctl": 1,
    "combat_pctl": 10,
-   "tier": "F"
+   "tier": "F",
+   "food": 150
   },
   {
    "paldex": "32",
@@ -525,7 +567,8 @@
    "atk_pctl": 25,
    "def_pctl": 29,
    "combat_pctl": 35,
-   "tier": "B"
+   "tier": "B",
+   "food": 140
   },
   {
    "paldex": "32B",
@@ -537,7 +580,8 @@
    "atk_pctl": 25,
    "def_pctl": 29,
    "combat_pctl": 35,
-   "tier": "B"
+   "tier": "B",
+   "food": 140
   },
   {
    "paldex": "33",
@@ -549,7 +593,8 @@
    "atk_pctl": 41,
    "def_pctl": 20,
    "combat_pctl": 30,
-   "tier": "C"
+   "tier": "C",
+   "food": 150
   },
   {
    "paldex": "34",
@@ -561,7 +606,8 @@
    "atk_pctl": 9,
    "def_pctl": 48,
    "combat_pctl": 39,
-   "tier": "B"
+   "tier": "B",
+   "food": 150
   },
   {
    "paldex": "34B",
@@ -573,7 +619,8 @@
    "atk_pctl": 17,
    "def_pctl": 48,
    "combat_pctl": 41,
-   "tier": "B"
+   "tier": "B",
+   "food": 150
   },
   {
    "paldex": "35",
@@ -585,7 +632,8 @@
    "atk_pctl": 2,
    "def_pctl": 3,
    "combat_pctl": 2,
-   "tier": "F"
+   "tier": "F",
+   "food": 100
   },
   {
    "paldex": "36",
@@ -597,7 +645,8 @@
    "atk_pctl": 41,
    "def_pctl": 48,
    "combat_pctl": 49,
-   "tier": "B"
+   "tier": "B",
+   "food": 300
   },
   {
    "paldex": "37",
@@ -609,7 +658,8 @@
    "atk_pctl": 17,
    "def_pctl": 85,
    "combat_pctl": 41,
-   "tier": "B"
+   "tier": "B",
+   "food": 280
   },
   {
    "paldex": "37B",
@@ -621,7 +671,8 @@
    "atk_pctl": 33,
    "def_pctl": 94,
    "combat_pctl": 54,
-   "tier": "B"
+   "tier": "B",
+   "food": 280
   },
   {
    "paldex": "38",
@@ -633,7 +684,8 @@
    "atk_pctl": 9,
    "def_pctl": 12,
    "combat_pctl": 16,
-   "tier": "C"
+   "tier": "C",
+   "food": 100
   },
   {
    "paldex": "38B",
@@ -645,7 +697,8 @@
    "atk_pctl": 25,
    "def_pctl": 12,
    "combat_pctl": 22,
-   "tier": "C"
+   "tier": "C",
+   "food": 100
   },
   {
    "paldex": "39",
@@ -657,7 +710,8 @@
    "atk_pctl": 9,
    "def_pctl": 48,
    "combat_pctl": 23,
-   "tier": "C"
+   "tier": "C",
+   "food": 100
   },
   {
    "paldex": "39B",
@@ -669,7 +723,8 @@
    "atk_pctl": 9,
    "def_pctl": 56,
    "combat_pctl": 26,
-   "tier": "C"
+   "tier": "C",
+   "food": 100
   },
   {
    "paldex": "40",
@@ -681,7 +736,8 @@
    "atk_pctl": 0,
    "def_pctl": 29,
    "combat_pctl": 24,
-   "tier": "C"
+   "tier": "C",
+   "food": 150
   },
   {
    "paldex": "41",
@@ -693,7 +749,8 @@
    "atk_pctl": 56,
    "def_pctl": 65,
    "combat_pctl": 66,
-   "tier": "B"
+   "tier": "B",
+   "food": 340
   },
   {
    "paldex": "41B",
@@ -705,7 +762,8 @@
    "atk_pctl": 66,
    "def_pctl": 74,
    "combat_pctl": 74,
-   "tier": "A"
+   "tier": "A",
+   "food": 340
   },
   {
    "paldex": "42",
@@ -717,7 +775,8 @@
    "atk_pctl": 17,
    "def_pctl": 12,
    "combat_pctl": 10,
-   "tier": "F"
+   "tier": "F",
+   "food": 100
   },
   {
    "paldex": "43",
@@ -729,7 +788,8 @@
    "atk_pctl": 9,
    "def_pctl": 12,
    "combat_pctl": 11,
-   "tier": "F"
+   "tier": "F",
+   "food": 100
   },
   {
    "paldex": "43B",
@@ -741,7 +801,8 @@
    "atk_pctl": 9,
    "def_pctl": 12,
    "combat_pctl": 11,
-   "tier": "F"
+   "tier": "F",
+   "food": 100
   },
   {
    "paldex": "44",
@@ -753,7 +814,8 @@
    "atk_pctl": 4,
    "def_pctl": 12,
    "combat_pctl": 12,
-   "tier": "F"
+   "tier": "F",
+   "food": 100
   },
   {
    "paldex": "44B",
@@ -765,7 +827,8 @@
    "atk_pctl": 4,
    "def_pctl": 12,
    "combat_pctl": 15,
-   "tier": "C"
+   "tier": "C",
+   "food": 100
   },
   {
    "paldex": "45",
@@ -777,7 +840,8 @@
    "atk_pctl": 41,
    "def_pctl": 12,
    "combat_pctl": 24,
-   "tier": "C"
+   "tier": "C",
+   "food": 220
   },
   {
    "paldex": "46",
@@ -789,7 +853,8 @@
    "atk_pctl": 17,
    "def_pctl": 20,
    "combat_pctl": 27,
-   "tier": "C"
+   "tier": "C",
+   "food": 220
   },
   {
    "paldex": "47",
@@ -801,7 +866,8 @@
    "atk_pctl": 9,
    "def_pctl": 4,
    "combat_pctl": 6,
-   "tier": "F"
+   "tier": "F",
+   "food": 230
   },
   {
    "paldex": "48",
@@ -813,7 +879,8 @@
    "atk_pctl": 33,
    "def_pctl": 12,
    "combat_pctl": 19,
-   "tier": "C"
+   "tier": "C",
+   "food": 280
   },
   {
    "paldex": "48B",
@@ -825,7 +892,8 @@
    "atk_pctl": 33,
    "def_pctl": 12,
    "combat_pctl": 22,
-   "tier": "C"
+   "tier": "C",
+   "food": 280
   },
   {
    "paldex": "49",
@@ -837,7 +905,8 @@
    "atk_pctl": 33,
    "def_pctl": 3,
    "combat_pctl": 19,
-   "tier": "C"
+   "tier": "C",
+   "food": 150
   },
   {
    "paldex": "50",
@@ -849,7 +918,8 @@
    "atk_pctl": 48,
    "def_pctl": 12,
    "combat_pctl": 32,
-   "tier": "C"
+   "tier": "C",
+   "food": 450
   },
   {
    "paldex": "51",
@@ -861,7 +931,8 @@
    "atk_pctl": 48,
    "def_pctl": 29,
    "combat_pctl": 45,
-   "tier": "B"
+   "tier": "B",
+   "food": 140
   },
   {
    "paldex": "52",
@@ -873,7 +944,8 @@
    "atk_pctl": 48,
    "def_pctl": 29,
    "combat_pctl": 43,
-   "tier": "B"
+   "tier": "B",
+   "food": 140
   },
   {
    "paldex": "53",
@@ -885,7 +957,8 @@
    "atk_pctl": 17,
    "def_pctl": 12,
    "combat_pctl": 10,
-   "tier": "F"
+   "tier": "F",
+   "food": 150
   },
   {
    "paldex": "54",
@@ -897,7 +970,8 @@
    "atk_pctl": 66,
    "def_pctl": 74,
    "combat_pctl": 56,
-   "tier": "B"
+   "tier": "B",
+   "food": 210
   },
   {
    "paldex": "54B",
@@ -909,7 +983,8 @@
    "atk_pctl": 66,
    "def_pctl": 80,
    "combat_pctl": 58,
-   "tier": "B"
+   "tier": "B",
+   "food": 210
   },
   {
    "paldex": "55",
@@ -921,7 +996,8 @@
    "atk_pctl": 41,
    "def_pctl": 20,
    "combat_pctl": 34,
-   "tier": "B"
+   "tier": "B",
+   "food": 150
   },
   {
    "paldex": "55B",
@@ -933,7 +1009,8 @@
    "atk_pctl": 41,
    "def_pctl": 20,
    "combat_pctl": 34,
-   "tier": "B"
+   "tier": "B",
+   "food": 150
   },
   {
    "paldex": "56",
@@ -945,7 +1022,8 @@
    "atk_pctl": 56,
    "def_pctl": 29,
    "combat_pctl": 38,
-   "tier": "B"
+   "tier": "B",
+   "food": 210
   },
   {
    "paldex": "56B",
@@ -957,7 +1035,8 @@
    "atk_pctl": 66,
    "def_pctl": 29,
    "combat_pctl": 41,
-   "tier": "B"
+   "tier": "B",
+   "food": 210
   },
   {
    "paldex": "57",
@@ -969,7 +1048,8 @@
    "atk_pctl": 48,
    "def_pctl": 29,
    "combat_pctl": 32,
-   "tier": "C"
+   "tier": "C",
+   "food": 210
   },
   {
    "paldex": "58",
@@ -981,7 +1061,8 @@
    "atk_pctl": 48,
    "def_pctl": 56,
    "combat_pctl": 46,
-   "tier": "B"
+   "tier": "B",
+   "food": 210
   },
   {
    "paldex": "59",
@@ -993,7 +1074,8 @@
    "atk_pctl": 25,
    "def_pctl": 1,
    "combat_pctl": 9,
-   "tier": "F"
+   "tier": "F",
+   "food": 230
   },
   {
    "paldex": "60",
@@ -1005,7 +1087,8 @@
    "atk_pctl": 25,
    "def_pctl": 29,
    "combat_pctl": 28,
-   "tier": "C"
+   "tier": "C",
+   "food": 140
   },
   {
    "paldex": "61",
@@ -1017,7 +1100,8 @@
    "atk_pctl": 25,
    "def_pctl": 29,
    "combat_pctl": 22,
-   "tier": "C"
+   "tier": "C",
+   "food": 150
   },
   {
    "paldex": "62",
@@ -1029,7 +1113,8 @@
    "atk_pctl": 25,
    "def_pctl": 12,
    "combat_pctl": 19,
-   "tier": "C"
+   "tier": "C",
+   "food": 170
   },
   {
    "paldex": "63",
@@ -1041,7 +1126,8 @@
    "atk_pctl": 25,
    "def_pctl": 48,
    "combat_pctl": 50,
-   "tier": "B"
+   "tier": "B",
+   "food": 200
   },
   {
    "paldex": "63B",
@@ -1053,7 +1139,8 @@
    "atk_pctl": 25,
    "def_pctl": 56,
    "combat_pctl": 55,
-   "tier": "B"
+   "tier": "B",
+   "food": 200
   },
   {
    "paldex": "64",
@@ -1065,7 +1152,8 @@
    "atk_pctl": 81,
    "def_pctl": 48,
    "combat_pctl": 57,
-   "tier": "B"
+   "tier": "B",
+   "food": 340
   },
   {
    "paldex": "64B",
@@ -1077,7 +1165,8 @@
    "atk_pctl": 87,
    "def_pctl": 56,
    "combat_pctl": 62,
-   "tier": "B"
+   "tier": "B",
+   "food": 340
   },
   {
    "paldex": "65",
@@ -1089,7 +1178,8 @@
    "atk_pctl": 66,
    "def_pctl": 80,
    "combat_pctl": 68,
-   "tier": "A"
+   "tier": "A",
+   "food": 490
   },
   {
    "paldex": "66",
@@ -1101,7 +1191,8 @@
    "atk_pctl": 56,
    "def_pctl": 90,
    "combat_pctl": 68,
-   "tier": "A"
+   "tier": "A",
+   "food": 380
   },
   {
    "paldex": "67",
@@ -1113,7 +1204,8 @@
    "atk_pctl": 41,
    "def_pctl": 48,
    "combat_pctl": 39,
-   "tier": "B"
+   "tier": "B",
+   "food": 230
   },
   {
    "paldex": "68",
@@ -1125,7 +1217,8 @@
    "atk_pctl": 66,
    "def_pctl": 65,
    "combat_pctl": 58,
-   "tier": "B"
+   "tier": "B",
+   "food": 340
   },
   {
    "paldex": "69",
@@ -1137,7 +1230,8 @@
    "atk_pctl": 9,
    "def_pctl": 12,
    "combat_pctl": 36,
-   "tier": "B"
+   "tier": "B",
+   "food": 280
   },
   {
    "paldex": "70",
@@ -1149,7 +1243,8 @@
    "atk_pctl": 25,
    "def_pctl": 29,
    "combat_pctl": 44,
-   "tier": "B"
+   "tier": "B",
+   "food": 300
   },
   {
    "paldex": "71",
@@ -1161,7 +1256,8 @@
    "atk_pctl": 56,
    "def_pctl": 65,
    "combat_pctl": 66,
-   "tier": "B"
+   "tier": "B",
+   "food": 320
   },
   {
    "paldex": "72",
@@ -1173,7 +1269,8 @@
    "atk_pctl": 66,
    "def_pctl": 74,
    "combat_pctl": 64,
-   "tier": "B"
+   "tier": "B",
+   "food": 220
   },
   {
    "paldex": "72B",
@@ -1185,7 +1282,8 @@
    "atk_pctl": 66,
    "def_pctl": 80,
    "combat_pctl": 66,
-   "tier": "B"
+   "tier": "B",
+   "food": 220
   },
   {
    "paldex": "73",
@@ -1197,7 +1295,8 @@
    "atk_pctl": 25,
    "def_pctl": 1,
    "combat_pctl": 18,
-   "tier": "C"
+   "tier": "C",
+   "food": 150
   },
   {
    "paldex": "73B",
@@ -1209,7 +1308,8 @@
    "atk_pctl": 25,
    "def_pctl": 1,
    "combat_pctl": 18,
-   "tier": "C"
+   "tier": "C",
+   "food": 150
   },
   {
    "paldex": "74",
@@ -1221,7 +1321,8 @@
    "atk_pctl": 48,
    "def_pctl": 48,
    "combat_pctl": 46,
-   "tier": "B"
+   "tier": "B",
+   "food": 230
   },
   {
    "paldex": "74B",
@@ -1233,7 +1334,8 @@
    "atk_pctl": 56,
    "def_pctl": 48,
    "combat_pctl": 49,
-   "tier": "B"
+   "tier": "B",
+   "food": 230
   },
   {
    "paldex": "75",
@@ -1245,7 +1347,8 @@
    "atk_pctl": 41,
    "def_pctl": 29,
    "combat_pctl": 37,
-   "tier": "B"
+   "tier": "B",
+   "food": 210
   },
   {
    "paldex": "75B",
@@ -1257,7 +1360,8 @@
    "atk_pctl": 41,
    "def_pctl": 65,
    "combat_pctl": 49,
-   "tier": "B"
+   "tier": "B",
+   "food": 210
   },
   {
    "paldex": "76",
@@ -1269,7 +1373,8 @@
    "atk_pctl": 66,
    "def_pctl": 29,
    "combat_pctl": 46,
-   "tier": "B"
+   "tier": "B",
+   "food": 230
   },
   {
    "paldex": "76B",
@@ -1281,7 +1386,8 @@
    "atk_pctl": 66,
    "def_pctl": 29,
    "combat_pctl": 46,
-   "tier": "B"
+   "tier": "B",
+   "food": 230
   },
   {
    "paldex": "77",
@@ -1293,7 +1399,8 @@
    "atk_pctl": 4,
    "def_pctl": 12,
    "combat_pctl": 12,
-   "tier": "F"
+   "tier": "F",
+   "food": 150
   },
   {
    "paldex": "78",
@@ -1305,7 +1412,8 @@
    "atk_pctl": 74,
    "def_pctl": 29,
    "combat_pctl": 48,
-   "tier": "B"
+   "tier": "B",
+   "food": 280
   },
   {
    "paldex": "78B",
@@ -1317,7 +1425,8 @@
    "atk_pctl": 74,
    "def_pctl": 39,
    "combat_pctl": 52,
-   "tier": "B"
+   "tier": "B",
+   "food": 280
   },
   {
    "paldex": "79",
@@ -1329,7 +1438,8 @@
    "atk_pctl": 66,
    "def_pctl": 48,
    "combat_pctl": 52,
-   "tier": "B"
+   "tier": "B",
+   "food": 280
   },
   {
    "paldex": "79B",
@@ -1341,7 +1451,8 @@
    "atk_pctl": 66,
    "def_pctl": 48,
    "combat_pctl": 55,
-   "tier": "B"
+   "tier": "B",
+   "food": 280
   },
   {
    "paldex": "80",
@@ -1353,7 +1464,8 @@
    "atk_pctl": 91,
    "def_pctl": 65,
    "combat_pctl": 72,
-   "tier": "A"
+   "tier": "A",
+   "food": 460
   },
   {
    "paldex": "80B",
@@ -1365,7 +1477,8 @@
    "atk_pctl": 91,
    "def_pctl": 65,
    "combat_pctl": 75,
-   "tier": "A"
+   "tier": "A",
+   "food": 460
   },
   {
    "paldex": "81",
@@ -1377,7 +1490,8 @@
    "atk_pctl": 66,
    "def_pctl": 74,
    "combat_pctl": 72,
-   "tier": "A"
+   "tier": "A",
+   "food": 560
   },
   {
    "paldex": "81B",
@@ -1389,7 +1503,8 @@
    "atk_pctl": 56,
    "def_pctl": 74,
    "combat_pctl": 73,
-   "tier": "A"
+   "tier": "A",
+   "food": 560
   },
   {
    "paldex": "82",
@@ -1401,7 +1516,8 @@
    "atk_pctl": 56,
    "def_pctl": 48,
    "combat_pctl": 49,
-   "tier": "B"
+   "tier": "B",
+   "food": 300
   },
   {
    "paldex": "83",
@@ -1413,7 +1529,8 @@
    "atk_pctl": 74,
    "def_pctl": 48,
    "combat_pctl": 66,
-   "tier": "B"
+   "tier": "B",
+   "food": 340
   },
   {
    "paldex": "83B",
@@ -1425,7 +1542,8 @@
    "atk_pctl": 81,
    "def_pctl": 48,
    "combat_pctl": 69,
-   "tier": "A"
+   "tier": "A",
+   "food": 340
   },
   {
    "paldex": "84",
@@ -1437,7 +1555,8 @@
    "atk_pctl": 33,
    "def_pctl": 48,
    "combat_pctl": 53,
-   "tier": "B"
+   "tier": "B",
+   "food": 270
   },
   {
    "paldex": "84B",
@@ -1449,7 +1568,8 @@
    "atk_pctl": 41,
    "def_pctl": 48,
    "combat_pctl": 55,
-   "tier": "B"
+   "tier": "B",
+   "food": 270
   },
   {
    "paldex": "85",
@@ -1461,7 +1581,8 @@
    "atk_pctl": 91,
    "def_pctl": 29,
    "combat_pctl": 50,
-   "tier": "B"
+   "tier": "B",
+   "food": 380
   },
   {
    "paldex": "85B",
@@ -1473,7 +1594,8 @@
    "atk_pctl": 95,
    "def_pctl": 29,
    "combat_pctl": 51,
-   "tier": "B"
+   "tier": "B",
+   "food": 380
   },
   {
    "paldex": "86",
@@ -1485,7 +1607,8 @@
    "atk_pctl": 25,
    "def_pctl": 39,
    "combat_pctl": 28,
-   "tier": "C"
+   "tier": "C",
+   "food": 310
   },
   {
    "paldex": "87",
@@ -1497,7 +1620,8 @@
    "atk_pctl": 33,
    "def_pctl": 48,
    "combat_pctl": 60,
-   "tier": "B"
+   "tier": "B",
+   "food": 400
   },
   {
    "paldex": "87B",
@@ -1509,7 +1633,8 @@
    "atk_pctl": 33,
    "def_pctl": 48,
    "combat_pctl": 60,
-   "tier": "B"
+   "tier": "B",
+   "food": 400
   },
   {
    "paldex": "88",
@@ -1521,7 +1646,8 @@
    "atk_pctl": 33,
    "def_pctl": 29,
    "combat_pctl": 28,
-   "tier": "C"
+   "tier": "C",
+   "food": 140
   },
   {
    "paldex": "88B",
@@ -1533,7 +1659,8 @@
    "atk_pctl": 41,
    "def_pctl": 29,
    "combat_pctl": 30,
-   "tier": "C"
+   "tier": "C",
+   "food": 140
   },
   {
    "paldex": "89",
@@ -1545,7 +1672,8 @@
    "atk_pctl": 48,
    "def_pctl": 65,
    "combat_pctl": 57,
-   "tier": "B"
+   "tier": "B",
+   "food": 450
   },
   {
    "paldex": "89B",
@@ -1557,7 +1685,8 @@
    "atk_pctl": 66,
    "def_pctl": 65,
    "combat_pctl": 60,
-   "tier": "B"
+   "tier": "B",
+   "food": 450
   },
   {
    "paldex": "90",
@@ -1569,7 +1698,8 @@
    "atk_pctl": 81,
    "def_pctl": 56,
    "combat_pctl": 65,
-   "tier": "B"
+   "tier": "B",
+   "food": 530
   },
   {
    "paldex": "91",
@@ -1581,7 +1711,8 @@
    "atk_pctl": 56,
    "def_pctl": 39,
    "combat_pctl": 49,
-   "tier": "B"
+   "tier": "B",
+   "food": 380
   },
   {
    "paldex": "91B",
@@ -1593,7 +1724,8 @@
    "atk_pctl": 66,
    "def_pctl": 39,
    "combat_pctl": 52,
-   "tier": "B"
+   "tier": "B",
+   "food": 380
   },
   {
    "paldex": "92",
@@ -1605,7 +1737,8 @@
    "atk_pctl": 25,
    "def_pctl": 12,
    "combat_pctl": 16,
-   "tier": "C"
+   "tier": "C",
+   "food": 150
   },
   {
    "paldex": "92B",
@@ -1617,7 +1750,8 @@
    "atk_pctl": 25,
    "def_pctl": 20,
    "combat_pctl": 19,
-   "tier": "C"
+   "tier": "C",
+   "food": 150
   },
   {
    "paldex": "93",
@@ -1629,7 +1763,8 @@
    "atk_pctl": 48,
    "def_pctl": 48,
    "combat_pctl": 52,
-   "tier": "B"
+   "tier": "B",
+   "food": 280
   },
   {
    "paldex": "93B",
@@ -1641,7 +1776,8 @@
    "atk_pctl": 48,
    "def_pctl": 48,
    "combat_pctl": 52,
-   "tier": "B"
+   "tier": "B",
+   "food": 280
   },
   {
    "paldex": "94",
@@ -1653,7 +1789,8 @@
    "atk_pctl": 81,
    "def_pctl": 80,
    "combat_pctl": 83,
-   "tier": "A"
+   "tier": "A",
+   "food": 480
   },
   {
    "paldex": "94B",
@@ -1665,7 +1802,8 @@
    "atk_pctl": 87,
    "def_pctl": 80,
    "combat_pctl": 85,
-   "tier": "S"
+   "tier": "S",
+   "food": 480
   },
   {
    "paldex": "95",
@@ -1677,7 +1815,8 @@
    "atk_pctl": 48,
    "def_pctl": 74,
    "combat_pctl": 55,
-   "tier": "B"
+   "tier": "B",
+   "food": 300
   },
   {
    "paldex": "96",
@@ -1689,7 +1828,8 @@
    "atk_pctl": 81,
    "def_pctl": 29,
    "combat_pctl": 59,
-   "tier": "B"
+   "tier": "B",
+   "food": 340
   },
   {
    "paldex": "96B",
@@ -1701,7 +1841,8 @@
    "atk_pctl": 81,
    "def_pctl": 39,
    "combat_pctl": 62,
-   "tier": "B"
+   "tier": "B",
+   "food": 340
   },
   {
    "paldex": "97",
@@ -1713,7 +1854,8 @@
    "atk_pctl": 91,
    "def_pctl": 74,
    "combat_pctl": 69,
-   "tier": "A"
+   "tier": "A",
+   "food": 480
   },
   {
    "paldex": "97B",
@@ -1725,7 +1867,8 @@
    "atk_pctl": 95,
    "def_pctl": 74,
    "combat_pctl": 71,
-   "tier": "A"
+   "tier": "A",
+   "food": 480
   },
   {
    "paldex": "98",
@@ -1737,7 +1880,8 @@
    "atk_pctl": 56,
    "def_pctl": 29,
    "combat_pctl": 42,
-   "tier": "B"
+   "tier": "B",
+   "food": 280
   },
   {
    "paldex": "98B",
@@ -1749,7 +1893,8 @@
    "atk_pctl": 66,
    "def_pctl": 29,
    "combat_pctl": 46,
-   "tier": "B"
+   "tier": "B",
+   "food": 280
   },
   {
    "paldex": "99",
@@ -1761,7 +1906,8 @@
    "atk_pctl": 56,
    "def_pctl": 96,
    "combat_pctl": 70,
-   "tier": "A"
+   "tier": "A",
+   "food": 410
   },
   {
    "paldex": "99B",
@@ -1773,7 +1919,8 @@
    "atk_pctl": 66,
    "def_pctl": 96,
    "combat_pctl": 73,
-   "tier": "A"
+   "tier": "A",
+   "food": 410
   },
   {
    "paldex": "100",
@@ -1785,7 +1932,8 @@
    "atk_pctl": 33,
    "def_pctl": 12,
    "combat_pctl": 22,
-   "tier": "C"
+   "tier": "C",
+   "food": 150
   },
   {
    "paldex": "100B",
@@ -1797,7 +1945,8 @@
    "atk_pctl": 41,
    "def_pctl": 12,
    "combat_pctl": 24,
-   "tier": "C"
+   "tier": "C",
+   "food": 150
   },
   {
    "paldex": "101",
@@ -1809,7 +1958,8 @@
    "atk_pctl": 33,
    "def_pctl": 80,
    "combat_pctl": 57,
-   "tier": "B"
+   "tier": "B",
+   "food": 280
   },
   {
    "paldex": "102",
@@ -1821,7 +1971,8 @@
    "atk_pctl": 41,
    "def_pctl": 48,
    "combat_pctl": 49,
-   "tier": "B"
+   "tier": "B",
+   "food": 280
   },
   {
    "paldex": "102B",
@@ -1833,7 +1984,8 @@
    "atk_pctl": 56,
    "def_pctl": 65,
    "combat_pctl": 60,
-   "tier": "B"
+   "tier": "B",
+   "food": 280
   },
   {
    "paldex": "103",
@@ -1845,7 +1997,8 @@
    "atk_pctl": 25,
    "def_pctl": 29,
    "combat_pctl": 32,
-   "tier": "C"
+   "tier": "C",
+   "food": 230
   },
   {
    "paldex": "103B",
@@ -1857,7 +2010,8 @@
    "atk_pctl": 33,
    "def_pctl": 29,
    "combat_pctl": 35,
-   "tier": "B"
+   "tier": "B",
+   "food": 230
   },
   {
    "paldex": "104",
@@ -1869,7 +2023,8 @@
    "atk_pctl": 66,
    "def_pctl": 90,
    "combat_pctl": 69,
-   "tier": "A"
+   "tier": "A",
+   "food": 480
   },
   {
    "paldex": "105",
@@ -1881,7 +2036,8 @@
    "atk_pctl": 91,
    "def_pctl": 85,
    "combat_pctl": 84,
-   "tier": "S"
+   "tier": "S",
+   "food": 530
   },
   {
    "paldex": "105B",
@@ -1893,7 +2049,8 @@
    "atk_pctl": 91,
    "def_pctl": 90,
    "combat_pctl": 86,
-   "tier": "S"
+   "tier": "S",
+   "food": 530
   },
   {
    "paldex": "106",
@@ -1905,7 +2062,8 @@
    "atk_pctl": 74,
    "def_pctl": 85,
    "combat_pctl": 75,
-   "tier": "A"
+   "tier": "A",
+   "food": 410
   },
   {
    "paldex": "107",
@@ -1917,7 +2075,8 @@
    "atk_pctl": 48,
    "def_pctl": 90,
    "combat_pctl": 56,
-   "tier": "B"
+   "tier": "B",
+   "food": 350
   },
   {
    "paldex": "108",
@@ -1929,7 +2088,8 @@
    "atk_pctl": 41,
    "def_pctl": 65,
    "combat_pctl": 65,
-   "tier": "B"
+   "tier": "B",
+   "food": 410
   },
   {
    "paldex": "108B",
@@ -1941,7 +2101,8 @@
    "atk_pctl": 48,
    "def_pctl": 65,
    "combat_pctl": 67,
-   "tier": "B"
+   "tier": "B",
+   "food": 410
   },
   {
    "paldex": "109",
@@ -1953,7 +2114,8 @@
    "atk_pctl": 9,
    "def_pctl": 56,
    "combat_pctl": 41,
-   "tier": "B"
+   "tier": "B",
+   "food": 230
   },
   {
    "paldex": "109B",
@@ -1965,7 +2127,8 @@
    "atk_pctl": 17,
    "def_pctl": 65,
    "combat_pctl": 50,
-   "tier": "B"
+   "tier": "B",
+   "food": 230
   },
   {
    "paldex": "110",
@@ -1977,7 +2140,8 @@
    "atk_pctl": 48,
    "def_pctl": 90,
    "combat_pctl": 77,
-   "tier": "A"
+   "tier": "A",
+   "food": 460
   },
   {
    "paldex": "111",
@@ -1989,7 +2153,8 @@
    "atk_pctl": 81,
    "def_pctl": 65,
    "combat_pctl": 68,
-   "tier": "A"
+   "tier": "A",
+   "food": 380
   },
   {
    "paldex": "111B",
@@ -2001,7 +2166,8 @@
    "atk_pctl": 81,
    "def_pctl": 74,
    "combat_pctl": 71,
-   "tier": "A"
+   "tier": "A",
+   "food": 380
   },
   {
    "paldex": "112",
@@ -2013,7 +2179,8 @@
    "atk_pctl": 74,
    "def_pctl": 29,
    "combat_pctl": 57,
-   "tier": "B"
+   "tier": "B",
+   "food": 410
   },
   {
    "paldex": "112B",
@@ -2025,7 +2192,8 @@
    "atk_pctl": 81,
    "def_pctl": 29,
    "combat_pctl": 59,
-   "tier": "B"
+   "tier": "B",
+   "food": 410
   },
   {
    "paldex": "113",
@@ -2037,7 +2205,8 @@
    "atk_pctl": 56,
    "def_pctl": 90,
    "combat_pctl": 78,
-   "tier": "A"
+   "tier": "A",
+   "food": 400
   },
   {
    "paldex": "113B",
@@ -2049,7 +2218,8 @@
    "atk_pctl": 66,
    "def_pctl": 90,
    "combat_pctl": 81,
-   "tier": "A"
+   "tier": "A",
+   "food": 400
   },
   {
    "paldex": "114",
@@ -2061,7 +2231,8 @@
    "atk_pctl": 56,
    "def_pctl": 65,
    "combat_pctl": 66,
-   "tier": "B"
+   "tier": "B",
+   "food": 300
   },
   {
    "paldex": "115",
@@ -2073,7 +2244,8 @@
    "atk_pctl": 81,
    "def_pctl": 48,
    "combat_pctl": 69,
-   "tier": "A"
+   "tier": "A",
+   "food": 600
   },
   {
    "paldex": "116",
@@ -2085,7 +2257,8 @@
    "atk_pctl": 41,
    "def_pctl": 65,
    "combat_pctl": 61,
-   "tier": "B"
+   "tier": "B",
+   "food": 350
   },
   {
    "paldex": "116B",
@@ -2097,7 +2270,8 @@
    "atk_pctl": 41,
    "def_pctl": 65,
    "combat_pctl": 63,
-   "tier": "B"
+   "tier": "B",
+   "food": 350
   },
   {
    "paldex": "117",
@@ -2109,7 +2283,8 @@
    "atk_pctl": 66,
    "def_pctl": 29,
    "combat_pctl": 38,
-   "tier": "B"
+   "tier": "B",
+   "food": 380
   },
   {
    "paldex": "118",
@@ -2121,7 +2296,8 @@
    "atk_pctl": 25,
    "def_pctl": 48,
    "combat_pctl": 50,
-   "tier": "B"
+   "tier": "B",
+   "food": 450
   },
   {
    "paldex": "118B",
@@ -2133,7 +2309,8 @@
    "atk_pctl": 33,
    "def_pctl": 48,
    "combat_pctl": 53,
-   "tier": "B"
+   "tier": "B",
+   "food": 450
   },
   {
    "paldex": "119",
@@ -2145,7 +2322,8 @@
    "atk_pctl": 81,
    "def_pctl": 74,
    "combat_pctl": 69,
-   "tier": "A"
+   "tier": "A",
+   "food": 270
   },
   {
    "paldex": "120",
@@ -2157,7 +2335,8 @@
    "atk_pctl": 87,
    "def_pctl": 74,
    "combat_pctl": 76,
-   "tier": "A"
+   "tier": "A",
+   "food": 450
   },
   {
    "paldex": "121",
@@ -2169,7 +2348,8 @@
    "atk_pctl": 87,
    "def_pctl": 65,
    "combat_pctl": 82,
-   "tier": "A"
+   "tier": "A",
+   "food": 550
   },
   {
    "paldex": "121B",
@@ -2181,7 +2361,8 @@
    "atk_pctl": 95,
    "def_pctl": 65,
    "combat_pctl": 85,
-   "tier": "S"
+   "tier": "S",
+   "food": 550
   },
   {
    "paldex": "122",
@@ -2193,7 +2374,8 @@
    "atk_pctl": 66,
    "def_pctl": 74,
    "combat_pctl": 76,
-   "tier": "A"
+   "tier": "A",
+   "food": 460
   },
   {
    "paldex": "122B",
@@ -2205,7 +2387,8 @@
    "atk_pctl": 66,
    "def_pctl": 74,
    "combat_pctl": 77,
-   "tier": "A"
+   "tier": "A",
+   "food": 460
   },
   {
    "paldex": "123",
@@ -2217,7 +2400,8 @@
    "atk_pctl": 41,
    "def_pctl": 29,
    "combat_pctl": 40,
-   "tier": "B"
+   "tier": "B",
+   "food": 230
   },
   {
    "paldex": "124",
@@ -2229,7 +2413,8 @@
    "atk_pctl": 56,
    "def_pctl": 65,
    "combat_pctl": 63,
-   "tier": "B"
+   "tier": "B",
+   "food": 450
   },
   {
    "paldex": "124B",
@@ -2241,7 +2426,8 @@
    "atk_pctl": 66,
    "def_pctl": 65,
    "combat_pctl": 66,
-   "tier": "B"
+   "tier": "B",
+   "food": 450
   },
   {
    "paldex": "125",
@@ -2253,7 +2439,8 @@
    "atk_pctl": 41,
    "def_pctl": 29,
    "combat_pctl": 37,
-   "tier": "B"
+   "tier": "B",
+   "food": 300
   },
   {
    "paldex": "126",
@@ -2265,7 +2452,8 @@
    "atk_pctl": 9,
    "def_pctl": 48,
    "combat_pctl": 26,
-   "tier": "C"
+   "tier": "C",
+   "food": 340
   },
   {
    "paldex": "127",
@@ -2277,7 +2465,8 @@
    "atk_pctl": 33,
    "def_pctl": 39,
    "combat_pctl": 36,
-   "tier": "B"
+   "tier": "B",
+   "food": 270
   },
   {
    "paldex": "128",
@@ -2289,7 +2478,8 @@
    "atk_pctl": 56,
    "def_pctl": 29,
    "combat_pctl": 32,
-   "tier": "C"
+   "tier": "C",
+   "food": 340
   },
   {
    "paldex": "128B",
@@ -2301,7 +2491,8 @@
    "atk_pctl": 66,
    "def_pctl": 29,
    "combat_pctl": 35,
-   "tier": "B"
+   "tier": "B",
+   "food": 340
   },
   {
    "paldex": "129",
@@ -2313,7 +2504,8 @@
    "atk_pctl": 66,
    "def_pctl": 90,
    "combat_pctl": 77,
-   "tier": "A"
+   "tier": "A",
+   "food": 490
   },
   {
    "paldex": "129B",
@@ -2325,7 +2517,8 @@
    "atk_pctl": 66,
    "def_pctl": 96,
    "combat_pctl": 79,
-   "tier": "A"
+   "tier": "A",
+   "food": 490
   },
   {
    "paldex": "130",
@@ -2337,7 +2530,8 @@
    "atk_pctl": 56,
    "def_pctl": 65,
    "combat_pctl": 66,
-   "tier": "B"
+   "tier": "B",
+   "food": 440
   },
   {
    "paldex": "130B",
@@ -2349,7 +2543,8 @@
    "atk_pctl": 66,
    "def_pctl": 65,
    "combat_pctl": 69,
-   "tier": "A"
+   "tier": "A",
+   "food": 440
   },
   {
    "paldex": "131",
@@ -2361,7 +2556,8 @@
    "atk_pctl": 66,
    "def_pctl": 90,
    "combat_pctl": 71,
-   "tier": "A"
+   "tier": "A",
+   "food": 580
   },
   {
    "paldex": "131B",
@@ -2373,7 +2569,8 @@
    "atk_pctl": 74,
    "def_pctl": 90,
    "combat_pctl": 74,
-   "tier": "A"
+   "tier": "A",
+   "food": 580
   },
   {
    "paldex": "132",
@@ -2385,7 +2582,8 @@
    "atk_pctl": 56,
    "def_pctl": 80,
    "combat_pctl": 65,
-   "tier": "B"
+   "tier": "B",
+   "food": 480
   },
   {
    "paldex": "132B",
@@ -2397,7 +2595,8 @@
    "atk_pctl": 66,
    "def_pctl": 80,
    "combat_pctl": 68,
-   "tier": "A"
+   "tier": "A",
+   "food": 480
   },
   {
    "paldex": "133",
@@ -2409,7 +2608,8 @@
    "atk_pctl": 17,
    "def_pctl": 39,
    "combat_pctl": 28,
-   "tier": "C"
+   "tier": "C",
+   "food": 380
   },
   {
    "paldex": "134",
@@ -2421,7 +2621,8 @@
    "atk_pctl": 25,
    "def_pctl": 65,
    "combat_pctl": 62,
-   "tier": "B"
+   "tier": "B",
+   "food": 460
   },
   {
    "paldex": "134B",
@@ -2433,7 +2634,8 @@
    "atk_pctl": 25,
    "def_pctl": 80,
    "combat_pctl": 68,
-   "tier": "A"
+   "tier": "A",
+   "food": 460
   },
   {
    "paldex": "135",
@@ -2445,7 +2647,8 @@
    "atk_pctl": 91,
    "def_pctl": 48,
    "combat_pctl": 69,
-   "tier": "A"
+   "tier": "A",
+   "food": 480
   },
   {
    "paldex": "136",
@@ -2457,7 +2660,8 @@
    "atk_pctl": 41,
    "def_pctl": 39,
    "combat_pctl": 38,
-   "tier": "B"
+   "tier": "B",
+   "food": 530
   },
   {
    "paldex": "137",
@@ -2469,7 +2673,8 @@
    "atk_pctl": 91,
    "def_pctl": 90,
    "combat_pctl": 80,
-   "tier": "A"
+   "tier": "A",
+   "food": 600
   },
   {
    "paldex": "137B",
@@ -2481,7 +2686,8 @@
    "atk_pctl": 95,
    "def_pctl": 94,
    "combat_pctl": 86,
-   "tier": "S"
+   "tier": "S",
+   "food": 600
   },
   {
    "paldex": "138",
@@ -2493,7 +2699,8 @@
    "atk_pctl": 66,
    "def_pctl": 94,
    "combat_pctl": 79,
-   "tier": "A"
+   "tier": "A",
+   "food": 550
   },
   {
    "paldex": "138B",
@@ -2505,7 +2712,8 @@
    "atk_pctl": 74,
    "def_pctl": 94,
    "combat_pctl": 82,
-   "tier": "A"
+   "tier": "A",
+   "food": 550
   },
   {
    "paldex": "139",
@@ -2517,7 +2725,8 @@
    "atk_pctl": 95,
    "def_pctl": 65,
    "combat_pctl": 83,
-   "tier": "A"
+   "tier": "A",
+   "food": 540
   },
   {
    "paldex": "140",
@@ -2529,7 +2738,8 @@
    "atk_pctl": 81,
    "def_pctl": 65,
    "combat_pctl": 74,
-   "tier": "A"
+   "tier": "A",
+   "food": 530
   },
   {
    "paldex": "141",
@@ -2541,7 +2751,8 @@
    "atk_pctl": 74,
    "def_pctl": 48,
    "combat_pctl": 55,
-   "tier": "B"
+   "tier": "B",
+   "food": 380
   },
   {
    "paldex": "141B",
@@ -2553,7 +2764,8 @@
    "atk_pctl": 81,
    "def_pctl": 48,
    "combat_pctl": 57,
-   "tier": "B"
+   "tier": "B",
+   "food": 380
   },
   {
    "paldex": "142",
@@ -2565,7 +2777,8 @@
    "atk_pctl": 56,
    "def_pctl": 97,
    "combat_pctl": 68,
-   "tier": "A"
+   "tier": "A",
+   "food": 580
   },
   {
    "paldex": "142B",
@@ -2577,7 +2790,8 @@
    "atk_pctl": 56,
    "def_pctl": 98,
    "combat_pctl": 68,
-   "tier": "A"
+   "tier": "A",
+   "food": 550
   },
   {
    "paldex": "143",
@@ -2589,7 +2803,8 @@
    "atk_pctl": 56,
    "def_pctl": 65,
    "combat_pctl": 66,
-   "tier": "B"
+   "tier": "B",
+   "food": 560
   },
   {
    "paldex": "144",
@@ -2601,7 +2816,8 @@
    "atk_pctl": 2,
    "def_pctl": 96,
    "combat_pctl": 33,
-   "tier": "B"
+   "tier": "B",
+   "food": 230
   },
   {
    "paldex": "145",
@@ -2613,7 +2829,8 @@
    "atk_pctl": 91,
    "def_pctl": 39,
    "combat_pctl": 58,
-   "tier": "B"
+   "tier": "B",
+   "food": 280
   },
   {
    "paldex": "146",
@@ -2625,7 +2842,8 @@
    "atk_pctl": 87,
    "def_pctl": 96,
    "combat_pctl": 87,
-   "tier": "S"
+   "tier": "S",
+   "food": 470
   },
   {
    "paldex": "147",
@@ -2637,7 +2855,8 @@
    "atk_pctl": 48,
    "def_pctl": 65,
    "combat_pctl": 60,
-   "tier": "B"
+   "tier": "B",
+   "food": 380
   },
   {
    "paldex": "148",
@@ -2649,7 +2868,8 @@
    "atk_pctl": 48,
    "def_pctl": 74,
    "combat_pctl": 63,
-   "tier": "B"
+   "tier": "B",
+   "food": 510
   },
   {
    "paldex": "148B",
@@ -2661,7 +2881,8 @@
    "atk_pctl": 48,
    "def_pctl": 74,
    "combat_pctl": 66,
-   "tier": "B"
+   "tier": "B",
+   "food": 510
   },
   {
    "paldex": "149",
@@ -2673,7 +2894,8 @@
    "atk_pctl": 41,
    "def_pctl": 39,
    "combat_pctl": 38,
-   "tier": "B"
+   "tier": "B",
+   "food": 170
   },
   {
    "paldex": "149B",
@@ -2685,7 +2907,8 @@
    "atk_pctl": 41,
    "def_pctl": 48,
    "combat_pctl": 41,
-   "tier": "B"
+   "tier": "B",
+   "food": 170
   },
   {
    "paldex": "150",
@@ -2697,7 +2920,8 @@
    "atk_pctl": 66,
    "def_pctl": 65,
    "combat_pctl": 60,
-   "tier": "B"
+   "tier": "B",
+   "food": 400
   },
   {
    "paldex": "151",
@@ -2709,7 +2933,8 @@
    "atk_pctl": 81,
    "def_pctl": 80,
    "combat_pctl": 76,
-   "tier": "A"
+   "tier": "A",
+   "food": 560
   },
   {
    "paldex": "151B",
@@ -2721,7 +2946,8 @@
    "atk_pctl": 87,
    "def_pctl": 80,
    "combat_pctl": 78,
-   "tier": "A"
+   "tier": "A",
+   "food": 560
   },
   {
    "paldex": "152",
@@ -2733,7 +2959,8 @@
    "atk_pctl": 81,
    "def_pctl": 48,
    "combat_pctl": 57,
-   "tier": "B"
+   "tier": "B",
+   "food": 450
   },
   {
    "paldex": "153",
@@ -2745,7 +2972,8 @@
    "atk_pctl": 81,
    "def_pctl": 74,
    "combat_pctl": 69,
-   "tier": "A"
+   "tier": "A",
+   "food": 530
   },
   {
    "paldex": "154",
@@ -2757,7 +2985,8 @@
    "atk_pctl": 74,
    "def_pctl": 80,
    "combat_pctl": 81,
-   "tier": "A"
+   "tier": "A",
+   "food": 550
   },
   {
    "paldex": "155",
@@ -2769,7 +2998,8 @@
    "atk_pctl": 56,
    "def_pctl": 65,
    "combat_pctl": 54,
-   "tier": "B"
+   "tier": "B",
+   "food": 380
   },
   {
    "paldex": "156",
@@ -2781,7 +3011,8 @@
    "atk_pctl": 48,
    "def_pctl": 65,
    "combat_pctl": 65,
-   "tier": "B"
+   "tier": "B",
+   "food": 420
   },
   {
    "paldex": "157",
@@ -2793,7 +3024,8 @@
    "atk_pctl": 74,
    "def_pctl": 65,
    "combat_pctl": 76,
-   "tier": "A"
+   "tier": "A",
+   "food": 550
   },
   {
    "paldex": "157B",
@@ -2805,7 +3037,8 @@
    "atk_pctl": 81,
    "def_pctl": 65,
    "combat_pctl": 78,
-   "tier": "A"
+   "tier": "A",
+   "food": 550
   },
   {
    "paldex": "158",
@@ -2817,7 +3050,8 @@
    "atk_pctl": 91,
    "def_pctl": 94,
    "combat_pctl": 81,
-   "tier": "A"
+   "tier": "A",
+   "food": 470
   },
   {
    "paldex": "159",
@@ -2829,7 +3063,8 @@
    "atk_pctl": 74,
    "def_pctl": 97,
    "combat_pctl": 80,
-   "tier": "A"
+   "tier": "A",
+   "food": 600
   },
   {
    "paldex": "159B",
@@ -2841,7 +3076,8 @@
    "atk_pctl": 81,
    "def_pctl": 97,
    "combat_pctl": 82,
-   "tier": "A"
+   "tier": "A",
+   "food": 600
   },
   {
    "paldex": "160",
@@ -2853,7 +3089,8 @@
    "atk_pctl": 74,
    "def_pctl": 85,
    "combat_pctl": 82,
-   "tier": "A"
+   "tier": "A",
+   "food": 600
   },
   {
    "paldex": "161",
@@ -2865,7 +3102,8 @@
    "atk_pctl": 87,
    "def_pctl": 80,
    "combat_pctl": 87,
-   "tier": "S"
+   "tier": "S",
+   "food": 550
   },
   {
    "paldex": "162",
@@ -2877,7 +3115,8 @@
    "atk_pctl": 25,
    "def_pctl": 12,
    "combat_pctl": 19,
-   "tier": "C"
+   "tier": "C",
+   "food": 230
   },
   {
    "paldex": "163",
@@ -2889,7 +3128,8 @@
    "atk_pctl": 9,
    "def_pctl": 20,
    "combat_pctl": 11,
-   "tier": "F"
+   "tier": "F",
+   "food": 300
   },
   {
    "paldex": "163B",
@@ -2901,7 +3141,8 @@
    "atk_pctl": 9,
    "def_pctl": 29,
    "combat_pctl": 14,
-   "tier": "C"
+   "tier": "C",
+   "food": 300
   },
   {
    "paldex": "164",
@@ -2913,7 +3154,8 @@
    "atk_pctl": 17,
    "def_pctl": 3,
    "combat_pctl": 11,
-   "tier": "F"
+   "tier": "F",
+   "food": 230
   },
   {
    "paldex": "165",
@@ -2925,7 +3167,8 @@
    "atk_pctl": 17,
    "def_pctl": 29,
    "combat_pctl": 19,
-   "tier": "C"
+   "tier": "C",
+   "food": 300
   },
   {
    "paldex": "166",
@@ -2937,7 +3180,8 @@
    "atk_pctl": 33,
    "def_pctl": 29,
    "combat_pctl": 25,
-   "tier": "C"
+   "tier": "C",
+   "food": 230
   },
   {
    "paldex": "167",
@@ -2949,7 +3193,8 @@
    "atk_pctl": 17,
    "def_pctl": 12,
    "combat_pctl": 19,
-   "tier": "C"
+   "tier": "C",
+   "food": 300
   },
   {
    "paldex": "168",
@@ -2961,7 +3206,8 @@
    "atk_pctl": 33,
    "def_pctl": 29,
    "combat_pctl": 25,
-   "tier": "C"
+   "tier": "C",
+   "food": 290
   },
   {
    "paldex": "169",
@@ -2973,7 +3219,8 @@
    "atk_pctl": 41,
    "def_pctl": 39,
    "combat_pctl": 41,
-   "tier": "B"
+   "tier": "B",
+   "food": 450
   },
   {
    "paldex": "169B",
@@ -2985,7 +3232,8 @@
    "atk_pctl": 48,
    "def_pctl": 39,
    "combat_pctl": 43,
-   "tier": "B"
+   "tier": "B",
+   "food": 450
   },
   {
    "paldex": "170",
@@ -2997,7 +3245,8 @@
    "atk_pctl": 56,
    "def_pctl": 65,
    "combat_pctl": 63,
-   "tier": "B"
+   "tier": "B",
+   "food": 400
   },
   {
    "paldex": "171",
@@ -3009,7 +3258,8 @@
    "atk_pctl": 91,
    "def_pctl": 90,
    "combat_pctl": 88,
-   "tier": "S"
+   "tier": "S",
+   "food": 620
   },
   {
    "paldex": "171B",
@@ -3021,7 +3271,8 @@
    "atk_pctl": 95,
    "def_pctl": 90,
    "combat_pctl": 89,
-   "tier": "S"
+   "tier": "S",
+   "food": 620
   },
   {
    "paldex": "172",
@@ -3033,7 +3284,8 @@
    "atk_pctl": 33,
    "def_pctl": 29,
    "combat_pctl": 28,
-   "tier": "C"
+   "tier": "C",
+   "food": 450
   },
   {
    "paldex": "173",
@@ -3045,7 +3297,8 @@
    "atk_pctl": 33,
    "def_pctl": 48,
    "combat_pctl": 39,
-   "tier": "B"
+   "tier": "B",
+   "food": 450
   },
   {
    "paldex": "174",
@@ -3057,7 +3310,8 @@
    "atk_pctl": 91,
    "def_pctl": 74,
    "combat_pctl": 81,
-   "tier": "A"
+   "tier": "A",
+   "food": 600
   },
   {
    "paldex": "175",
@@ -3069,7 +3323,8 @@
    "atk_pctl": 81,
    "def_pctl": 90,
    "combat_pctl": 88,
-   "tier": "S"
+   "tier": "S",
+   "food": 620
   },
   {
    "paldex": "176",
@@ -3081,7 +3336,8 @@
    "atk_pctl": 74,
    "def_pctl": 65,
    "combat_pctl": 66,
-   "tier": "B"
+   "tier": "B",
+   "food": 600
   },
   {
    "paldex": "177",
@@ -3093,7 +3349,8 @@
    "atk_pctl": 81,
    "def_pctl": 56,
    "combat_pctl": 71,
-   "tier": "A"
+   "tier": "A",
+   "food": 560
   },
   {
    "paldex": "178",
@@ -3105,7 +3362,8 @@
    "atk_pctl": 33,
    "def_pctl": 48,
    "combat_pctl": 37,
-   "tier": "B"
+   "tier": "B",
+   "food": 340
   },
   {
    "paldex": "179",
@@ -3117,7 +3375,8 @@
    "atk_pctl": 48,
    "def_pctl": 48,
    "combat_pctl": 54,
-   "tier": "B"
+   "tier": "B",
+   "food": 530
   },
   {
    "paldex": "180",
@@ -3129,7 +3388,8 @@
    "atk_pctl": 56,
    "def_pctl": 56,
    "combat_pctl": 51,
-   "tier": "B"
+   "tier": "B",
+   "food": 530
   },
   {
    "paldex": "181",
@@ -3141,7 +3401,8 @@
    "atk_pctl": 41,
    "def_pctl": 3,
    "combat_pctl": 24,
-   "tier": "C"
+   "tier": "C",
+   "food": 380
   },
   {
    "paldex": "182",
@@ -3153,7 +3414,8 @@
    "atk_pctl": 81,
    "def_pctl": 85,
    "combat_pctl": 81,
-   "tier": "A"
+   "tier": "A",
+   "food": 680
   },
   {
    "paldex": "183",
@@ -3165,7 +3427,8 @@
    "atk_pctl": 87,
    "def_pctl": 65,
    "combat_pctl": 73,
-   "tier": "A"
+   "tier": "A",
+   "food": 560
   },
   {
    "paldex": "184",
@@ -3177,7 +3440,8 @@
    "atk_pctl": 91,
    "def_pctl": 98,
    "combat_pctl": 86,
-   "tier": "S"
+   "tier": "S",
+   "food": 600
   },
   {
    "paldex": "185",
@@ -3189,7 +3453,8 @@
    "atk_pctl": 66,
    "def_pctl": 74,
    "combat_pctl": 76,
-   "tier": "A"
+   "tier": "A",
+   "food": 410
   },
   {
    "paldex": "186",
@@ -3201,7 +3466,8 @@
    "atk_pctl": 87,
    "def_pctl": 80,
    "combat_pctl": 85,
-   "tier": "S"
+   "tier": "S",
+   "food": 540
   },
   {
    "paldex": "186B",
@@ -3213,7 +3479,8 @@
    "atk_pctl": 87,
    "def_pctl": 85,
    "combat_pctl": 85,
-   "tier": "S"
+   "tier": "S",
+   "food": 540
   },
   {
    "paldex": "187",
@@ -3225,7 +3492,8 @@
    "atk_pctl": 95,
    "def_pctl": 85,
    "combat_pctl": 90,
-   "tier": "S"
+   "tier": "S",
+   "food": 620
   },
   {
    "paldex": "188",
@@ -3237,7 +3505,8 @@
    "atk_pctl": 74,
    "def_pctl": 85,
    "combat_pctl": 75,
-   "tier": "A"
+   "tier": "A",
+   "food": 600
   },
   {
    "paldex": "188B",
@@ -3249,7 +3518,8 @@
    "atk_pctl": 74,
    "def_pctl": 85,
    "combat_pctl": 79,
-   "tier": "A"
+   "tier": "A",
+   "food": 600
   },
   {
    "paldex": "189",
@@ -3261,7 +3531,8 @@
    "atk_pctl": 87,
    "def_pctl": 98,
    "combat_pctl": 91,
-   "tier": "S"
+   "tier": "S",
+   "food": 530
   },
   {
    "paldex": "190",
@@ -3273,7 +3544,8 @@
    "atk_pctl": 81,
    "def_pctl": 80,
    "combat_pctl": 85,
-   "tier": "S"
+   "tier": "S",
+   "food": 680
   },
   {
    "paldex": "191",
@@ -3285,7 +3557,8 @@
    "atk_pctl": 95,
    "def_pctl": 90,
    "combat_pctl": 94,
-   "tier": "S"
+   "tier": "S",
+   "food": 730
   },
   {
    "paldex": "192",
@@ -3297,7 +3570,8 @@
    "atk_pctl": 97,
    "def_pctl": 90,
    "combat_pctl": 95,
-   "tier": "S"
+   "tier": "S",
+   "food": 620
   },
   {
    "paldex": "193",
@@ -3309,7 +3583,8 @@
    "atk_pctl": 87,
    "def_pctl": 80,
    "combat_pctl": 88,
-   "tier": "S"
+   "tier": "S",
+   "food": 630
   },
   {
    "paldex": "194",
@@ -3321,7 +3596,8 @@
    "atk_pctl": 97,
    "def_pctl": 80,
    "combat_pctl": 90,
-   "tier": "S"
+   "tier": "S",
+   "food": 630
   },
   {
    "paldex": "195",
@@ -3333,7 +3609,8 @@
    "atk_pctl": 99,
    "def_pctl": 65,
    "combat_pctl": 84,
-   "tier": "A"
+   "tier": "A",
+   "food": 530
   },
   {
    "paldex": "195B",
@@ -3345,7 +3622,8 @@
    "atk_pctl": 99,
    "def_pctl": 65,
    "combat_pctl": 84,
-   "tier": "A"
+   "tier": "A",
+   "food": 530
   },
   {
    "paldex": "196",
@@ -3357,7 +3635,8 @@
    "atk_pctl": 87,
    "def_pctl": 90,
    "combat_pctl": 90,
-   "tier": "S"
+   "tier": "S",
+   "food": 570
   },
   {
    "paldex": "197",
@@ -3369,7 +3648,8 @@
    "atk_pctl": 95,
    "def_pctl": 80,
    "combat_pctl": 91,
-   "tier": "S"
+   "tier": "S",
+   "food": 710
   },
   {
    "paldex": "198",
@@ -3381,7 +3661,8 @@
    "atk_pctl": 87,
    "def_pctl": 99,
    "combat_pctl": 93,
-   "tier": "S"
+   "tier": "S",
+   "food": 600
   },
   {
    "paldex": "199",
@@ -3393,7 +3674,8 @@
    "atk_pctl": 99,
    "def_pctl": 90,
    "combat_pctl": 94,
-   "tier": "S"
+   "tier": "S",
+   "food": 600
   },
   {
    "paldex": "200",
@@ -3405,7 +3687,8 @@
    "atk_pctl": 98,
    "def_pctl": 90,
    "combat_pctl": 95,
-   "tier": "S"
+   "tier": "S",
+   "food": 620
   },
   {
    "paldex": "200B",
@@ -3417,7 +3700,8 @@
    "atk_pctl": 98,
    "def_pctl": 97,
    "combat_pctl": 98,
-   "tier": "S"
+   "tier": "S",
+   "food": 620
   },
   {
    "paldex": "201",
@@ -3429,7 +3713,8 @@
    "atk_pctl": 99,
    "def_pctl": 94,
    "combat_pctl": 87,
-   "tier": "S"
+   "tier": "S",
+   "food": 620
   },
   {
    "paldex": "202",
@@ -3441,7 +3726,8 @@
    "atk_pctl": 98,
    "def_pctl": 90,
    "combat_pctl": 90,
-   "tier": "S"
+   "tier": "S",
+   "food": 600
   },
   {
    "paldex": "203",
@@ -3453,7 +3739,8 @@
    "atk_pctl": 87,
    "def_pctl": 100,
    "combat_pctl": 95,
-   "tier": "S"
+   "tier": "S",
+   "food": 600
   },
   {
    "paldex": "204",
@@ -3465,7 +3752,8 @@
    "atk_pctl": 100,
    "def_pctl": 100,
    "combat_pctl": 100,
-   "tier": "S"
+   "tier": "S",
+   "food": 600
   },
   {
    "paldex": null,
@@ -3477,7 +3765,8 @@
    "atk_pctl": 9,
    "def_pctl": 29,
    "combat_pctl": 16,
-   "tier": "C"
+   "tier": "C",
+   "food": 210
   },
   {
    "paldex": null,
@@ -3489,7 +3778,8 @@
    "atk_pctl": 17,
    "def_pctl": 29,
    "combat_pctl": 17,
-   "tier": "C"
+   "tier": "C",
+   "food": 220
   },
   {
    "paldex": null,
@@ -3501,7 +3791,8 @@
    "atk_pctl": 74,
    "def_pctl": 56,
    "combat_pctl": 66,
-   "tier": "B"
+   "tier": "B",
+   "food": 220
   },
   {
    "paldex": null,
@@ -3513,7 +3804,8 @@
    "atk_pctl": 66,
    "def_pctl": 48,
    "combat_pctl": 55,
-   "tier": "B"
+   "tier": "B",
+   "food": 180
   },
   {
    "paldex": null,
@@ -3525,7 +3817,8 @@
    "atk_pctl": 66,
    "def_pctl": 56,
    "combat_pctl": 66,
-   "tier": "B"
+   "tier": "B",
+   "food": 240
   },
   {
    "paldex": null,
@@ -3537,7 +3830,8 @@
    "atk_pctl": 9,
    "def_pctl": 29,
    "combat_pctl": 14,
-   "tier": "C"
+   "tier": "C",
+   "food": 180
   },
   {
    "paldex": null,
@@ -3549,7 +3843,8 @@
    "atk_pctl": 25,
    "def_pctl": 56,
    "combat_pctl": 37,
-   "tier": "B"
+   "tier": "B",
+   "food": 220
   },
   {
    "paldex": null,
@@ -3561,7 +3856,8 @@
    "atk_pctl": 17,
    "def_pctl": 39,
    "combat_pctl": 28,
-   "tier": "C"
+   "tier": "C",
+   "food": 300
   },
   {
    "paldex": null,
@@ -3573,7 +3869,8 @@
    "atk_pctl": 9,
    "def_pctl": 29,
    "combat_pctl": 20,
-   "tier": "C"
+   "tier": "C",
+   "food": 270
   },
   {
    "paldex": null,
@@ -3585,7 +3882,8 @@
    "atk_pctl": 48,
    "def_pctl": 74,
    "combat_pctl": 63,
-   "tier": "B"
+   "tier": "B",
+   "food": 330
   },
   {
    "paldex": null,
@@ -3597,7 +3895,8 @@
    "atk_pctl": 17,
    "def_pctl": 39,
    "combat_pctl": 23,
-   "tier": "C"
+   "tier": "C",
+   "food": 240
   }
  ]
 }

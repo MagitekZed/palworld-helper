@@ -181,7 +181,6 @@ function workChip(work, lv, pal) {
 function bonusBadge(p, onAfter) {
   const done = bonusDone(p.name);
   const copies = copiesOf(p.name);
-  if (!done && !copies) return null;
   // owning 5+ copies proves the bonus is earned — nothing to toggle
   if (done && copies >= BONUS_AT) {
     return el('span', { class: 'bonus done', title: '5-catch paldex bonus earned' }, '★5');

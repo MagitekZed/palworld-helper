@@ -18,6 +18,8 @@ const LS_ROSTER_V1 = 'palplanner.roster.v1'; // legacy: array of owned names
 const LS_ROSTER = 'palplanner.roster.v2';    // { name: copies }
 const LS_BASES = 'palplanner.bases.v1';      // crew: [{name, qty}] (legacy: array of names)
 const LS_UI = 'palplanner.ui.v1';
+const LS_BONUS = 'palplanner.bonus5.v1';     // { name: 1 } — 5-catch paldex bonus earned
+const BONUS_AT = 5; // catching this many of a species earns its paldex bonus (v1.0)
 
 function lsLoad(key, fallback) {
   try {
@@ -36,6 +38,15 @@ let roster = (() => {
     const qty = Math.floor(Number(q));
     if (byName.has(n) && qty > 0) clean[n] = qty;
   }
+  return clean;
+})();
+
+// 5-catch bonus: sticky — auto-earned when copies reach BONUS_AT, kept when
+// copies later drop (condensing/selling doesn't undo the in-game bonus).
+let bonus = (() => {
+  const clean = {};
+  for (const n of Object.keys(lsLoad(LS_BONUS, {}))) if (byName.has(n)) clean[n] = 1;
+  for (const [n, q] of Object.entries(roster)) if (q >= BONUS_AT) clean[n] = 1;
   return clean;
 })();
 
@@ -60,7 +71,7 @@ let bases = lsLoad(LS_BASES, [])
   .map(b => ({ id: String(b.id), name: String(b.name || 'Base'), crew: normalizeCrew(b.crew), cap: clampCap(b.cap) }));
 
 let ui = Object.assign(
-  { view: 'roster', baseId: null, search: '', element: '', works: [], tier: '', ownedOnly: false, sort: 'dex' },
+  { view: 'roster', baseId: null, search: '', element: '', works: [], tier: '', bonus5: '', ownedOnly: false, sort: 'dex' },
   lsLoad(LS_UI, {})
 );
 // migrate the old single-work filter (ui.work: string) to ui.works: []
@@ -73,6 +84,7 @@ function persist() {
   localStorage.setItem(LS_ROSTER, JSON.stringify(roster));
   localStorage.setItem(LS_BASES, JSON.stringify(bases));
   localStorage.setItem(LS_UI, JSON.stringify(ui));
+  localStorage.setItem(LS_BONUS, JSON.stringify(bonus));
 }
 
 /* ================= helpers ================= */
@@ -96,10 +108,13 @@ const copiesOf = name => roster[name] || 0;
 const isOwned = name => copiesOf(name) > 0;
 function setCopies(name, n) {
   if (n > 0) roster[name] = n; else delete roster[name];
+  if (n >= BONUS_AT) bonus[name] = 1; // sticky: earned for good
   persist();
 }
 const uniqueOwned = () => Object.keys(roster).length;
 const totalCopies = () => Object.values(roster).reduce((a, b) => a + b, 0);
+const bonusDone = name => !!bonus[name];
+const bonusCount = () => Object.keys(bonus).length;
 
 const crewEntry = (base, name) => base.crew.find(e => e.name === name);
 const crewTotal = base => base.crew.reduce((s, e) => s + e.qty, 0);
@@ -158,6 +173,30 @@ function workChip(work, lv, pal) {
     attrs.title = 'Ranch produce: ' + pal.ranch.map(i => i.name).join(', ');
   }
   return el('span', attrs, `${work} `, el('b', {}, String(lv)));
+}
+
+// 5-catch bonus badge: ★5 when earned, progress n/5 while owned copies build up.
+// Click toggles manually (for pals caught before using this tool, since the
+// roster only tracks copies you still have).
+function bonusBadge(p, onAfter) {
+  const done = bonusDone(p.name);
+  const copies = copiesOf(p.name);
+  if (!done && !copies) return null;
+  // owning 5+ copies proves the bonus is earned — nothing to toggle
+  if (done && copies >= BONUS_AT) {
+    return el('span', { class: 'bonus done', title: '5-catch paldex bonus earned' }, '★5');
+  }
+  const title = done
+    ? '5-catch paldex bonus earned (marked manually) · click to unmark'
+    : `${copies} cop${copies === 1 ? 'y' : 'ies'} toward the 5-catch paldex bonus · click to mark it earned (e.g. caught before tracking here)`;
+  return el('button', {
+    class: 'bonus' + (done ? ' done' : ''), title,
+    onclick: e => {
+      e.stopPropagation();
+      if (done) delete bonus[p.name]; else bonus[p.name] = 1;
+      persist(); onAfter();
+    }
+  }, done ? '★5' : `${Math.min(copies, BONUS_AT)}/${BONUS_AT}`);
 }
 
 function foodChip(p) {
@@ -238,6 +277,8 @@ function matchesFilters(p) {
   if (ui.element && !p.elements.includes(ui.element)) return false;
   if (ui.works.length && !ui.works.every(w => w in p.works)) return false;
   if (ui.tier && p.tier !== ui.tier) return false;
+  if (ui.bonus5 === 'done' && !bonusDone(p.name)) return false;
+  if (ui.bonus5 === 'not' && bonusDone(p.name)) return false;
   if (ui.ownedOnly && !isOwned(p.name)) return false;
   return true;
 }
@@ -252,6 +293,11 @@ function sortPals(list) {
   else if (s === 'total') copy.sort((a, b) => totalLevels(b) - totalLevels(a));
   else if (s === 'best') copy.sort((a, b) => bestLevel(b) - bestLevel(a) || totalLevels(b) - totalLevels(a));
   else if (s === 'tier') copy.sort((a, b) => (b.combat || 0) - (a.combat || 0) || a.name.localeCompare(b.name));
+  else if (s === 'bonus') {
+    // closest to the 5-catch bonus first: earned, then 4/5, 3/5…; paldex order to break ties
+    const prog = p => bonusDone(p.name) ? BONUS_AT : Math.min(copiesOf(p.name), BONUS_AT - 1);
+    copy.sort((a, b) => prog(b) - prog(a) || dexOrder.get(a.name) - dexOrder.get(b.name));
+  }
   else copy.sort((a, b) => dexOrder.get(a.name) - dexOrder.get(b.name));
   // when filtering by work types, sort the strongest at those works to the top
   if (ui.works.length) copy.sort((a, b) => selectedWorksTotal(b) - selectedWorksTotal(a));
@@ -310,8 +356,13 @@ function renderRoster() {
   })();
   const sortSel = el('select',
     { onchange: e => { ui.sort = e.target.value; persist(); renderList(); } },
-    [['dex', 'Sort: Paldex'], ['name', 'Sort: Name'], ['total', 'Sort: Total levels'], ['best', 'Sort: Best level'], ['tier', 'Sort: Combat tier']]
+    [['dex', 'Sort: Paldex'], ['name', 'Sort: Name'], ['total', 'Sort: Total levels'], ['best', 'Sort: Best level'], ['tier', 'Sort: Combat tier'], ['bonus', 'Sort: 5-catch progress']]
       .map(([v, t]) => el('option', { value: v, selected: ui.sort === v ? '' : null }, t))
+  );
+  const bonusSel = el('select',
+    { onchange: e => { ui.bonus5 = e.target.value; persist(); renderList(); } },
+    [['', '5-catch: any'], ['done', '5-catch: done ★'], ['not', '5-catch: not yet']]
+      .map(([v, t]) => el('option', { value: v, selected: ui.bonus5 === v ? '' : null }, t))
   );
   const tierSel = el('select',
     { onchange: e => { ui.tier = e.target.value; persist(); renderList(); } },
@@ -328,7 +379,7 @@ function renderRoster() {
   const countPill = el('span', { class: 'count-pill' });
 
   view.append(
-    el('div', { class: 'toolbar' }, searchInput, elementSel, workSel, tierSel, sortSel, ownedChk,
+    el('div', { class: 'toolbar' }, searchInput, elementSel, workSel, tierSel, bonusSel, sortSel, ownedChk,
       el('span', { class: 'spacer' }), countPill),
     listWrap
   );
@@ -338,7 +389,9 @@ function renderRoster() {
     countPill.innerHTML = '';
     countPill.append('Own ', el('b', {}, String(uniqueOwned())), ` / ${PALS.length}`,
       totalCopies() > uniqueOwned() ? ` · ${totalCopies()} copies` : '',
+      bonusCount() ? ` · ${bonusCount()} ★5` : '',
       pals.length !== PALS.length ? ` · showing ${pals.length}` : '');
+    countPill.title = bonusCount() ? `${bonusCount()} pals have the 5-catch paldex bonus` : '';
     listWrap.innerHTML = '';
     if (!pals.length) {
       listWrap.append(el('div', { class: 'empty-note' }, 'No pals match these filters.'));
@@ -365,6 +418,7 @@ function renderRoster() {
           el('a', { href: 'https://paldb.cc/en/' + p.slug, target: '_blank', rel: 'noopener' }, p.name)),
         elementChips(p),
         combatCluster(p),
+        bonusBadge(p, () => renderList()),
         el('span', { class: 'work-chips' }, sortedWorks(p).map(([w, l]) => {
           const chip = workChip(w, l, p);
           if (ui.works.includes(w)) chip.classList.add('hl');
@@ -811,7 +865,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal()
 
 /* export / import — accepts both current and pre-count backup formats */
 $('#btn-export').addEventListener('click', () => {
-  const blob = new Blob([JSON.stringify({ exportedAt: new Date().toISOString(), roster, bases }, null, 2)],
+  const blob = new Blob([JSON.stringify({ exportedAt: new Date().toISOString(), roster, bases, bonus }, null, 2)],
     { type: 'application/json' });
   const a = el('a', { href: URL.createObjectURL(blob), download: 'palworld-base-planner-backup.json' });
   document.body.append(a); a.click(); a.remove();
@@ -840,6 +894,9 @@ $('#import-file').addEventListener('change', async e => {
     if (!confirm(`Import ${Object.keys(newRoster).length} owned pals (${copies} copies) and ${newBases.length} bases? This replaces your current data.`)) return;
     roster = newRoster;
     bases = newBases;
+    bonus = {};
+    for (const n of Object.keys(data.bonus || {})) if (byName.has(n)) bonus[n] = 1;
+    for (const [n, q] of Object.entries(roster)) if (q >= BONUS_AT) bonus[n] = 1;
     ui.baseId = null;
     persist(); render();
   } catch {

@@ -60,6 +60,7 @@ main { flex: 1; width: 100%; max-width: 1180px; margin: 0 auto; padding: 18px 22
   color: var(--muted); font-size: 12px; text-align: center;
   padding: 14px; border-top: 1px solid var(--border);
 }
+.foot-legal { margin-top: 6px; opacity: 0.75; }
 
 /* ---------- toolbar ---------- */
 .toolbar {

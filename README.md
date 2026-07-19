@@ -22,6 +22,20 @@ No build step, no dependencies — plain HTML/CSS/JS. Open `index.html` from any
 
 ## Data
 
-Work suitability for all pals lives in [`data/`](data/) (JSON + CSV) and is embedded in the app as `data.js`. Values are the v1.0 rebalanced base levels, sourced from [paldb.cc](https://paldb.cc/en/Pals) (2026-07-13). See [`data/README.md`](data/README.md) for details and caveats.
+Work suitability, combat stats (HP/Attack/Defense + our derived S–F tier), and Food
+appetite for all pals live in [`data/`](data/) (JSON + CSV) and are embedded in the
+app as `data.js`. Values are v1.0 base levels, sourced from
+[paldb.cc](https://paldb.cc/en/Pals) (2026-07-13/16). See
+[`data/README.md`](data/README.md) for details and caveats.
 
-Fan-made tool; not affiliated with Pocketpair. Pal data and icons belong to their respective owners.
+Pal and item icons are self-hosted in [`icons/`](icons/) (originally obtained via
+paldb.cc's mirrors of the game assets) so the app puts no load on paldb.cc.
+
+## Legal
+
+This is a **free, non-commercial fan tool**. It is not affiliated with, endorsed by,
+or sponsored by Pocketpair, Inc. or paldb.cc. All Palworld game data, names, and art
+are © Pocketpair, Inc. Game data was compiled via the fan-run
+[paldb.cc](https://paldb.cc/en/) database. Shared in the spirit of Pocketpair's
+[derivative works guidelines](https://www.pocketpair.jp/en/guidelines-derivativework-en/);
+if you're a rights holder and want anything changed or removed, open an issue.

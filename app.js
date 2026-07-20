@@ -9,9 +9,39 @@ const dexOrder = new Map(PALS.map((p, i) => [p.name, i]));
 const ELEMENTS = ['Neutral', 'Fire', 'Water', 'Grass', 'Electric', 'Ground', 'Rock', 'Ice', 'Dragon', 'Dark'];
 const CAP_DEFAULT = 15; // default per-base worker cap; editable per base
 const CAP_MAX = 50;
-// auto-fill: a 2nd worker on the same job counts half as much as the 1st, a 3rd a quarter, …
-const AUTOFILL_DIMINISH = 0.5;
-const AUTOFILL_MIN_GAIN = 0.9;
+
+/* auto-fill purposes: each preset is a slot-share recipe over the open slots.
+   Shares are targets, filled proportionally; if a job runs out of owned pals
+   its share spills to the rest. */
+const PRESETS = {
+  balanced: {
+    label: 'Balanced',
+    recipe: {
+      Handiwork: 0.15, Transporting: 0.15,
+      Kindling: 0.085, Watering: 0.085, Planting: 0.085, Gathering: 0.085,
+      Mining: 0.085, Lumbering: 0.085, Farming: 0.085, 'Generating Electricity': 0.085,
+      Cooling: 0.02,
+    },
+  },
+  mining: { label: 'Mining', recipe: { Mining: 0.6, Transporting: 0.25, Kindling: 0.15 } },
+  logging: { label: 'Logging', recipe: { Lumbering: 0.6, Transporting: 0.25, Handiwork: 0.15 } },
+  ranch: { label: 'Ranch', recipe: { Farming: 0.7, Transporting: 0.3 } },
+  crops: { label: 'Crops', recipe: { Planting: 0.3, Watering: 0.3, Gathering: 0.2, Transporting: 0.15, Cooling: 0.05 } },
+  crafting: { label: 'Crafting & power', recipe: { Handiwork: 0.55, Transporting: 0.25, 'Generating Electricity': 0.2 } },
+};
+
+/* self-sufficiency ("cover the basics") targets, raw-food playstyle (no cook).
+   Food trio is measured in total work LEVELS — one plantation crew feeds ~8
+   pals on cooked food (paldb workload data + community measurements), raw-only
+   needs ~1.5x, and work speed ~doubles per level, so better pals need fewer
+   bodies. The rest are worker counts. */
+const BASICS_FOOD_LEVELS = cap => Math.max(1, Math.round(cap * 0.75)); // Planting, Watering, Gathering each
+const BASICS_COUNTS = cap => ({
+  Transporting: Math.max(1, Math.round(cap / 8)),
+  Handiwork: Math.round(cap / 10),
+  'Medicine Production': Math.round(cap / 15),
+});
+const BASICS_COUNT_WEIGHT = 2.5; // one count-slot ≈ this many food levels when scoring multi-job picks
 
 /* ================= state ================= */
 const LS_ROSTER_V1 = 'palplanner.roster.v1'; // legacy: array of owned names
@@ -66,9 +96,15 @@ function clampCap(n) {
   return Number.isFinite(v) && v >= 1 ? Math.min(v, CAP_MAX) : CAP_DEFAULT;
 }
 
+const normalizeBase = b => ({
+  id: String(b.id), name: String(b.name || 'Base'), crew: normalizeCrew(b.crew), cap: clampCap(b.cap),
+  purpose: PRESETS[b.purpose] ? b.purpose : 'balanced',
+  coverBasics: b.coverBasics !== false,
+});
+
 let bases = lsLoad(LS_BASES, [])
   .filter(b => b && b.id && Array.isArray(b.crew))
-  .map(b => ({ id: String(b.id), name: String(b.name || 'Base'), crew: normalizeCrew(b.crew), cap: clampCap(b.cap) }));
+  .map(normalizeBase);
 
 let ui = Object.assign(
   { view: 'roster', baseId: null, search: '', element: '', works: [], tier: '', bonus5: '', ownedOnly: false, sort: 'dex' },
@@ -488,7 +524,7 @@ function openBasePickerModal(p, btn) {
 
 /* ================= bases view ================= */
 function newBase() {
-  const base = { id: 'b' + Date.now().toString(36), name: `Base ${bases.length + 1}`, crew: [], cap: CAP_DEFAULT };
+  const base = { id: 'b' + Date.now().toString(36), name: `Base ${bases.length + 1}`, crew: [], cap: CAP_DEFAULT, purpose: 'balanced', coverBasics: true };
   bases.push(base);
   ui.baseId = base.id;
   persist(); renderHeaderStats(); render();
@@ -509,6 +545,7 @@ function renderBases() {
     grid.append(el('div', { class: 'base-card', onclick: () => { ui.baseId = b.id; persist(); render(); } },
       el('h3', {}, b.name),
       el('div', { class: 'meta', title: crewFood(b) ? FOOD_TIP : null },
+        (b.purpose !== 'balanced' ? `${PRESETS[b.purpose].label} · ` : '') +
         `${total} / ${b.cap} pals · covers ${covered}/12 work types` + (crewFood(b) ? ` · 🍖 ${crewFood(b).toLocaleString()}` : '')),
       missing
         ? el('div', { class: 'missing' }, `⚠ ${missing} cop${missing === 1 ? 'y' : 'ies'} still to catch`)
@@ -639,12 +676,35 @@ function renderEditor(view, base) {
         `⚠ ${total} workers planned, but this base's max is ${base.cap}.`));
     }
 
-    crewPanel.append(el('div', { style: 'margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;' },
+    const basicsChk = el('label', { class: 'check', title: 'Adds a food-farm crew (planting/watering/gathering, raw-food scale), haulers, handiwork and a medic before filling the specialty — so the base needs no supply runs' },
+      el('input', {
+        type: 'checkbox', ...(base.coverBasics ? { checked: '' } : {}),
+        onchange: e => { base.coverBasics = e.target.checked; persist(); }
+      }),
+      'self-sufficient (grows its own food)'
+    );
+    basicsChk.hidden = base.purpose === 'balanced';
+    const purposeSel = el('select',
+      { onchange: e => { base.purpose = e.target.value; basicsChk.hidden = base.purpose === 'balanced'; persist(); refresh(); } },
+      Object.entries(PRESETS).map(([v, pr]) =>
+        el('option', { value: v, selected: base.purpose === v ? '' : null }, 'Purpose: ' + pr.label))
+    );
+    crewPanel.append(el('div', { class: 'autofill-row' },
+      purposeSel,
+      basicsChk,
       el('button', { class: 'btn', onclick: () => { autofill(base); refresh(); } }, 'Auto-fill from my roster'),
       el('button', { class: 'ghost', onclick: () => { base.crew = []; persist(); refresh(); } }, 'Clear crew')
     ));
+    const recipeText = Object.entries((PRESETS[base.purpose] || PRESETS.balanced).recipe)
+      .sort((a, b) => b[1] - a[1]).slice(0, 3).map(([w, s]) => `${Math.round(s * 100)}% ${w}`).join(' · ');
     crewPanel.append(el('div', { class: 'tips' },
-      `Auto-fill adds your best free copies (owned and not assigned to any base) up to this base's max of ${base.cap}. Extra workers on the same job count for less (2nd counts half, 3rd a quarter…), so it covers empty jobs first, then stacks your strongest pals.`));
+      `Auto-fill adds your best free copies (owned and unassigned) up to the max of ${base.cap}, following the ${(PRESETS[base.purpose] || PRESETS.balanced).label} recipe (${recipeText}…). ` +
+      (base.purpose === 'balanced'
+        ? 'Balanced spreads across every job with extra handiwork and hauling.'
+        : base.coverBasics
+          ? 'Self-sufficient first staffs food farming (scaled for raw feeding — better pals need fewer bodies), hauling, handiwork and a medic, then fills the specialty.'
+          : 'Focus-only: every slot goes to the specialty — ship food in from another base.') +
+      ' It never removes pals you placed, and never adds pals with no relevant work.'));
 
     left.append(crewPanel);
   }
@@ -659,7 +719,12 @@ function renderEditor(view, base) {
     const MAX_BADGES = 8, MAX_PROVIDERS = 3;
     for (const w of WORKS) {
       const { contributors, levels } = det[w];
-      const tile = el('div', { class: 'cov-tile' + (levels.length ? '' : ' zero'), onclick: () => openWorkModal(w, base, refresh) });
+      const focus = base.purpose !== 'balanced' && (PRESETS[base.purpose].recipe[w] || 0) > 0;
+      const tile = el('div', {
+        class: 'cov-tile' + (levels.length ? '' : ' zero') + (focus ? ' focus' : ''),
+        ...(focus ? { title: `Part of this base's ${PRESETS[base.purpose].label} recipe` } : {}),
+        onclick: () => openWorkModal(w, base, refresh)
+      });
       tile.append(el('div', { class: 'w-name' }, w + (levels.length > 1 ? ` · ${levels.length} workers` : '')));
 
       const badges = el('div', { class: 'lv-badges' });
@@ -746,35 +811,103 @@ function renderEditor(view, base) {
 }
 
 /* ================= auto-fill =================
-   Greedy: repeatedly add the spare owned copy that raises the crew's weighted
-   score the most. A job's workers are sorted by level; the i-th worker counts
-   level * DIMINISH^i, so empty jobs get covered first and strong duplicates
-   still help. Stops at the soft cap or when the best gain is negligible. */
-function weightedWorkScore(levelsDesc) {
-  let s = 0;
-  for (let i = 0; i < levelsDesc.length; i++) s += levelsDesc[i] * Math.pow(AUTOFILL_DIMINISH, i);
-  return s;
+   Two phases, both append-only and limited to free owned copies:
+   1. Self-sufficiency (optional): meet the basics targets — food trio in work
+      LEVELS (better pals = fewer bodies), hauling/handiwork/medicine in worker
+      counts — preferring multi-job pals, existing crew counted first.
+   2. Recipe: fill remaining slots proportionally to the purpose's slot shares
+      (interleaved, so a thin roster yields a working miniature); a job with no
+      pals left spills its share to the rest. Irrelevant pals are never added. */
+function spareCopies(base, name) {
+  // owned − in this crew − demanded by other bases
+  return copiesOf(name) - crewQty(base, name) - demandElsewhere(base, name);
 }
-function baseScore(base) {
-  const det = coverageDetail(base);
-  return WORKS.reduce((s, w) => s + weightedWorkScore(det[w].levels), 0);
+
+// crew job totals: worker count and summed levels per work type
+function crewJobTotals(base) {
+  const count = {}, levels = {};
+  for (const e of base.crew) {
+    const p = byName.get(e.name);
+    if (!p) continue;
+    for (const [w, lv] of Object.entries(p.works)) {
+      count[w] = (count[w] || 0) + e.qty;
+      levels[w] = (levels[w] || 0) + lv * e.qty;
+    }
+  }
+  return { count, levels };
 }
-function autofill(base) {
+
+const FOOD_TRIO = ['Planting', 'Watering', 'Gathering'];
+
+function fillBasics(base) {
+  const foodTarget = BASICS_FOOD_LEVELS(base.cap);
+  const countTargets = BASICS_COUNTS(base.cap);
   while (crewTotal(base) < base.cap) {
-    const current = baseScore(base);
-    let best = null, bestGain = AUTOFILL_MIN_GAIN;
+    const { count, levels } = crewJobTotals(base);
+    const levelDeficit = w => Math.max(0, foodTarget - (levels[w] || 0));
+    const countDeficit = w => Math.max(0, (countTargets[w] || 0) - (count[w] || 0));
+    if (!FOOD_TRIO.some(levelDeficit) && !Object.keys(countTargets).some(countDeficit)) break;
+    let best = null, bestGain = 0, bestFood = Infinity;
     for (const p of PALS) {
-      // only copies no base has claimed: owned − in this crew − demanded by other bases
-      const spare = copiesOf(p.name) - crewQty(base, p.name) - demandElsewhere(base, p.name);
-      if (spare <= 0) continue;
-      addToCrew(base, p.name, 1);
-      const gain = baseScore(base) - current;
-      setCrewQty(base, p.name, crewQty(base, p.name) - 1);
-      if (gain > bestGain) { best = p; bestGain = gain; }
+      if (spareCopies(base, p.name) <= 0) continue;
+      let gain = 0;
+      for (const w of FOOD_TRIO) gain += Math.min(p.works[w] || 0, levelDeficit(w));
+      for (const w of Object.keys(countTargets)) {
+        if ((p.works[w] || 0) > 0 && countDeficit(w) > 0) gain += BASICS_COUNT_WEIGHT;
+      }
+      if (gain > bestGain || (gain === bestGain && gain > 0 && (p.food || 0) < bestFood)) {
+        best = p; bestGain = gain; bestFood = p.food || 0;
+      }
     }
     if (!best) break;
     addToCrew(base, best.name, 1);
   }
+}
+
+// best free pal for one job: highest level, then (Farming) produce this base
+// doesn't have yet, then lowest food
+function bestCandidate(base, work) {
+  const crewProduce = new Set(base.crew.flatMap(e => (byName.get(e.name)?.ranch || []).map(i => i.name)));
+  let best = null, bestKey = null;
+  for (const p of PALS) {
+    const lv = p.works[work] || 0;
+    if (!lv || spareCopies(base, p.name) <= 0) continue;
+    const newProduce = work === 'Farming' && (p.ranch || []).some(i => !crewProduce.has(i.name)) ? 1 : 0;
+    const key = [lv, newProduce, -(p.food || 0)];
+    if (!best || key[0] > bestKey[0] || (key[0] === bestKey[0] && (key[1] > bestKey[1] || (key[1] === bestKey[1] && key[2] > bestKey[2])))) {
+      best = p; bestKey = key;
+    }
+  }
+  return best;
+}
+
+function fillRecipe(base, recipe) {
+  const filled = {}; // slots added per job by this phase
+  const active = new Set(Object.keys(recipe));
+  while (crewTotal(base) < base.cap && active.size) {
+    // proportional scheduler: next slot goes to the job furthest behind its share
+    const job = [...active].sort((a, b) => ((filled[a] || 0) + 1) / recipe[a] - ((filled[b] || 0) + 1) / recipe[b])[0];
+    const p = bestCandidate(base, job);
+    if (!p) { active.delete(job); continue; } // supply dry — share spills to the rest
+    addToCrew(base, p.name, 1);
+    filled[job] = (filled[job] || 0) + 1;
+  }
+}
+
+function autofill(base) {
+  const preset = PRESETS[base.purpose] || PRESETS.balanced;
+  if (base.purpose === 'balanced') {
+    // balanced IS the basics — but still honor the medicine-per-15 rule
+    const medTarget = Math.round(base.cap / 15);
+    while (crewTotal(base) < base.cap && (crewJobTotals(base).count['Medicine Production'] || 0) < medTarget) {
+      const p = bestCandidate(base, 'Medicine Production');
+      if (!p) break;
+      addToCrew(base, p.name, 1);
+    }
+  } else if (base.coverBasics) {
+    fillBasics(base);
+  }
+  fillRecipe(base, preset.recipe);
   persist();
 }
 
@@ -888,7 +1021,7 @@ $('#import-file').addEventListener('change', async e => {
     } else throw new Error('bad shape');
     if (!Array.isArray(data.bases)) throw new Error('bad shape');
     const newBases = data.bases.filter(b => b && b.id && Array.isArray(b.crew))
-      .map(b => ({ id: String(b.id), name: String(b.name || 'Base'), crew: normalizeCrew(b.crew), cap: clampCap(b.cap) }));
+      .map(normalizeBase);
     const copies = Object.values(newRoster).reduce((a, b) => a + b, 0);
     if (!confirm(`Import ${Object.keys(newRoster).length} owned pals (${copies} copies) and ${newBases.length} bases? This replaces your current data.`)) return;
     roster = newRoster;

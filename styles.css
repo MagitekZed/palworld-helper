@@ -132,6 +132,19 @@ main { flex: 1; width: 100%; max-width: 1180px; margin: 0 auto; padding: 18px 22
 .lv8 b, .lv9 b, .lv10 b { color: #fbbf24; }
 .wchip.hl { border-color: var(--accent-dim); background: #16302c; color: var(--text); }
 
+/* ---------- auto-fill purpose row ---------- */
+.autofill-row {
+  margin-top: 12px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+}
+.autofill-row select {
+  background: var(--panel-2); border: 1px solid var(--border); border-radius: 8px;
+  color: var(--text); padding: 8px 12px;
+}
+.autofill-row label.check { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 13.5px; }
+.autofill-row label.check input { accent-color: var(--accent); }
+.cov-tile.focus { border-color: var(--accent-dim); }
+.cov-tile.focus .w-name { color: var(--accent); }
+
 /* ---------- 5-catch bonus badge ---------- */
 .bonus {
   flex-shrink: 0; line-height: 1.2;

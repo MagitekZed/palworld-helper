@@ -999,7 +999,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal()
 $('#btn-export').addEventListener('click', () => {
   const blob = new Blob([JSON.stringify({ exportedAt: new Date().toISOString(), roster, bases, bonus }, null, 2)],
     { type: 'application/json' });
-  const a = el('a', { href: URL.createObjectURL(blob), download: 'palworld-base-planner-backup.json' });
+  const a = el('a', { href: URL.createObjectURL(blob), download: 'palpedia-tracker-backup.json' });
   document.body.append(a); a.click(); a.remove();
 });
 $('#btn-import').addEventListener('click', () => $('#import-file').click());

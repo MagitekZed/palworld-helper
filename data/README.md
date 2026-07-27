@@ -52,11 +52,15 @@ utility/work pal (e.g. Anubis) can grade below a raw stat monster.
 
 `pals_partner_skills.json` carries every pal's partner skill name and full
 description (paldb.cc/en/Partner_Skill, retrieved 2026-07-26), plus `tags`
-derived from the description's trigger phrases: `base` ("While at a/your base"),
-`ranch` ("when assigned to Ranch"), `party` ("While in party" / "While fighting
+derived from the description's trigger phrases: `base` ("While at a/the/your base"),
+`ranch` ("when assigned to Ranch"), `party` (any "in (your) party" / "fighting
 together"), `active` ("When activated"), `mount` ("Can be ridden" / "While
-mounted/flying"), and `passive` (no trigger clause — always-on). A skill can
-carry several tags. Descriptions keep paldb's level-scaling ranges like
+mounted/flying"), and `passive` (no trigger clause). A skill can carry several
+tags — most mounts also have a party effect. Counts: party 180, mount 121,
+active 57, ranch 29, base 21, passive 1 (Astralym, whose skill paldb lists as
+still unknown). Phrasing varies more than you'd expect — Sekhmet says "While at
+base" without the article, and several pals express party conditions as "for
+each X in party" — so the patterns are deliberately loose. Descriptions keep paldb's level-scaling ranges like
 "(15~30)%".
 
 ## Sources

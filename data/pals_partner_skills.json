@@ -1,6 +1,6 @@
 {
  "meta": {
-  "source": "paldb.cc/en/Partner_Skill, retrieved 2026-07-26; tags derived from trigger phrases (base/ranch/party/active/mount/passive)"
+  "source": "paldb.cc/en/Partner_Skill, retrieved 2026-07-26; tags derived from trigger phrases (base/ranch/party/active/mount/passive), rules corrected 2026-07-27"
  },
  "pals": {
   "Lamball": {
@@ -195,6 +195,7 @@
    "skill": "King of Muscles",
    "desc": "Can be ridden. This Pal's Defense and Movement Speed increase by (5~14)% for each Melpaca in party.",
    "tags": [
+    "party",
     "mount"
    ]
   },
@@ -202,6 +203,7 @@
    "skill": "Coldhearted King",
    "desc": "Can be ridden. This Pal's Defense and Movement Speed increase by (5~14)% for each Melpaca in party.",
    "tags": [
+    "party",
     "mount"
    ]
   },
@@ -354,6 +356,7 @@
    "skill": "King of Fluff",
    "desc": "Can be ridden. This Pal's Attack and Defense increase by (12~24)% for each Swee in party.",
    "tags": [
+    "party",
     "mount"
    ]
   },
@@ -682,7 +685,7 @@
    "skill": "Queen Bee Command",
    "desc": "This Pal's Attack increases by (12~24)% for each Beegarde in party.",
    "tags": [
-    "passive"
+    "party"
    ]
   },
   "Lovander": {
@@ -950,7 +953,7 @@
    "skill": "Selfless Discipline",
    "desc": "This Pal's Attack and Defense increase by (2~6)% for each other Grass Pal in your party.",
    "tags": [
-    "passive"
+    "party"
    ]
   },
   "Incineram": {
@@ -1021,6 +1024,7 @@
    "skill": "Thunderous",
    "desc": "Can be ridden as a flying mount. While mounted, changes the player's attack type to Electric and increases Attack by (5~20)%. This Pal’s Movement Speed increases by (5~25)% for each other Electric Pal in your party. (Excluding Beakon)",
    "tags": [
+    "party",
     "mount"
    ]
   },
@@ -1028,6 +1032,7 @@
    "skill": "Coldsnap",
    "desc": "Can be ridden as a flying mount. While mounted, changes the player's attack type to Ice and increases Attack by (5~20)%. This Pal’s Movement Speed increases by (5~25)% for each other Ice Pal in your party. (Excluding Beakon Cryst)",
    "tags": [
+    "party",
     "mount"
    ]
   },
@@ -1035,6 +1040,7 @@
    "skill": "Master of Darkness",
    "desc": "Can be ridden to travel on water. This Pal’s Movement Speed increases by (5~25)% for each other Dark or Water Pal in your party. (Excluding Ghangler)",
    "tags": [
+    "party",
     "mount"
    ]
   },
@@ -1042,6 +1048,7 @@
    "skill": "Abyssal Celebrity Chef",
    "desc": "Can be ridden to travel on water. This Pal’s Movement Speed increases by (5~25)% for each other Fire or Water Pal in your party. (Excluding Ghangler Ignis)",
    "tags": [
+    "party",
     "mount"
    ]
   },
@@ -1049,6 +1056,7 @@
    "skill": "Lightning Shepherd",
    "desc": "Can be ridden. Can perform a double jump while mounted. This Pal’s Movement Speed increases by (5~25)% for each other Electric Pal in your party. (Excluding Rayhound)",
    "tags": [
+    "party",
     "mount"
    ]
   },
@@ -1135,6 +1143,7 @@
    "skill": "Magma Overload",
    "desc": "Can be ridden as a mount. This Pal's Attack increases by (4~8)% for each other Fire or Ground Pal in your party.",
    "tags": [
+    "party",
     "mount"
    ]
   },
@@ -1334,6 +1343,7 @@
    "skill": "Wings of Flame",
    "desc": "Can be ridden as a flying mount. This Pal’s Movement Speed increases by (5~25)% for each other Fire Pal in your party. (Excluding Suzaku)",
    "tags": [
+    "party",
     "mount"
    ]
   },
@@ -1341,6 +1351,7 @@
    "skill": "Wings of Water",
    "desc": "Can be ridden as a flying mount. This Pal’s Movement Speed increases by (5~25)% for each other Water Pal in your party. (Excluding Suzaku Aqua)",
    "tags": [
+    "party",
     "mount"
    ]
   },
@@ -1429,6 +1440,7 @@
    "skill": "Light Dancer",
    "desc": "Can be ridden. Boosts Jump Power while mounted. This Pal’s Movement Speed increases by (5~25)% for each other Neutral Pal in your party. (Excluding Starryon Primo)",
    "tags": [
+    "party",
     "mount"
    ]
   },
@@ -1541,7 +1553,7 @@
    "skill": "Desert Empress",
    "desc": "While at base, boosts Anubis's work speed by (20~40)%. Increases efficiency by (30~60)% if Sekhmet is also working at a Workbench, Workshop, or other related facilities. (Does not stack)",
    "tags": [
-    "passive"
+    "base"
    ]
   },
   "Prixter": {
@@ -1703,6 +1715,7 @@
    "skill": "Blessing of Purification",
    "desc": "Can be ridden. This Pal's Attack and Movement Speed increases by (2~6)% for each other Neutral Pal in your party. When in party, recovers Health of the player and Party Pals by (0.15~0.75)% per second. (Does not stack)",
    "tags": [
+    "party",
     "mount"
    ]
   },
@@ -1833,6 +1846,7 @@
    "skill": "Liberated Pterosaur",
    "desc": "Can be ridden as a flying mount. This Pal's Attack and Movement Speed increase by (2~6)% for each other Dragonor Dark Pal in your party.",
    "tags": [
+    "party",
     "mount"
    ]
   },
@@ -1840,6 +1854,7 @@
    "skill": "Resentful Pterosaur",
    "desc": "Can be ridden as a flying mount. This Pal's Attack and Movement Speed increase by (2~6)% or each other Dragon or Fire Pal in your party. (Excluding Eidrolon Ignis)",
    "tags": [
+    "party",
     "mount"
    ]
   },
@@ -2007,6 +2022,7 @@
    "skill": "Azure Sovereign",
    "desc": "Can be ridden as a flying mount. This Pal's Attack increases by (4~8)% for each other Dragon Pal in your party.",
    "tags": [
+    "party",
     "mount"
    ]
   },
@@ -2065,6 +2081,7 @@
    "skill": "Dark Knight of the Abyss",
    "desc": "Can be ridden. Can double jump while mounted. When Twin Spears skill is activated, a Paladius in your party will appear and attack alongside you.",
    "tags": [
+    "party",
     "mount"
    ]
   },

@@ -6,7 +6,14 @@ const WORKS = DATA.meta.work_types;
 const PALS = DATA.pals; // sorted by paldex, collab pals last
 const byName = new Map(PALS.map(p => [p.name, p]));
 const dexOrder = new Map(PALS.map((p, i) => [p.name, i]));
-const ELEMENTS = ['Neutral', 'Fire', 'Water', 'Grass', 'Electric', 'Ground', 'Rock', 'Ice', 'Dragon', 'Dark'];
+const ELEMENTS = ['Neutral', 'Fire', 'Water', 'Grass', 'Electric', 'Ground', 'Ice', 'Dragon', 'Dark'];
+// attacker element -> defender elements it deals bonus damage to
+// (v1.0 in-game Elements help guide, retrieved via paldb CDN 2026-07-26)
+const ELEM_STRONG = {
+  Neutral: [], Fire: ['Grass', 'Ice'], Water: ['Fire'], Grass: ['Ground'],
+  Electric: ['Water'], Ground: ['Electric'], Ice: ['Dragon'], Dragon: ['Dark'], Dark: ['Neutral'],
+};
+const PARTY_SIZE = 5;
 const CAP_DEFAULT = 15; // default per-base worker cap; editable per base
 const CAP_MAX = 50;
 
@@ -49,6 +56,8 @@ const LS_ROSTER = 'palplanner.roster.v2';    // { name: copies }
 const LS_BASES = 'palplanner.bases.v1';      // crew: [{name, qty}] (legacy: array of names)
 const LS_UI = 'palplanner.ui.v1';
 const LS_BONUS = 'palplanner.bonus5.v1';     // { name: 1 } — 5-catch paldex bonus earned
+const LS_PARTY = 'palplanner.party.v1';      // [{name, nickname, level, stars, passives[4]}] — up to 5
+const LS_PARTY_MEMO = 'palplanner.partymemo.v1'; // { name: last details } — restored on re-add
 const BONUS_AT = 5; // catching this many of a species earns its paldex bonus (v1.0)
 
 function lsLoad(key, fallback) {
@@ -77,6 +86,31 @@ let bonus = (() => {
   const clean = {};
   for (const n of Object.keys(lsLoad(LS_BONUS, {}))) if (byName.has(n)) clean[n] = 1;
   for (const [n, q] of Object.entries(roster)) if (q >= BONUS_AT) clean[n] = 1;
+  return clean;
+})();
+
+// party: up to 5 individual pals, each with hand-tracked details
+function normalizeMember(m) {
+  if (!m || !byName.has(m.name)) return null;
+  const lvl = Math.floor(Number(m.level));
+  const stars = Math.floor(Number(m.stars));
+  const passives = Array.isArray(m.passives) ? m.passives.slice(0, 4).map(s => String(s).slice(0, 40)) : [];
+  while (passives.length < 4) passives.push('');
+  return {
+    name: m.name,
+    nickname: String(m.nickname || '').slice(0, 30),
+    level: Number.isFinite(lvl) && lvl >= 1 ? Math.min(lvl, 100) : 0,
+    stars: Number.isFinite(stars) ? Math.max(0, Math.min(stars, 4)) : 0,
+    passives,
+  };
+}
+let party = lsLoad(LS_PARTY, []).map(normalizeMember).filter(Boolean).slice(0, PARTY_SIZE);
+let partyMemo = (() => {
+  const clean = {};
+  for (const [n, m] of Object.entries(lsLoad(LS_PARTY_MEMO, {}))) {
+    const v = normalizeMember({ ...m, name: n });
+    if (v) clean[n] = v;
+  }
   return clean;
 })();
 
@@ -115,12 +149,15 @@ if (typeof ui.work === 'string' && ui.work) ui.works = [ui.work];
 delete ui.work;
 if (!Array.isArray(ui.works)) ui.works = [];
 ui.works = ui.works.filter(w => WORKS.includes(w));
+if (ui.element && !ELEMENTS.includes(ui.element)) ui.element = ''; // e.g. removed "Rock"
 
 function persist() {
   localStorage.setItem(LS_ROSTER, JSON.stringify(roster));
   localStorage.setItem(LS_BASES, JSON.stringify(bases));
   localStorage.setItem(LS_UI, JSON.stringify(ui));
   localStorage.setItem(LS_BONUS, JSON.stringify(bonus));
+  localStorage.setItem(LS_PARTY, JSON.stringify(party));
+  localStorage.setItem(LS_PARTY_MEMO, JSON.stringify(partyMemo));
 }
 
 /* ================= helpers ================= */
@@ -163,11 +200,13 @@ function setCrewQty(base, name, qty) {
   if (qty <= 0) base.crew = base.crew.filter(e => e.name !== name);
   else crewEntry(base, name).qty = qty;
 }
-/* Owned copies are allocated to bases in list order (the first base on the
-   Bases screen gets first claim). A copy assigned to one base is never
-   counted as available to another. */
+const partyCount = name => party.reduce((s, m) => s + (m.name === name ? 1 : 0), 0);
+
+/* Owned copies are allocated to the PARTY first, then to bases in list order
+   (the first base on the Bases screen gets first claim). A copy assigned to
+   one place is never counted as available to another. */
 function allocatedTo(base, name) {
-  let remaining = copiesOf(name);
+  let remaining = Math.max(0, copiesOf(name) - partyCount(name));
   for (const b of bases) {
     const take = Math.min(crewQty(b, name), remaining);
     if (b.id === base.id) return take;
@@ -181,9 +220,9 @@ const heldElsewhere = (base, name) =>
 // total demand for `name` from bases other than `base`
 const demandElsewhere = (base, name) =>
   bases.reduce((s, b) => s + (b.id === base.id ? 0 : crewQty(b, name)), 0);
-// owned copies not assigned to any base
+// owned copies not in the party and not assigned to any base
 const globalFree = name =>
-  Math.max(0, copiesOf(name) - bases.reduce((s, b) => s + crewQty(b, name), 0));
+  Math.max(0, copiesOf(name) - partyCount(name) - bases.reduce((s, b) => s + crewQty(b, name), 0));
 // copies this base wants but cannot get (not owned, or claimed by an earlier base)
 const shortfallOf = (base, name) => Math.max(0, crewQty(base, name) - allocatedTo(base, name));
 const baseShortfall = base => base.crew.reduce((s, e) => s + shortfallOf(base, e.name), 0);
@@ -454,6 +493,8 @@ function renderRoster() {
         elementChips(p),
         combatCluster(p),
         bonusBadge(p, () => renderList()),
+        partyCount(p.name) ? el('span', { class: 'party-chip', title: 'In your party — not counted as free base labor' },
+          '⚔' + (partyCount(p.name) > 1 ? '×' + partyCount(p.name) : '')) : '',
         el('span', { class: 'work-chips' }, sortedWorks(p).map(([w, l]) => {
           const chip = workChip(w, l, p);
           if (ui.works.includes(w)) chip.classList.add('hl');
@@ -468,6 +509,162 @@ function renderRoster() {
     }
   }
   renderList();
+}
+
+/* ================= party view ================= */
+function addToParty(name) {
+  if (party.length >= PARTY_SIZE || !byName.has(name)) return;
+  party.push(partyMemo[name] ? { ...partyMemo[name], name } : normalizeMember({ name }));
+  persist(); render(); renderHeaderStats();
+}
+function removeFromParty(i) {
+  const m = party[i];
+  if (!m) return;
+  partyMemo[m.name] = { ...m }; // remember details for re-add
+  party.splice(i, 1);
+  persist(); render(); renderHeaderStats();
+}
+
+function renderParty() {
+  const view = $('#view');
+  view.innerHTML = '';
+
+  const summary = el('div', { class: 'panel party-summary' });
+  const grid = el('div', { class: 'party-grid' });
+  view.append(summary, grid);
+
+  function paintSummary() {
+    summary.innerHTML = '';
+    summary.append(el('h3', {}, `Party (${party.length} / ${PARTY_SIZE})`));
+    if (!party.length) {
+      summary.append(el('div', { class: 'tips' },
+        'Your active travel team. Party pals are claimed before any base can use them — a copy in your party never counts as free base labor.'));
+      return;
+    }
+    const members = party.map(m => byName.get(m.name)).filter(Boolean);
+    const leveled = party.filter(m => m.level > 0);
+    const avgLevel = leveled.length ? Math.round(leveled.reduce((s, m) => s + m.level, 0) / leveled.length) : null;
+    const food = members.reduce((s, p) => s + (p.food || 0), 0);
+    const covered = new Set(members.flatMap(p => p.elements.flatMap(e => ELEM_STRONG[e] || [])));
+    const gaps = ELEMENTS.filter(e => !covered.has(e));
+    const chips = list => list.length
+      ? list.map(e => el('span', { class: `el-chip el-${e}` }, e))
+      : [el('span', { class: 'hint' }, '—')];
+    summary.append(el('div', { class: 'party-stats' },
+      el('span', {}, 'Tiers: ', party.map(m => {
+        const p = byName.get(m.name);
+        return p && p.tier ? el('span', { class: 'tier tier-' + p.tier, title: m.name }, p.tier) : null;
+      })),
+      avgLevel ? el('span', {}, `avg Lv. ${avgLevel}`) : null,
+      el('span', { title: FOOD_TIP }, `🍖 ${food.toLocaleString()}`)
+    ));
+    summary.append(
+      el('div', { class: 'party-cover' }, el('span', { class: 'cover-label', title: 'Enemy elements your party hits for bonus damage (by pal element)' }, 'Hits hard:'), chips([...covered])),
+      el('div', { class: 'party-cover' }, el('span', { class: 'cover-label', title: 'Enemy elements no party member has an edge against' }, 'No edge vs:'), chips(gaps))
+    );
+  }
+
+  function memberCard(m, i) {
+    const p = byName.get(m.name);
+    const card = el('div', { class: 'party-card' });
+    const short = partyCount(m.name) > copiesOf(m.name);
+
+    const nick = el('input', {
+      class: 'nick', type: 'text', maxlength: '30', placeholder: 'Nickname…', value: m.nickname,
+      onchange: e => { m.nickname = e.target.value.trim(); persist(); }
+    });
+    card.append(el('div', { class: 'party-head' },
+      palIcon(p, 'pal-icon party-icon'),
+      el('div', { class: 'party-title' }, nick,
+        el('div', {},
+          el('span', { class: 'pal-id' }, dexLabel(p)), ' ',
+          el('a', { href: 'https://paldb.cc/en/' + p.slug, target: '_blank', rel: 'noopener' }, p.name))),
+      el('button', { class: 'rm', title: 'Remove from party (details are remembered)', onclick: () => removeFromParty(i) }, '✕')
+    ));
+
+    card.append(el('div', { class: 'party-row' }, elementChips(p), combatCluster(p), foodChip(p)));
+
+    const stars = el('span', { class: 'stars' });
+    const paintStars = () => {
+      stars.innerHTML = '';
+      for (let s = 1; s <= 4; s++) {
+        stars.append(el('button', {
+          class: 'star' + (m.stars >= s ? ' on' : ''),
+          title: `Condenser rank ${s}★` + (m.stars === s ? ' (click to clear)' : ''),
+          onclick: () => { m.stars = m.stars === s ? s - 1 : s; persist(); paintStars(); }
+        }, m.stars >= s ? '★' : '☆'));
+      }
+    };
+    paintStars();
+    card.append(el('div', { class: 'party-row' },
+      el('label', { class: 'lvl' }, 'Lv. ', el('input', {
+        type: 'number', min: '1', max: '100', value: m.level || '',
+        placeholder: '—',
+        onchange: e => {
+          const v = Math.floor(Number(e.target.value));
+          m.level = Number.isFinite(v) && v >= 1 ? Math.min(v, 100) : 0;
+          e.target.value = m.level || '';
+          persist(); paintSummary();
+        }
+      })),
+      stars
+    ));
+
+    const passWrap = el('div', { class: 'passives' });
+    m.passives.forEach((val, pi) => {
+      passWrap.append(el('input', {
+        type: 'text', maxlength: '40', placeholder: 'passive ' + (pi + 1), value: val,
+        onchange: e => { m.passives[pi] = e.target.value.trim(); persist(); }
+      }));
+    });
+    card.append(passWrap);
+
+    card.append(el('div', { class: 'party-row party-works' }, sortedWorks(p).map(([w, l]) => workChip(w, l, p))));
+    if (short) {
+      card.append(el('div', { class: 'party-warn' },
+        `⚠ You own ${copiesOf(m.name)} but ${partyCount(m.name)} are in the party — catch another or remove one.`));
+    }
+    return card;
+  }
+
+  function emptyCard() {
+    const card = el('div', { class: 'party-card empty' });
+    const input = el('input', { type: 'search', placeholder: 'Add to party — name or #paldex…', autocomplete: 'off' });
+    const drop = el('div', { class: 'picker-drop', hidden: '' });
+    function updateDrop() {
+      const q = input.value.trim().toLowerCase();
+      drop.innerHTML = '';
+      if (!q) { drop.hidden = true; return; }
+      const matches = PALS.filter(p =>
+        p.name.toLowerCase().includes(q) || (p.paldex && ('#' + p.paldex.toLowerCase()).includes(q))
+      ).slice(0, 9);
+      if (!matches.length) { drop.hidden = true; return; }
+      for (const p of matches) {
+        drop.append(el('div', {
+          class: 'pick-row',
+          onmousedown: e => { e.preventDefault(); addToParty(p.name); }
+        },
+          palIcon(p, 'pal-icon'),
+          el('span', { class: 'pal-id' }, dexLabel(p)),
+          el('b', {}, p.name),
+          p.tier ? el('span', { class: 'tier tier-' + p.tier }, p.tier) : null,
+          isOwned(p.name)
+            ? el('span', { class: 'status have' }, `owned ×${copiesOf(p.name)}` + (globalFree(p.name) < copiesOf(p.name) ? ` · ${globalFree(p.name)} free` : ''))
+            : el('span', { class: 'status need' }, 'not owned')
+        ));
+      }
+      drop.hidden = false;
+    }
+    input.addEventListener('input', updateDrop);
+    input.addEventListener('focus', updateDrop);
+    input.addEventListener('blur', () => setTimeout(() => { drop.hidden = true; }, 120));
+    card.append(el('div', { class: 'empty-slot-label' }, '＋ Empty slot'), el('div', { class: 'picker-wrap' }, input, drop));
+    return card;
+  }
+
+  paintSummary();
+  party.forEach((m, i) => grid.append(memberCard(m, i)));
+  for (let i = party.length; i < PARTY_SIZE; i++) grid.append(emptyCard());
 }
 
 /* ================= quick add to base ================= */
@@ -819,8 +1016,8 @@ function renderEditor(view, base) {
       (interleaved, so a thin roster yields a working miniature); a job with no
       pals left spills its share to the rest. Irrelevant pals are never added. */
 function spareCopies(base, name) {
-  // owned − in this crew − demanded by other bases
-  return copiesOf(name) - crewQty(base, name) - demandElsewhere(base, name);
+  // owned − in the party − in this crew − demanded by other bases
+  return copiesOf(name) - partyCount(name) - crewQty(base, name) - demandElsewhere(base, name);
 }
 
 // crew job totals: worker count and summed levels per work type
@@ -981,6 +1178,7 @@ function render() {
   document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.view === ui.view));
   renderHeaderStats();
   if (ui.view === 'roster') renderRoster();
+  else if (ui.view === 'party') renderParty();
   else renderBases();
 }
 
@@ -997,7 +1195,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal()
 
 /* export / import — accepts both current and pre-count backup formats */
 $('#btn-export').addEventListener('click', () => {
-  const blob = new Blob([JSON.stringify({ exportedAt: new Date().toISOString(), roster, bases, bonus }, null, 2)],
+  const blob = new Blob([JSON.stringify({ exportedAt: new Date().toISOString(), roster, bases, bonus, party, partyMemo }, null, 2)],
     { type: 'application/json' });
   const a = el('a', { href: URL.createObjectURL(blob), download: 'palpedia-tracker-backup.json' });
   document.body.append(a); a.click(); a.remove();
@@ -1029,6 +1227,12 @@ $('#import-file').addEventListener('change', async e => {
     bonus = {};
     for (const n of Object.keys(data.bonus || {})) if (byName.has(n)) bonus[n] = 1;
     for (const [n, q] of Object.entries(roster)) if (q >= BONUS_AT) bonus[n] = 1;
+    party = (Array.isArray(data.party) ? data.party : []).map(normalizeMember).filter(Boolean).slice(0, PARTY_SIZE);
+    partyMemo = {};
+    for (const [n, m] of Object.entries(data.partyMemo || {})) {
+      const v = normalizeMember({ ...m, name: n });
+      if (v) partyMemo[n] = v;
+    }
     ui.baseId = null;
     persist(); render();
   } catch {

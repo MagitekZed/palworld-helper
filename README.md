@@ -29,6 +29,18 @@ your browser's localStorage, with JSON Export/Import for backups.
   to paldb.cc for spawn maps and breeding combos
 - 🌙 marks Dark-type pals, which work through the night
 
+## Party
+
+- **Five slots** for your active travel team, tracked as *individuals*: nickname,
+  level, condenser star rank (0–4★), and four free-text passive slots per pal —
+  handy for planning surgery-table builds
+- **Party claims copies first** — a pal in your party is never counted as free base
+  labor; bases show it as "to catch" if you don't own a spare
+- **Summary strip** — tier lineup, average level, combined 🍖, and element coverage:
+  which enemy elements your five hit for bonus damage and where you have no edge
+  (chart from the v1.0 in-game elements guide)
+- Roster rows show a ⚔ chip on party members
+
 ## Base planner
 
 - **Multiple bases** with per-base worker caps and duplicate crew members

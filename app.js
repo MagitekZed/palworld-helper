@@ -341,21 +341,33 @@ function qtyStepper(get, set, onAfter) {
   );
 }
 
-/* per work type: who in this crew contributes, and the full stack of levels (copies expanded) */
+/* per work type: who in this crew contributes, the raw stack of levels (copies
+   expanded), and the same stack after this base's aura pals. An aura buffs every
+   OTHER pal here (+1, no stacking), never the aura pal itself. */
+const WORK_LEVEL_MAX = 10;
 function coverageDetail(base) {
   const det = {};
   for (const w of WORKS) {
+    const auraPal = AURA_BY_WORK[w];
+    const aura = auraPal && crewQty(base, auraPal) > 0 ? auraPal : null;
     const contributors = [];
     for (const e of base.crew) {
       const p = byName.get(e.name);
       if (!p) continue;
       const lv = p.works[w] || 0;
       if (!lv) continue;
-      contributors.push({ name: e.name, level: lv, qty: e.qty, short: shortfallOf(base, e.name) });
+      const boost = aura && e.name !== aura ? 1 : 0;
+      contributors.push({
+        name: e.name, level: lv, qty: e.qty, short: shortfallOf(base, e.name),
+        blevel: Math.min(lv + boost, WORK_LEVEL_MAX), boosted: boost > 0,
+      });
     }
-    contributors.sort((a, b) => b.level - a.level || b.qty - a.qty);
+    contributors.sort((a, b) => b.blevel - a.blevel || b.level - a.level || b.qty - a.qty);
     const levels = contributors.flatMap(c => Array(c.qty).fill(c.level)).sort((a, b) => b - a);
-    det[w] = { contributors, levels };
+    const blevels = contributors
+      .flatMap(c => Array(c.qty).fill({ lv: c.blevel, boosted: c.boosted }))
+      .sort((a, b) => b.lv - a.lv);
+    det[w] = { contributors, levels, blevels, aura };
   }
   return det;
 }
@@ -972,21 +984,29 @@ function renderEditor(view, base) {
     const grid = el('div', { class: 'cov-grid' });
     const MAX_BADGES = 8, MAX_PROVIDERS = 3;
     for (const w of WORKS) {
-      const { contributors, levels } = det[w];
+      const { contributors, levels, blevels, aura } = det[w];
       const focus = base.purpose !== 'balanced' && (PRESETS[base.purpose].recipe[w] || 0) > 0;
+      const auraTip = aura
+        ? `${aura}'s partner skill: +1 ${w} for every other pal at this base (does not stack)`
+        : null;
       const tile = el('div', {
-        class: 'cov-tile' + (levels.length ? '' : ' zero') + (focus ? ' focus' : ''),
+        class: 'cov-tile' + (levels.length ? '' : ' zero') + (focus ? ' focus' : '') + (aura ? ' auraed' : ''),
         ...(focus ? { title: `Part of this base's ${PRESETS[base.purpose].label} recipe` } : {}),
         onclick: () => openWorkModal(w, base, refresh)
       });
-      tile.append(el('div', { class: 'w-name' }, w + (levels.length > 1 ? ` · ${levels.length} workers` : '')));
+      tile.append(el('div', { class: 'w-name' },
+        w + (levels.length > 1 ? ` · ${levels.length} workers` : ''),
+        aura ? el('span', { class: 'aura-flag', title: auraTip }, ' ✦+1') : ''));
 
       const badges = el('div', { class: 'lv-badges' });
-      if (!levels.length) badges.append(el('span', { class: 'w-dash' }, '—'));
-      for (const lv of levels.slice(0, MAX_BADGES)) {
-        badges.append(el('span', { class: `lv-badge lv${lv}` }, el('b', {}, String(lv))));
+      if (!blevels.length) badges.append(el('span', { class: 'w-dash' }, '—'));
+      for (const b of blevels.slice(0, MAX_BADGES)) {
+        badges.append(el('span', {
+          class: `lv-badge lv${b.lv}` + (b.boosted ? ' boosted' : ''),
+          ...(b.boosted ? { title: auraTip } : {})
+        }, el('b', {}, String(b.lv))));
       }
-      if (levels.length > MAX_BADGES) badges.append(el('span', { class: 'w-dash' }, `+${levels.length - MAX_BADGES}`));
+      if (blevels.length > MAX_BADGES) badges.append(el('span', { class: 'w-dash' }, `+${blevels.length - MAX_BADGES}`));
       tile.append(badges);
 
       if (!contributors.length) {
@@ -994,7 +1014,9 @@ function renderEditor(view, base) {
       } else {
         for (const c of contributors.slice(0, MAX_PROVIDERS)) {
           tile.append(el('div', { class: 'w-by' + (c.short ? ' need' : '') },
-            `${c.name}${c.qty > 1 ? ` ×${c.qty}` : ''}${c.short ? ' (to catch)' : ''}`));
+            `${c.name}${c.qty > 1 ? ` ×${c.qty}` : ''}`,
+            c.boosted ? el('span', { class: 'w-boost', title: auraTip }, ` ${c.level}→${c.blevel}` ) : '',
+            c.short ? ' (to catch)' : ''));
         }
         if (contributors.length > MAX_PROVIDERS) {
           tile.append(el('div', { class: 'w-by' }, `+${contributors.length - MAX_PROVIDERS} more`));

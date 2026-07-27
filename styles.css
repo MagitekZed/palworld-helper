@@ -359,6 +359,15 @@ span.bonus.done { cursor: default; }
   font-size: 14.5px;
 }
 .lv-badge b { font-weight: 700; }
+/* aura-boosted level: highlighted so it's clear the number isn't the pal's base level */
+.lv-badge.boosted {
+  border-color: #b28dff; background: #241c38; cursor: help;
+  box-shadow: 0 0 6px #b28dff33;
+}
+.lv-badge.boosted::after { content: '✦'; font-size: 8.5px; color: #b28dff; margin-left: 2px; align-self: flex-start; }
+.aura-flag { color: #b28dff; font-weight: 700; font-size: 11.5px; cursor: help; }
+.cov-tile.auraed { border-color: #4b3d6b; }
+.w-boost { color: #b28dff; cursor: help; }
 .w-dash { color: #55637a; font-size: 15px; font-weight: 600; }
 .ranch-items { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 7px; }
 .ranch-item {

@@ -63,7 +63,10 @@ your browser's localStorage, with JSON Export/Import for backups.
   plus haulers, handiwork, and a medic — a satellite base that needs no supply runs.
   Untick it for focus-only outposts you feed from elsewhere
 - **Stacked work coverage** — every worker's level per job (not just the best), with
-  the purpose's jobs highlighted; click a tile for the best candidates for that job
+  the purpose's jobs highlighted; click a tile for the best candidates for that job.
+  Levels include any aura pal at the base: boosted numbers are shown at their real
+  value, highlighted with ✦, and the contributor line spells out the change (7→8).
+  The aura pal itself isn't boosted — the skill reads "all *other* Base Pals"
 - **Ranch produce** — the Farming tile lists what your ranch pals actually drop;
   auto-fill picks ranch pals for produce variety
 - **Crew food total** — 🍖 sum on base cards and the crew panel, so you can compare

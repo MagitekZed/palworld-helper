@@ -22,9 +22,14 @@ your browser's localStorage, with JSON Export/Import for backups.
   (see [How the derived numbers work](#how-the-derived-numbers-work)), shown as a
   badge with percentile mini-bars; exact stats in the tooltip
 - **Food stat** — 🍖 chips show each pal's appetite (higher = eats more)
+- **Partner skills** — every pal's partner skill (✦ tooltip on its row), tagged by
+  when it applies: while at base, ranch drops, in party, when activated, mount, or
+  always-on — with a filter for each (e.g. show the 20 pals whose skills buff the
+  whole base, like Clovee's +1 Gathering aura)
 - **Search, filters, sorts** — name/#paldex search; filters for element, work
-  suitability (multi-select, AND logic), combat tier, 5-catch status, owned-only;
-  sorts by paldex, name, total/best work levels, combat tier, or 5-catch progress
+  suitability (multi-select, AND logic), combat tier, 5-catch status, partner-skill
+  type, owned-only; sorts by paldex, name, total/best work levels, combat tier, or
+  5-catch progress
 - **Quick-add** — send any pal straight to a base from its roster row; pal names link
   to paldb.cc for spawn maps and breeding combos
 - 🌙 marks Dark-type pals, which work through the night
@@ -92,6 +97,7 @@ All game data lives in [`data/`](data/) (JSON + CSV) and is embedded in the app 
 - Work suitability for all 299 pals (v1.0 rebalanced levels, paldb.cc, 2026-07-13)
 - HP / Attack / Defense / Food stats + our derived tier (paldb.cc, 2026-07-16)
 - Ranch produce for the 29 Farming pals
+- Partner skills with trigger-phrase tags (paldb.cc, 2026-07-26)
 
 See [`data/README.md`](data/README.md) for scrape details, caveats, and cross-checks.
 Pal and item icons are self-hosted in [`icons/`](icons/) (originally obtained via

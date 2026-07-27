@@ -132,6 +132,16 @@ main { flex: 1; width: 100%; max-width: 1180px; margin: 0 auto; padding: 18px 22
 .lv8 b, .lv9 b, .lv10 b { color: #fbbf24; }
 .wchip.hl { border-color: var(--accent-dim); background: #16302c; color: var(--text); }
 
+/* ---------- partner skill ---------- */
+.pskill {
+  color: #b28dff; font-size: 15px; cursor: default; flex-shrink: 0;
+}
+.pskill-line {
+  flex-basis: 100%; font-size: 12.5px; color: var(--muted);
+  padding-top: 4px; border-top: 1px dashed var(--border); margin-top: 2px;
+}
+.pskill-line b { color: #b28dff; }
+
 /* ---------- party ---------- */
 .party-summary { margin-bottom: 14px; }
 .party-stats { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; margin-bottom: 8px; color: var(--muted); font-size: 14px; }

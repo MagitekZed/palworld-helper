@@ -141,7 +141,7 @@ let bases = lsLoad(LS_BASES, [])
   .map(normalizeBase);
 
 let ui = Object.assign(
-  { view: 'roster', baseId: null, search: '', element: '', works: [], tier: '', bonus5: '', ownedOnly: false, sort: 'dex' },
+  { view: 'roster', baseId: null, search: '', element: '', works: [], tier: '', bonus5: '', pskill: '', ownedOnly: false, sort: 'dex' },
   lsLoad(LS_UI, {})
 );
 // migrate the old single-work filter (ui.work: string) to ui.works: []
@@ -353,6 +353,7 @@ function matchesFilters(p) {
   if (ui.tier && p.tier !== ui.tier) return false;
   if (ui.bonus5 === 'done' && !bonusDone(p.name)) return false;
   if (ui.bonus5 === 'not' && bonusDone(p.name)) return false;
+  if (ui.pskill && !(p.partner && p.partner.tags.includes(ui.pskill))) return false;
   if (ui.ownedOnly && !isOwned(p.name)) return false;
   return true;
 }
@@ -438,6 +439,12 @@ function renderRoster() {
     [['', '5-catch: any'], ['done', '5-catch: done ★'], ['not', '5-catch: not yet']]
       .map(([v, t]) => el('option', { value: v, selected: ui.bonus5 === v ? '' : null }, t))
   );
+  const pskillSel = el('select',
+    { onchange: e => { ui.pskill = e.target.value; persist(); renderList(); } },
+    [['', 'Partner skill: any'], ['base', 'While at base'], ['ranch', 'Ranch drops'], ['party', 'In party'],
+     ['active', 'When activated'], ['mount', 'Mount / ride'], ['passive', 'Always-on']]
+      .map(([v, t]) => el('option', { value: v, selected: ui.pskill === v ? '' : null }, t))
+  );
   const tierSel = el('select',
     { onchange: e => { ui.tier = e.target.value; persist(); renderList(); } },
     el('option', { value: '' }, 'Any tier'),
@@ -453,7 +460,7 @@ function renderRoster() {
   const countPill = el('span', { class: 'count-pill' });
 
   view.append(
-    el('div', { class: 'toolbar' }, searchInput, elementSel, workSel, tierSel, bonusSel, sortSel, ownedChk,
+    el('div', { class: 'toolbar' }, searchInput, elementSel, workSel, tierSel, bonusSel, pskillSel, sortSel, ownedChk,
       el('span', { class: 'spacer' }), countPill),
     listWrap
   );
@@ -500,10 +507,15 @@ function renderRoster() {
           if (ui.works.includes(w)) chip.classList.add('hl');
           return chip;
         })),
+        p.partner ? el('span', {
+          class: 'pskill', title: `${p.partner.skill} — ${p.partner.desc}`
+        }, '✦') : '',
         el('button', {
           class: 'add-btn qadd-btn', title: 'Quick-add to a base',
           onclick: e => quickAddToBase(p, e.target)
-        }, '+ base')
+        }, '+ base'),
+        ui.pskill && p.partner ? el('span', { class: 'pskill-line' },
+          el('b', {}, p.partner.skill), ' — ' + p.partner.desc) : ''
       );
       listWrap.append(row);
     }

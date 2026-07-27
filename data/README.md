@@ -48,6 +48,17 @@ average the three (equal weight), then bucket the composite into a pyramid:
 partner skills, and mount abilities are deliberately excluded, so a great
 utility/work pal (e.g. Anubis) can grade below a raw stat monster.
 
+## Partner skills
+
+`pals_partner_skills.json` carries every pal's partner skill name and full
+description (paldb.cc/en/Partner_Skill, retrieved 2026-07-26), plus `tags`
+derived from the description's trigger phrases: `base` ("While at a/your base"),
+`ranch` ("when assigned to Ranch"), `party` ("While in party" / "While fighting
+together"), `active` ("When activated"), `mount` ("Can be ridden" / "While
+mounted/flying"), and `passive` (no trigger clause — always-on). A skill can
+carry several tags. Descriptions keep paldb's level-scaling ranges like
+"(15~30)%".
+
 ## Sources
 
 - Primary: [paldb.cc/en/Pals](https://paldb.cc/en/Pals) (data-mined from game files, retrieved 2026-07-13) — parsed from each card's `data-filters` attribute.

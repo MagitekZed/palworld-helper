@@ -1,0 +1,2193 @@
+{
+ "meta": {
+  "source": "paldb.cc/en/Partner_Skill, retrieved 2026-07-26; tags derived from trigger phrases (base/ranch/party/active/mount/passive)"
+ },
+ "pals": {
+  "Lamball": {
+   "skill": "Fluffy Shield",
+   "desc": "When activated, equips to the player and becomes a shield. Sometimes drops Wool when assigned to Ranch.",
+   "tags": [
+    "ranch",
+    "active"
+   ]
+  },
+  "Cattiva": {
+   "skill": "Cat Helper",
+   "desc": "While in party, Cattiva helps carry supplies, increasing the player's max carrying capacity by (100~200). (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Chikipi": {
+   "skill": "Egg Layer",
+   "desc": "Sometimes lays an Egg when assigned to Ranch.",
+   "tags": [
+    "ranch"
+   ]
+  },
+  "Lifmunk": {
+   "skill": "Lifmunk Recoil",
+   "desc": "When activated, leaps onto the player's head and uses a submachine gun to follows up player attacks.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Fuack": {
+   "skill": "Surfing Slam",
+   "desc": "When activated, Fuack body surfs towards an enemy and slams into them.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Fuack Ignis": {
+   "skill": "Fire Tackle",
+   "desc": "When activated, Fuack Ignis fire surfs towards an enemy and slams into them.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Vixy": {
+   "skill": "Dig Here!",
+   "desc": "Sometimes digs up items from the ground when assigned to Ranch.",
+   "tags": [
+    "ranch"
+   ]
+  },
+  "Celaray": {
+   "skill": "Zephyr Glider",
+   "desc": "While in party, modifies the performance of the equipped glider. Prevents fall damage and extends the duration of high-speed gliding.",
+   "tags": [
+    "party"
+   ]
+  },
+  "Celaray Lux": {
+   "skill": "Jolt Glider",
+   "desc": "While in party, modifies the performance of the equipped glider. Prevents fall damage and extends the duration of high-speed gliding.",
+   "tags": [
+    "party"
+   ]
+  },
+  "Cremis": {
+   "skill": "Fluffy Wool",
+   "desc": "While in party, increases Attack of Neutral Pals by (15~30)%. (Does not stack) Sometimes drops Wool when assigned to Ranch.",
+   "tags": [
+    "ranch",
+    "party"
+   ]
+  },
+  "Croajiro": {
+   "skill": "Leap Stance",
+   "desc": "When activated, Croajiro Noct channels its loyalty and puffs up its abdomen to store energy. Climbing on top will propel the player high into the air. While airborne before landing, the player's Attack is increased by (50~86)%.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Croajiro Noct": {
+   "skill": "Shadow Stance",
+   "desc": "When activated, Croajiro Noct channels its loyalty and puffs up its abdomen to store energy. Climbing on top will propel the player high into the air. While in party, improves player's and Pals' Dark damage to enemy weak points by (25~40)%. (Does not stack)",
+   "tags": [
+    "party",
+    "active"
+   ]
+  },
+  "Herbil": {
+   "skill": "Herbil Pulse",
+   "desc": "While in party, Herbil uses its healing powers to restore (30~60)% of the player's Max Health when incapacitated.",
+   "tags": [
+    "party"
+   ]
+  },
+  "Teafant": {
+   "skill": "Soothing Shower",
+   "desc": "While in party, restores (20~40)% of the player's Health when Health falls below 30%. (Does not stack) (120-second cooldown after activation)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Gumoss": {
+   "skill": "Logging Assistance",
+   "desc": "While in party, improves logging efficiency by (30~50)% and reduces weight of all types of wood by (40~60)%. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Pupperai": {
+   "skill": "Best Boy",
+   "desc": "While in party, increases the player's melee weapon damage by (10~35)%. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Clovee": {
+   "skill": "Happy Clover",
+   "desc": "While at a base, increases the Gathering Work Suitability Level for all other Base Pals by +1. (Does not stack)",
+   "tags": [
+    "base"
+   ]
+  },
+  "Jolthog": {
+   "skill": "Jolt Bomb",
+   "desc": "When activated, equips Jolthog to the player to be thrown at an enemy, causing an Electric explosion upon impact.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Jolthog Cryst": {
+   "skill": "Cold Bomb",
+   "desc": "When activated, equips Jolthog Cryst to the player to be thrown at an enemy, causing an Ice explosion upon impact.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Depresso": {
+   "skill": "Caffeine Inoculation",
+   "desc": "When activated, Depresso chugs an entire energy drink, increasing its Movement Speed and Work Speed by (100~900)%. Sometimes drops Venom Gland when assigned to Ranch.",
+   "tags": [
+    "ranch",
+    "active"
+   ]
+  },
+  "Pengullet": {
+   "skill": "Pengullet Launcher",
+   "desc": "When activated, the player equips a Rocket Launcher to fire Pengullet as ammunition. Pengullet explodes on impact and is incapacitated.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Pengullet Lux": {
+   "skill": "Pengullet Lux Launcher",
+   "desc": "When activated, the player equips Pengullet Lux to fire Rocket Launcher as ammunition. Pengullet Lux explodes on impact and is incapacitated.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Penking": {
+   "skill": "Brave Sailor",
+   "desc": "While in party, Fire Pals drop (40~80)% more items when defeated. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Penking Lux": {
+   "skill": "Unyielding Storm Commander",
+   "desc": "While in party, improves player's and Pals' Water damage to enemy weak points by (25~40)%. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Hoocrates": {
+   "skill": "Dark Knowledge",
+   "desc": "While in party, increases Attack of Dark Pals by (15~30)%. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Melpaca": {
+   "skill": "Pacapaca Wool",
+   "desc": "Can be ridden. While in party, increases Kingpaca's Defense and Movement Speed. Sometimes drops Wool when assigned to Ranch.",
+   "tags": [
+    "ranch",
+    "party",
+    "mount"
+   ]
+  },
+  "Kingpaca": {
+   "skill": "King of Muscles",
+   "desc": "Can be ridden. This Pal's Defense and Movement Speed increase by (5~14)% for each Melpaca in party.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Kingpaca Cryst": {
+   "skill": "Coldhearted King",
+   "desc": "Can be ridden. This Pal's Defense and Movement Speed increase by (5~14)% for each Melpaca in party.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Daedream": {
+   "skill": "Dream Chaser",
+   "desc": "While in party, appears near the player. Attacks hostile enemies with Dark magic bullets. These bullets will not reduce the target's Health below 1.",
+   "tags": [
+    "party"
+   ]
+  },
+  "Tanzee": {
+   "skill": "Cheery Rifle",
+   "desc": "When activated, Tanzee will mercilessly fire an assault rifle at nearby enemies for a limited time.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Tanzee Ignis": {
+   "skill": "Chipper Chimp Gunfire",
+   "desc": "When activated, Tanzee Ignis will mercilessly fire a Fire assault rifle at nearby enemies for a limited time.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Nox": {
+   "skill": "Kuudere",
+   "desc": "When activated, detects the location of nearby Pal Effigies.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Flambelle": {
+   "skill": "Magma Tears",
+   "desc": "While in party, recovers Health of the player and Party Pals by (0.1~0.5)% per second outside of combat. (Does not stack) Sometimes drops Flame Organ when assigned to Ranch.",
+   "tags": [
+    "ranch",
+    "party"
+   ]
+  },
+  "Rooby": {
+   "skill": "Tiny Spark",
+   "desc": "While in party, increases Defense of Fire Pals by (15~30)%. (Does not stack) Sometimes drops Flame Organ when assigned to Ranch.",
+   "tags": [
+    "ranch",
+    "party"
+   ]
+  },
+  "Mau": {
+   "skill": "Gold Digger",
+   "desc": "Sometimes digs up Gold Coin when assigned to Ranch.",
+   "tags": [
+    "ranch"
+   ]
+  },
+  "Mau Cryst": {
+   "skill": "Icy Whispers",
+   "desc": "Sometimes drops Ice Organ when assigned to Ranch.",
+   "tags": [
+    "ranch"
+   ]
+  },
+  "Rushoar": {
+   "skill": "Hard Head",
+   "desc": "Can be ridden. While mounted, increases efficiency of destroying Stone by (500~2000)%.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Foxparks": {
+   "skill": "Huggy Fire",
+   "desc": "When activated, equips to the player and transforms into a flamethrower.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Foxparks Cryst": {
+   "skill": "Huggy Frost",
+   "desc": "When activated, equips to the player and attacks using frigid air.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Killamari": {
+   "skill": "Fried Squid",
+   "desc": "While in party, modifies the performance of the equipped glider. Enables gentle floating while gliding for an extended time.",
+   "tags": [
+    "party"
+   ]
+  },
+  "Killamari Primo": {
+   "skill": "Fried Killamari",
+   "desc": "While in party, modifies the performance of the equipped glider. Enables gentle floating while gliding for an extended time.",
+   "tags": [
+    "party"
+   ]
+  },
+  "Fuddler": {
+   "skill": "Mining Assistance",
+   "desc": "While in party, improves player mining efficiency by (30~60)% and reduces Stone weight by (80~100)%. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Eikthyrdeer": {
+   "skill": "Guardian of the Forest",
+   "desc": "Can be ridden. Can perform a double jump while mounted and increases lumbering efficiency by (220~500)%.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Eikthyrdeer Terra": {
+   "skill": "Guardian of the Golden Forest",
+   "desc": "Can be ridden. Can perform a double jump while mounted. While at a base, increases the Lumbering Work Suitability Level for all other Base Pals by +1 (Does not stack)",
+   "tags": [
+    "base",
+    "mount"
+   ]
+  },
+  "Direhowl": {
+   "skill": "Direhowl Rider",
+   "desc": "Can be ridden. Moves slightly faster than most mounts.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Caprity": {
+   "skill": "Berry Picker",
+   "desc": "Sometimes drops Red Berries from its back when assigned to Ranch. While in party, restores (100~200) Pal’s Hunger to the Pal with the lowest Hunger every 5 minutes. (Does not stack)",
+   "tags": [
+    "ranch",
+    "party"
+   ]
+  },
+  "Caprity Noct": {
+   "skill": "Venom Picker",
+   "desc": "Sometimes drops Venom Gland from its back when assigned to Ranch. While in party, restores (100~200) Pal’s Hunger to the Pal with the lowest Hunger every 5 minutes. (Does not stack)",
+   "tags": [
+    "ranch",
+    "party"
+   ]
+  },
+  "Swee": {
+   "skill": "Fluffy",
+   "desc": "While in party, increases Attack and Defense of Sweepa.",
+   "tags": [
+    "party"
+   ]
+  },
+  "Sweepa": {
+   "skill": "King of Fluff",
+   "desc": "Can be ridden. This Pal's Attack and Defense increase by (12~24)% for each Swee in party.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Turtacle": {
+   "skill": "Spikey Carrier",
+   "desc": "While in party, reduces Ore weight by (80~100)%. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Turtacle Terra": {
+   "skill": "Shiny Hauler",
+   "desc": "While in party, reduces weight of Sulfur and Coal by (80~100)%. Also improves player's and Pals' Ground damage to enemy weak points by (80~100)%. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Hangyu": {
+   "skill": "Flying Trapeze",
+   "desc": "While in party, modifies the performance of the equipped glider. Enables slow ascension while gliding.",
+   "tags": [
+    "party"
+   ]
+  },
+  "Hangyu Cryst": {
+   "skill": "Winter Trapeze",
+   "desc": "While in party, modifies the performance of the equipped glider. Enables slow ascension while gliding.",
+   "tags": [
+    "party"
+   ]
+  },
+  "Woolipop": {
+   "skill": "Candy Pop",
+   "desc": "Sometimes drops Cotton Candy when assigned to Ranch. While at a base, reduces Hunger depletion rate of Base Pals by (-10~-20)%. (Does not stack)",
+   "tags": [
+    "base",
+    "ranch"
+   ]
+  },
+  "Woolipop Terra": {
+   "skill": "Bitter Pop",
+   "desc": "Sometimes drops Caramel Cotton Candy when assigned to Ranch. While at a base, reduces Hunger depletion rate of Base Pals by (-15~-25)%. (Does not stack)",
+   "tags": [
+    "base",
+    "ranch"
+   ]
+  },
+  "Mozzarina": {
+   "skill": "Milk Maker",
+   "desc": "Sometimes drops Milk when assigned to Ranch.",
+   "tags": [
+    "ranch"
+   ]
+  },
+  "Azurobe": {
+   "skill": "Waterwing Dance",
+   "desc": "Can be ridden to travel on water. While mounted, changes the player's attack type to Water and increases Attack by (5~20)%.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Azurobe Cryst": {
+   "skill": "Icewing Dance",
+   "desc": "Can be ridden to travel on water. While mounted, changes the player’s attack type to Ice and increases Attack by (5~20)%.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Sparkit": {
+   "skill": "Static Electricity",
+   "desc": "While in party, increases Attack of Electric Pals by (15~30)%. (Does not stack) Sometimes drops Electric Organ when assigned to Ranch.",
+   "tags": [
+    "ranch",
+    "party"
+   ]
+  },
+  "Kelpsea": {
+   "skill": "Aqua Spout",
+   "desc": "While in party, increases Attack of Water Pals by (15~30)%. (Does not stack) Sometimes drops Aquatic Pal Fluids when assigned to Ranch.",
+   "tags": [
+    "ranch",
+    "party"
+   ]
+  },
+  "Kelpsea Ignis": {
+   "skill": "Lava Spout",
+   "desc": "While in party, increases Attack of Fire Pals by (15~30)%. (Does not stack) Sometimes drops Flame Organ when assigned to Ranch.",
+   "tags": [
+    "ranch",
+    "party"
+   ]
+  },
+  "Ribbuny": {
+   "skill": "Happy-Go-Lucky Bunny",
+   "desc": "While in party, increases Attack of Neutral Pals by (15~30)%. (Does not stack) While at a base, increases the Handiwork Work Suitability Level for all other Base Pals by +1. (Does not stack)",
+   "tags": [
+    "base",
+    "party"
+   ]
+  },
+  "Ribbuny Botan": {
+   "skill": "Ground 'n' Pound",
+   "desc": "While in party, improves player's and Pals' Grass damage to enemy weak points by (25~40)%. (Does not stack) Increases efficiency by (200~400)% when working at a Weapon Workbench, Weapon Assembly Line, or other related facilities.",
+   "tags": [
+    "party"
+   ]
+  },
+  "Jelliette": {
+   "skill": "Jelliette Drop",
+   "desc": "While in party, increases items obtained from fishing by (55~95)%. While Jelliette and Jellroy are in your base, Jelliette's watering speed increases by (50~120)%. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Jellroy": {
+   "skill": "Jellroy Drop",
+   "desc": "While in party, increases items obtained from salvaging by (55~95)%. While Jelliette and Jellroy are in your base, Jellroy's watering speed increases by (50~120)%. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Amione": {
+   "skill": "Magical Twin Powers",
+   "desc": "While at a base, increases the Watering Work Suitability Level for all other Base Pals by +1. (Does not stack)",
+   "tags": [
+    "base"
+   ]
+  },
+  "Gloopie": {
+   "skill": "Sticky Princess",
+   "desc": "While in party, the capture gauge decreases (12~35)% more slowly while the bars are not overlapping during the fishing minigame. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Gloopie Primo": {
+   "skill": "Cephalo-Princess",
+   "desc": "While in party, increases Defense of Water Pals by (15~30)%. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Galeclaw": {
+   "skill": "Galeclaw Glider",
+   "desc": "While in party, modifies the performance of the equipped glider. Enables high-speed gliding and allows shooting with the right hand.",
+   "tags": [
+    "party"
+   ]
+  },
+  "Wispaw": {
+   "skill": "Death-Cheating Feline",
+   "desc": "While in party, increases the capture rate when awarded a back bonus. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Nitewing": {
+   "skill": "Travel Companion",
+   "desc": "Can be ridden as a flying mount.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Tombat": {
+   "skill": "Ultrasonic Sensor",
+   "desc": "When activated, uses ultrasonic waves to detect nearby dungeons, treasure chests, and scrap.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Tocotoco": {
+   "skill": "Eggbomb Launcher",
+   "desc": "When activated, equips to the player and transforms into an egg launcher.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Univolt": {
+   "skill": "Swift Deity",
+   "desc": "Can be ridden. While in party, improves player's and Pals' Electric damage to weak points by (25~40)%. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Univolt Cryst": {
+   "skill": "Frigid Deity",
+   "desc": "Can be ridden. While mounted, changes the player’s attack type to Ice and increases Attack by (5~20)%.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Gobfin": {
+   "skill": "Angry Shark",
+   "desc": "When activated, attacks targeted enemy with Aqua Gun. When this Pal uses Aqua Gun, it has a x(1.1~2.5) damage multiplier. While in party, increases the player's Attack by (10~20)%.",
+   "tags": [
+    "party",
+    "active"
+   ]
+  },
+  "Gobfin Ignis": {
+   "skill": "Angry Shark",
+   "desc": "When activated, attacks targeted enemy with Spirit Fire. When this Pal uses Spirit Fire, it has a x(1.1~2.5) damage multiplier. While in party, increases the player's Attack by (10~20)%.",
+   "tags": [
+    "party",
+    "active"
+   ]
+  },
+  "Loupmoon": {
+   "skill": "Dark Gleam Strike",
+   "desc": "When activated, attacks targeted enemy with Jumping Claw. When this Pal uses Jumping Claw, it has a x(1.1~2.5) damage multiplier. While in party, increases the player's melee weapon attack speed by (15~30)%. (Does not stack)",
+   "tags": [
+    "party",
+    "active"
+   ]
+  },
+  "Loupmoon Cryst": {
+   "skill": "Frozen Gleam Strike",
+   "desc": "When activated, attacks targeted enemy with Snow Claw. When this Pal uses Snow Claw, it has a x(1.1~2.5) damage multiplier. While in party, increases the player's melee weapon attack speed by (15~30)%. (Does not stack)",
+   "tags": [
+    "party",
+    "active"
+   ]
+  },
+  "Cawgnito": {
+   "skill": "Eerie Nightstreaker",
+   "desc": "When activated, grants Night Vision to see in dark places. Activate again to turn off. Sometimes digs up Bone when assigned to Ranch.",
+   "tags": [
+    "ranch",
+    "active"
+   ]
+  },
+  "Arsox": {
+   "skill": "Warm Body",
+   "desc": "Can be ridden. While in party, the player gains Cold Resistance +2. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Muffly": {
+   "skill": "Fluffy Flutterer",
+   "desc": "While in party, increases the capture rate of Pals afflicted with Freeze. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Bristla": {
+   "skill": "Princess Gaze",
+   "desc": "While in party, increases Attack of Grass Pals by (15~30)%. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Cinnamoth": {
+   "skill": "Mysterious Scales",
+   "desc": "When activated, attacks the targeted enemy with Poison Fog. While at a base, increases the Farming Work Suitability Level for all other Base Pals by +1. (Does not stack)",
+   "tags": [
+    "base",
+    "active"
+   ]
+  },
+  "Puffolt": {
+   "skill": "Crackle Booster",
+   "desc": "While at a base, increases the Generating Electricity Work Suitability Level for all other Base Pals by +1. (Does not stack)",
+   "tags": [
+    "base"
+   ]
+  },
+  "Elphidran": {
+   "skill": "Amicable Holy Dragon",
+   "desc": "Can be ridden as a flying mount. While flying, Movement Speed is increased. While in party, Dark Pals drop (40~80)% more items when defeated. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Elphidran Aqua": {
+   "skill": "Amicable Water Dragon",
+   "desc": "Can be ridden as a flying mount. While flying, Movement Speed is increased. While in party, player and party Pals take (15~30)% less Fire damage and are immune to Burn. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Vanwyrm": {
+   "skill": "Aerial Marauder",
+   "desc": "Can be ridden as a flying mount. While in party, increases damage player deals to enemy weak points by (20~40)%. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Vanwyrm Cryst": {
+   "skill": "Aerial Marauder",
+   "desc": "Can be ridden as a flying mount. While in party, increases damage player deals to enemy weak points by (30~50)%. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Felbat": {
+   "skill": "Life Steal",
+   "desc": "While fighting together, grants the player and Felbat a life steal effect that restores (5~9)% of damage dealt as Health.",
+   "tags": [
+    "party"
+   ]
+  },
+  "Vaelet": {
+   "skill": "Purification of Gaia",
+   "desc": "While in party, Ground Pals drop (40~80)% more items when defeated. (Does not stack) Sometimes drops various seeds when assigned to Ranch.",
+   "tags": [
+    "ranch",
+    "party"
+   ]
+  },
+  "Beegarde": {
+   "skill": "Worker Bee",
+   "desc": "While in party, increases Elizabee's Attack. Sometimes drops Honey when assigned to Ranch.",
+   "tags": [
+    "ranch",
+    "party"
+   ]
+  },
+  "Elizabee": {
+   "skill": "Queen Bee Command",
+   "desc": "This Pal's Attack increases by (12~24)% for each Beegarde in party.",
+   "tags": [
+    "passive"
+   ]
+  },
+  "Lovander": {
+   "skill": "Heart Drain",
+   "desc": "While fighting together, grants the player and Lovander a life steal effect that restores (5~9)% of damage dealt as Health.",
+   "tags": [
+    "party"
+   ]
+  },
+  "Grintale": {
+   "skill": "Glaring Cat's Eye",
+   "desc": "Can be ridden. While in party, picking up a Pal Egg has a (50~75)% chance of receiving one extra. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Tarantriss": {
+   "skill": "Tarantriss’ Web",
+   "desc": "Can be ridden. Can double jump while mounted. Additionally, can shoot spider web to grapple and move at high speed.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Polapup": {
+   "skill": "Rider of the Snowy Mountain",
+   "desc": "Can be ridden. Movement Speed is increased by (80~160)% while mounted on snow. Can also slide quickly down slopes.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Polapup Terra": {
+   "skill": "Snowy Mountain Slider",
+   "desc": "Can be ridden. Movement Speed is increased by (80~160)% while mounted on snow. Can also slide quickly down slopes. While it starts out slow, the top speed it can hit while sliding is no joke.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Leezpunk": {
+   "skill": "Too Cool to be Seen",
+   "desc": "When activated, Leezpunk and the player become invisible, making them undetectable to enemies for (10~20) seconds.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Leezpunk Ignis": {
+   "skill": "Too Cool to be Seen",
+   "desc": "When activated, Leezpunk Ignis and the player become invisible, making them undetectable to enemies for (10~20) seconds.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Gorirat": {
+   "skill": "Full-Power Gorilla Mode",
+   "desc": "When activated, unleashes a primal fury that increases Gorirat's Attack by (75~300)% for a limited time.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Gorirat Terra": {
+   "skill": "Full-Power Gorilla Pound",
+   "desc": "While in party, increases the player's climbing speed by (50~100)%. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Surfent": {
+   "skill": "Swift Swimmer",
+   "desc": "Can be ridden to travel on water. Sometimes drops Leather when assigned to Ranch.",
+   "tags": [
+    "ranch",
+    "mount"
+   ]
+  },
+  "Surfent Terra": {
+   "skill": "Sand Swimmer",
+   "desc": "Can be ridden. While in party, the player's attacks inflict Muddy (2~6). (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Robinquill": {
+   "skill": "Grounded Archer",
+   "desc": "While in party, increases the player's bow damage by (10~35)%. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Robinquill Terra": {
+   "skill": "Master Archer",
+   "desc": "While in party, increases the player's bow charge speed by (15~30)%. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Flopie": {
+   "skill": "Helper Bunny",
+   "desc": "While in party, appears near the player. Automatically picks up nearby items.",
+   "tags": [
+    "party"
+   ]
+  },
+  "Wixen": {
+   "skill": "Lord Fox",
+   "desc": "When activated, Wixen changes the player's attack type to Fire and increases Attack by (30~50)%.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Wixen Noct": {
+   "skill": "Black Fox Lord",
+   "desc": "When activated, Wixen Noct changes the player's attack type to Dark and increases Attack by (30~50)%.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Katress": {
+   "skill": "Mystical Black Magic",
+   "desc": "While in party, Neutral Pals drop (40~80)% more items when defeated. Also has a (10~50)% chance to prevent Pal Sphere consumption when thrown. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Katress Ignis": {
+   "skill": "Blazing Black Magic",
+   "desc": "While at a base, increases the Kindling Work Suitability Level for all other Base Pals by +1. (Does not stack)",
+   "tags": [
+    "base"
+   ]
+  },
+  "Helzephyr": {
+   "skill": "Wings of Death",
+   "desc": "Can be ridden as a flying mount. While mounted, changes the player’s attack type to Dark and increases Attack by (5~20)%.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Helzephyr Lux": {
+   "skill": "Wings of Thunder",
+   "desc": "Can be ridden as a flying mount. While mounted, changes the player’s attack type to Electric and increases Attack by (5~20)%.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Elgrove": {
+   "skill": "Mother Nature's Menace",
+   "desc": "When activated, Elgrove changes the player's attack type to Grass and increases Attack by (30~50)%.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Elgrove Cryst": {
+   "skill": "Father Winter's Threat",
+   "desc": "While in party, grants the player the ability to Freeze enemies afflicted with Soak in one strike.",
+   "tags": [
+    "party"
+   ]
+  },
+  "Lunaris": {
+   "skill": "Antigravity",
+   "desc": "While in party, spheres home in on Pals, and carrying capacity increases by (300~600). (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Fenglope": {
+   "skill": "Wind and Clouds",
+   "desc": "Can be ridden. Can double jump while mounted.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Fenglope Lux": {
+   "skill": "Stormcloud",
+   "desc": "Can be ridden. Can double jump while mounted. While in party, Water Pals drop (40~80)% more items when defeated. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Dinossom": {
+   "skill": "Fragrant Dragon",
+   "desc": "Can be ridden. While in party, increase Defense of Dragon Pals by (15~30)%. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Dinossom Lux": {
+   "skill": "Thunder Dragon",
+   "desc": "Can be ridden. While in party, increases Defense of Electric Pals by (15~30)%. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Bushi": {
+   "skill": "Brandish Blade",
+   "desc": "When activated, attacks targeted enemy with Iaigiri. When this Pal uses Iaigiri, it has a x(1.1~2.5) damage multiplier.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Bushi Noct": {
+   "skill": "Void Blade",
+   "desc": "When activated, attacks targeted enemy with Iaigiri. When this Pal uses Iaigiri, it has a x(1.1~2.5) damage multiplier. While in party, increases the player's melee weapon damage by (30~65)% but only when not in combat. (Does not stack)",
+   "tags": [
+    "party",
+    "active"
+   ]
+  },
+  "Munchill": {
+   "skill": "Icy Maw",
+   "desc": "While in party, reduces the weight of ingredient and food by (30~60)%. When paired with another Ice Pal, their Rot Speed also reduces by (-30~-80)%. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Mammorest": {
+   "skill": "Gaia Crusher",
+   "desc": "Can be ridden. While mounted, increases logging efficiency by (220~500)% and mining efficiency by (500~2000)%.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Mammorest Cryst": {
+   "skill": "Ice Crusher",
+   "desc": "Can be ridden. While mounted, increases logging efficiency by (220~500)% and mining efficiency by (500~2000)%.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Finsider": {
+   "skill": "Water Gun",
+   "desc": "When activated, Finsider changes the player's attack type to Water and increases Attack by (30~50)%.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Finsider Ignis": {
+   "skill": "Ember Chamber",
+   "desc": "While in party, Finsider Ignis helps carry supplies, reducing the weight of weapons in your inventory by (60~100)%. Also improves player's and Pals' Fire damage to enemy weak points by (25~40)%. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Petallia": {
+   "skill": "Blessing of the Flower Spirit",
+   "desc": "When activated, soothing blossoms restore the player's Health by (75~85)%. While at a base, increases the Planting Work Suitability Level for all other Base Pals by +1. (Does not stack)",
+   "tags": [
+    "base",
+    "active"
+   ]
+  },
+  "Petallia Ignis": {
+   "skill": "Passion of the Flower Spirit",
+   "desc": "When activated, soothing blossoms restore the player's Health by (80~90)%. While in party, player and party Pals take (15~30)% less Grass damage, and are immune to Ivy-Covered. (Does not stack)",
+   "tags": [
+    "party",
+    "active"
+   ]
+  },
+  "Leafan": {
+   "skill": "Selfless Discipline",
+   "desc": "This Pal's Attack and Defense increase by (2~6)% for each other Grass Pal in your party.",
+   "tags": [
+    "passive"
+   ]
+  },
+  "Incineram": {
+   "skill": "Flameclaw Hunter",
+   "desc": "When activated, attacks the targeted enemy with Hellfire Claw. When this Pal uses Hellfire Claw, it has a x(1.1~2.5) damage multiplier.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Incineram Noct": {
+   "skill": "Darkclaw Hunter",
+   "desc": "When activated, attacks the targeted enemy with Nightmare Claw. When this Pal uses Nightmare Claw, it has a x(1.1~2.5) damage multiplier.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Dazzi": {
+   "skill": "Lady of Lightning",
+   "desc": "While in party, appears near the player. Attacks hostile enemies with Electric bolts. These bolts will not reduce the target's Health below 1.",
+   "tags": [
+    "party"
+   ]
+  },
+  "Dazzi Noct": {
+   "skill": "Lady of Dark Lightning",
+   "desc": "While in party, appears near the player. Attacks hostile enemies with Dark bolts. These bolts will not reduce the target's Health below 1.",
+   "tags": [
+    "party"
+   ]
+  },
+  "Pyrin": {
+   "skill": "Red Hare",
+   "desc": "Can be ridden. While mounted, changes the player’s attack type to Fire and increases Attack by (5~20)%.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Pyrin Noct": {
+   "skill": "Black Hare",
+   "desc": "Can be ridden. While mounted, changes the player’s attack type toDark and increases Attack by (5~20)%.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Relaxaurus": {
+   "skill": "Hungry Missile",
+   "desc": "Can be ridden. Can rapidly fire a missile launcher while mounted.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Relaxaurus Lux": {
+   "skill": "Missile Party",
+   "desc": "Can be ridden. Can rapidly fire a missile launcher while mounted.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Foxcicle": {
+   "skill": "Aurora Guide",
+   "desc": "While in party, increases Attack of Ice Pals by (15~30)%. (Does not stack) Sometimes drops Ice Organ when assigned to Ranch.",
+   "tags": [
+    "ranch",
+    "party"
+   ]
+  },
+  "Beakon": {
+   "skill": "Thunderous",
+   "desc": "Can be ridden as a flying mount. While mounted, changes the player's attack type to Electric and increases Attack by (5~20)%. This Pal’s Movement Speed increases by (5~25)% for each other Electric Pal in your party. (Excluding Beakon)",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Beakon Cryst": {
+   "skill": "Coldsnap",
+   "desc": "Can be ridden as a flying mount. While mounted, changes the player's attack type to Ice and increases Attack by (5~20)%. This Pal’s Movement Speed increases by (5~25)% for each other Ice Pal in your party. (Excluding Beakon Cryst)",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Ghangler": {
+   "skill": "Master of Darkness",
+   "desc": "Can be ridden to travel on water. This Pal’s Movement Speed increases by (5~25)% for each other Dark or Water Pal in your party. (Excluding Ghangler)",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Ghangler Ignis": {
+   "skill": "Abyssal Celebrity Chef",
+   "desc": "Can be ridden to travel on water. This Pal’s Movement Speed increases by (5~25)% for each other Fire or Water Pal in your party. (Excluding Ghangler Ignis)",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Rayhound": {
+   "skill": "Lightning Shepherd",
+   "desc": "Can be ridden. Can perform a double jump while mounted. This Pal’s Movement Speed increases by (5~25)% for each other Electric Pal in your party. (Excluding Rayhound)",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Rayhound Cryst": {
+   "skill": "Snow Shepherd",
+   "desc": "Can be ridden. Can perform a double jump while mounted. While in party, increases Defense of Ice Pals by (15~30)%. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Menasting": {
+   "skill": "Steel Scorpion",
+   "desc": "While in party, player's Defense increases by (5~10)%, and Electric Pals drop (40~80)% more items when defeated. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Menasting Terra": {
+   "skill": "Golden Scorpion",
+   "desc": "While in party, player's Defense increases by (5~10)%, and Electric Pals drop (40~80)% more items when defeated. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Needoll": {
+   "skill": "Hug Me Please",
+   "desc": "While in party, increases player's and Pals' damage to enemies afflicted with Ivy-Covered by (50~65)%. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Needoll Noct": {
+   "skill": "Hug You So Much",
+   "desc": "While in party, the player's attacks inflict Ivy-Covered (2~6). (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Reindrix": {
+   "skill": "Cool Body",
+   "desc": "Can be ridden. While in party, the player gains Heat Resistance +2. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Mossanda": {
+   "skill": "Grenadier Panda",
+   "desc": "Can be ridden. Can rapidly fire a grenade launcher while mounted.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Mossanda Lux": {
+   "skill": "Grenadier Panda",
+   "desc": "Can be ridden. Can rapidly fire a grenade launcher while mounted.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Chillet": {
+   "skill": "Wriggling Weasel",
+   "desc": "Can be ridden. While mounted, changes the player’s attack type to Dragon and increases Attack by (5~20)%.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Chillet Ignis": {
+   "skill": "Sparkling Weasel",
+   "desc": "Can be ridden. While mounted, changes the player’s attack type to Fire and increases Attack by (5~20)%.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Ragnahawk": {
+   "skill": "Flame Wing",
+   "desc": "Can be ridden as a flying mount. While mounted, changes the player’s attack type to Fire and increases Attack by (5~20)%.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Moldron": {
+   "skill": "Magma Overload",
+   "desc": "Can be ridden as a mount. This Pal's Attack increases by (4~8)% for each other Fire or Ground Pal in your party.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Moldron Cryst": {
+   "skill": "Ice Overload",
+   "desc": "Can be ridden. While in party, improves player's and Pals' Ice damage to enemy weak points by (25~40)%. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Palumba": {
+   "skill": "Samba Step",
+   "desc": "Can be ridden. Movement Speed is increased by (155~240)% while mounted on grass.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Digtoise": {
+   "skill": "Drill Crusher",
+   "desc": "When activated, enters the Shell Spin state. Follows the player while spinning, increasing ore mining efficiency by (800~2000)%.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Broncherry": {
+   "skill": "Love's First Blossom",
+   "desc": "Can be ridden. While in party, Pal Eggs you pick up have a (35~45)% chance of becoming an Alpha Pal Egg. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Broncherry Aqua": {
+   "skill": "Purity's Full Bloom",
+   "desc": "Can be ridden. While in party, Pal Eggs you pick up have a (45~55)% chance of becoming an Alpha Pal Egg. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Dumud": {
+   "skill": "Soil Improver",
+   "desc": "While in party, increases Attack of Ground Pals by (15~30)%. (Does not stack) Sometimes drops High Quality Pal Oil when assigned to Ranch.",
+   "tags": [
+    "ranch",
+    "party"
+   ]
+  },
+  "Dumud Gild": {
+   "skill": "Golden Harvest",
+   "desc": "While in party, increases amount of Gold Coin dropped by enemies by +(100~200)%. Sometimes drops High Quality Pal Oil when assigned to Ranch, with a small chance to drop Gold Coin. (Does not stack)",
+   "tags": [
+    "ranch",
+    "party"
+   ]
+  },
+  "Braloha": {
+   "skill": "Balmy Weather",
+   "desc": "Can be ridden. While in your base, increases the egg production speed of Pals assigned to Breeding Farm by (20~50)%. (Does not stack)",
+   "tags": [
+    "base",
+    "mount"
+   ]
+  },
+  "Kitsun": {
+   "skill": "Wolf of the Sun",
+   "desc": "Can be ridden. While in party, player and party Pals take (15~30)% less Ice damage and are immune to Freeze. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Kitsun Noct": {
+   "skill": "Gloomhowl",
+   "desc": "Can be ridden. While in party, player and party Pals take (15~30)% less Dark damage and are immune to Blind. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Blazehowl": {
+   "skill": "Hellflame Lion",
+   "desc": "Can be ridden. While in party, Grass Pals drop (40~80)% more items when defeated. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Blazehowl Noct": {
+   "skill": "Darkflame Lion",
+   "desc": "Can be ridden. While in party, Neutral Pals drop (40~80)% more items when defeated. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Warsect": {
+   "skill": "Cast-Iron Shell",
+   "desc": "While in your party, generates a barrier around the player after 5 melee hits are landed within (5~9) seconds. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Warsect Terra": {
+   "skill": "Fullmetal Shell",
+   "desc": "While in your party, generates a barrier around the player after 5 melee hits are landed within (5~9) seconds. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Frostplume": {
+   "skill": "Peacock Pounce",
+   "desc": "While in party, Frostplume's icy aura sharpens focus, increasing the player's reload speeds by (20~50)%. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Majex": {
+   "skill": "Phantasmal Arcana",
+   "desc": "While in party, when the player attacks an enemy afflicted with Burn, the enemy creates flames around itself, dealing continuous damage equal to (15~30)% of the player's attack damage to enemies that come into contact with them. (Does not stack.)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Sibelyx": {
+   "skill": "Silk Shroud",
+   "desc": "When activated, attacks targeted enemy with Blizzard Spike. When this Pal uses Blizzard Spike, it has a x(1.1~2.5) damage multiplier. Sometimes makes High Quality Cloth when assigned to Ranch.",
+   "tags": [
+    "ranch",
+    "active"
+   ]
+  },
+  "Sibelyx Primo": {
+   "skill": "Gilded Shroud",
+   "desc": "While in party, increases Defense of Neutral Pals by (15~30)%. (Does not stack) Sometimes makes High Quality Cloth when assigned to Ranch.",
+   "tags": [
+    "ranch",
+    "party"
+   ]
+  },
+  "Maraith": {
+   "skill": "Messenger of Death",
+   "desc": "Can be ridden. While in party, all Party Pals' Active Skill cooldowns are reduced by (30~60)% whenever you defeat an enemy. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Shroomer": {
+   "skill": "Rampant Spores",
+   "desc": "Can be ridden. Sometimes drops Mushroom or Cavern Mushroom when assigned to Ranch.",
+   "tags": [
+    "ranch",
+    "mount"
+   ]
+  },
+  "Shroomer Noct": {
+   "skill": "Roiling Spores",
+   "desc": "Can be ridden. While at a base, its mysterious spores slow the rate at which the SAN value of allies at the base decreases by (10~15)%.",
+   "tags": [
+    "base",
+    "mount"
+   ]
+  },
+  "Icelyn": {
+   "skill": "Witch's Icy Veil",
+   "desc": "When activated, Icelyn changes the player's attack type to Ice and increases Attack by (30~50)%.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Gildra": {
+   "skill": "Resurrection",
+   "desc": "While fighting together, when Gildra is incapacitated, it revives with its Hunger reduced to 0.",
+   "tags": [
+    "party"
+   ]
+  },
+  "Jormuntide": {
+   "skill": "Stormbringer Sea Dragon",
+   "desc": "Can be ridden to travel on water. While in party, increases player's and Pals' damage to enemies afflicted with Soak by (50~65)%. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Jormuntide Ignis": {
+   "skill": "Stormbringer Lava Dragon",
+   "desc": "Can be ridden. While in party, nullifies lava damage and increases player's and Pals' damage to enemies afflicted with Burn by (50~65)%. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Suzaku": {
+   "skill": "Wings of Flame",
+   "desc": "Can be ridden as a flying mount. This Pal’s Movement Speed increases by (5~25)% for each other Fire Pal in your party. (Excluding Suzaku)",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Suzaku Aqua": {
+   "skill": "Wings of Water",
+   "desc": "Can be ridden as a flying mount. This Pal’s Movement Speed increases by (5~25)% for each other Water Pal in your party. (Excluding Suzaku Aqua)",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Dazemu": {
+   "skill": "Sand Sprint",
+   "desc": "Can be ridden. Movement Speed is increased by (50~100)% while mounted on sand.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Quivern": {
+   "skill": "Sky Dragon Affection",
+   "desc": "Can be ridden as a flying mount. While in party, increases Attack of Dragon Pals by (15~30)%. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Quivern Botan": {
+   "skill": "Grass Dragon Affection",
+   "desc": "Can be ridden as a flying mount. While mounted, changes the player’s attack type to Grass and increases Attack by (5~20)%.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Lullu": {
+   "skill": "Floral Boost",
+   "desc": "While at a base, Lullu fills farms with good spirits, increasing the growth rate of the crops by (50~70)%.",
+   "tags": [
+    "base"
+   ]
+  },
+  "Kikit": {
+   "skill": "Sandball Soccer",
+   "desc": "While in party, increases Defense of Ground Pals by (15~30)%. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Yakumo": {
+   "skill": "Birds of a Feather",
+   "desc": "Can be ridden. While fighting together, (15~30)% increased chance of encountering pals with the same Passive Skill as this Pal. (Excludes certain Passive Skills)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Skutlass": {
+   "skill": "Fish Fillet",
+   "desc": "When activated, Skutlass becomes the player's katana (Attack: (2600~3900)). If it does not revert to its normal form quickly, Skutlass will become incapacitated. It will also become incapacitated if Iaigiri is used.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Skutlass Ignis": {
+   "skill": "Seared Fish Fillet",
+   "desc": "When activated, Skutlass Ignis becomes the player's katana (Attack: (2900~4200)). If it does not revert to its normal form quickly, Skutlass Ignis will become incapacitated. It will also become incapacitated if Iaigiri is used.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Reptyro": {
+   "skill": "Ore-Loving Beast",
+   "desc": "Can be ridden. While in party, reduces weight of all types of ore by (30~60)%. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Reptyro Cryst": {
+   "skill": "Ice-Loving Beast",
+   "desc": "Can be ridden. While in party, reduces weight of all types of ore by (35~65)%. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Starryon": {
+   "skill": "Night Dancer",
+   "desc": "Can be ridden. Boosts jumping ability while mounted. This Pal's movement speed increases by +(50~100)% at night.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Starryon Primo": {
+   "skill": "Light Dancer",
+   "desc": "Can be ridden. Boosts Jump Power while mounted. This Pal’s Movement Speed increases by (5~25)% for each other Neutral Pal in your party. (Excluding Starryon Primo)",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Pierdon": {
+   "skill": "Power Stone",
+   "desc": "While in party, increases player's and Pals' damage to enemies afflicted with Muddy by (50~65)%. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Pierdon Cryst": {
+   "skill": "Power Crystal",
+   "desc": "While in party, player and party Pals take (15~30)% less Dragon damage. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Cryolinx": {
+   "skill": "Dragon Hunter",
+   "desc": "While in party, Dragon Pals drop (40~80)% more items when defeated. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Cryolinx Terra": {
+   "skill": "Explosive Strength",
+   "desc": "While in party, when attacking enemy weak point, increases the power of the next weak point attack by (30~60)%. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Snugloo": {
+   "skill": "Invisible Eye",
+   "desc": "While in party, reduces the chance of being detected by enemies. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Wumpo": {
+   "skill": "Guardian of the Snowy Mountain",
+   "desc": "Can be ridden. While at a base, increases the Transporting Work Suitability Level for all other Base Pals by +1. (Does not stack)",
+   "tags": [
+    "base",
+    "mount"
+   ]
+  },
+  "Wumpo Botan": {
+   "skill": "Guardian of the South",
+   "desc": "Can be ridden. While in party, player and party Pals take (15~30)% less Ground damage and are immune to Muddy status. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Sootseer": {
+   "skill": "Grave Robber",
+   "desc": "While in party, player and party Pals take (15~30)% less Neutral damage. (Does not stack) Sometimes digs up Bone when assigned to Ranch.",
+   "tags": [
+    "ranch",
+    "party"
+   ]
+  },
+  "Carnibora": {
+   "skill": "Entangling Tongue",
+   "desc": "While in party, when the player performs a dodge roll or dodge step, Carnibora creates a whirlwind that deals damage to enemies it touches (Grass / Power: (40~80)). (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Blazamut": {
+   "skill": "Magma Kaiser",
+   "desc": "Can be ridden. While in party, increases the Attack and Defense of the Pal fighting alongside you by (5~10)% whenever you defeat an enemy. This effect lasts 20 seconds and stacks up to five times.",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Blazamut Ryu": {
+   "skill": "Dragon Kaiser",
+   "desc": "Can be ridden. While in party, improves player's and Pals' Dragon damage to enemy weak points by (25~40)%. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Dualith": {
+   "skill": "Forest Laser",
+   "desc": "Can be ridden. When activated, Dualith fires a powerful Grass laser from its right hand.",
+   "tags": [
+    "active",
+    "mount"
+   ]
+  },
+  "Dualith Noct": {
+   "skill": "Corruption Laser",
+   "desc": "Can be ridden. When activated, Dualith Noct fires a powerful Dark laser from its right hand.",
+   "tags": [
+    "active",
+    "mount"
+   ]
+  },
+  "Anubis": {
+   "skill": "Guardian of the Desert",
+   "desc": "When activated, Anubis changes the player's attack type to Ground and increases Attack by (30~50)%. Occasionally evades attacks with a flash sidestep during battle.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Sekhmet": {
+   "skill": "Desert Empress",
+   "desc": "While at base, boosts Anubis's work speed by (20~40)%. Increases efficiency by (30~60)% if Sekhmet is also working at a Workbench, Workshop, or other related facilities. (Does not stack)",
+   "tags": [
+    "passive"
+   ]
+  },
+  "Prixter": {
+   "skill": "Phantom Venom",
+   "desc": "While in party, increases player's and Pals' damage to enemies afflicted with Poison by (50~65)%. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Prixter Lux": {
+   "skill": "Scorpion Longwave",
+   "desc": "When activated, Prixter Lux changes the player's attack type to Electric and increases Attack by (30~50)%.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Tetroise": {
+   "skill": "Masonry Archelon",
+   "desc": "Can be ridden While at a base, increases the Mining Work Suitability Level for all other Base Pals by +1. (Does not stack)",
+   "tags": [
+    "base",
+    "mount"
+   ]
+  },
+  "Tetroise Primo": {
+   "skill": "Stone-Chaser Archelon",
+   "desc": "Can be ridden. While in party, increases the durability of all weapons and armor by (80~100)%. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Nyafia": {
+   "skill": "Shot-Nyan Mode",
+   "desc": "When activated, Nyafia will fire a shotgun at nearby enemies for a limited time. While in party, increases the player's shotgun damage by (10~35)%. (Does not stack)",
+   "tags": [
+    "party",
+    "active"
+   ]
+  },
+  "Mimog": {
+   "skill": "Master of Unlocking",
+   "desc": "While fighting together, Mimog can open treasure chests without using a key.",
+   "tags": [
+    "party"
+   ]
+  },
+  "Xenovader": {
+   "skill": "Unknown Invader",
+   "desc": "While in party, increases the damage of the last bullet fired from a full-auto weapon by (100~160)%. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Xenogard": {
+   "skill": "Unknown Intruder",
+   "desc": "Can be ridden. While in party, increases the player's energy weapon damage by (10~35)%. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Prunelia": {
+   "skill": "Prayer for Abundant Harvest",
+   "desc": "While at a base, Prunelia's prayers bless the crops, increasing their harvest by (18~35)%.",
+   "tags": [
+    "base"
+   ]
+  },
+  "Nitemary": {
+   "skill": "Soul Collector",
+   "desc": "While fighting together, Pals drop +(100~200)% more Pal Souls when defeated. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Nitemary Botan": {
+   "skill": "Soul Binder",
+   "desc": "While in party, increases Defense of Grass Pals by (15~30)%. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Smokie": {
+   "skill": "Dig, Smokie! Dig!",
+   "desc": "When activated, uses its sharp sense of smell to detect nearby Chromite. While fighting together, Chromite acquisition increases by +(100~200)%.",
+   "tags": [
+    "party",
+    "active"
+   ]
+  },
+  "Smokie Cryst": {
+   "skill": "Cryo Instincts",
+   "desc": "While at a base, increases the Cooling Work Suitability Level for all other Base Pals by +1. (Does not stack)",
+   "tags": [
+    "base"
+   ]
+  },
+  "Omascul": {
+   "skill": "Masquerade Dance",
+   "desc": "While in party, increases Party Pals' EXP gained by (40~80)%. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Whalaska": {
+   "skill": "Chilled Whale Cruiser",
+   "desc": "Can be ridden. While in party, fishing minigames start with the capture gauge increased by (5~14)%. Additionally, while the bars overlap, capture progress increases by (5~14)%. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Whalaska Ignis": {
+   "skill": "Cozy Whale Cruiser",
+   "desc": "Can be ridden. While in party, fishing minigame begins with the capture gauge (7~17)% higher than usual, and capture progress increases by (7~17)% while the bars overlap. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Verdash": {
+   "skill": "Grassland Gymnast",
+   "desc": "While in party, grants 1 additional jump and 1 additional mid-air dash. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Splatterina": {
+   "skill": "Blade of Uncontrolled Passion",
+   "desc": "While in party, the amount of items obtained from using the Meat Cleaver increases by (100~200)%. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Gildane": {
+   "skill": "Sandstorm's Blessing",
+   "desc": "Can be ridden. While mounted, changes the player’s attack type to Ground and increases Attack by (5~20)%.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Dogen": {
+   "skill": "Homeward Prayer",
+   "desc": "When activated, teleports to the nearest base. Cannot be used inside dungeons or similar areas.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Bulldosu": {
+   "skill": "Yokozuna's Presence",
+   "desc": "Can be ridden. While in party, player and party Pals take (15~30)% less Electric damage and are immune to Electrify. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Celesdir": {
+   "skill": "Blessing of Purification",
+   "desc": "Can be ridden. This Pal's Attack and Movement Speed increases by (2~6)% for each other Neutral Pal in your party. When in party, recovers Health of the player and Party Pals by (0.15~0.75)% per second. (Does not stack)",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Celesdir Noct": {
+   "skill": "Blessing of Chaos",
+   "desc": "Can be ridden. While in party, the Pal fighting alongside you gradually loses Health in exchange for (40~80)% Attack increase. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Astegon": {
+   "skill": "Black Ankylosaur",
+   "desc": "Can be ridden as a flying mount. Increases the damage dealt to ores by (1100~3300)%, and you can obtain (150~300)% more Ore while mounted.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Knocklem": {
+   "skill": "Steel Guardian Mode",
+   "desc": "When activated, a steel resolve increases Knocklem's Attack by (50~200)% and Defense by (50~200)% for a limited time.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Knocklem Ignis": {
+   "skill": "Iron Guardian Mode",
+   "desc": "When activated, a steel resolve increases Knocklem Ignis's Attack by (60~210)% and Defense by (60~210)% for a limited time.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Silvegis": {
+   "skill": "Aegis Shield",
+   "desc": "Can be ridden. While in party, reduces shield regeneration delay by (30~60)% and reduces damage taken by your shield by (65~80)%. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Azurmane": {
+   "skill": "Plasma Dash",
+   "desc": "Can be ridden. Grants Air Dash, to move at even higher speeds.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Valentail": {
+   "skill": "Big Stretch",
+   "desc": "While in party, reduces the effects of gravity on the player, making them more floaty while jumping and falling. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Snock": {
+   "skill": "Charging Shell",
+   "desc": "While in party, the player's attacks inflict Electrify (2~6). (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Snock Lux": {
+   "skill": "Grounding Shell",
+   "desc": "While in party, player and party Pals take (15~30)% less Water damage, and are immune to Soak. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Souffline": {
+   "skill": "Fuzzy Fairy",
+   "desc": "While in party, increases the capture rate of Pals afflicted with Ivy-Covered. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Lapiron": {
+   "skill": "Friend of Earth",
+   "desc": "While in party, increases the player's Defense by (50~65)% while sprinting. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Hoodle": {
+   "skill": "Void-Dweller",
+   "desc": "While in party, increases the player's damage dealt to enemies that are not in combat by (50~100)%. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Slowatt": {
+   "skill": "Chillswitch",
+   "desc": "While in party, when the player attacks an enemy afflicted with Electrify, the enemy discharges electricity, dealing damage equal to (40~60)% of the player's attack damage to nearby enemies. (Does not stack.)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Bakemi": {
+   "skill": "Grinning Death",
+   "desc": "While in party, attacking enemies afflicted with Poison reduces their Attack by (40~80)%. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Solmora": {
+   "skill": "Charming Fish",
+   "desc": "Can be ridden to travel on water. While in party, makes it easier to fish up talented Pals. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Solmora Lux": {
+   "skill": "Shocking Fish",
+   "desc": "Can be ridden to travel on water. While mounted, changes the player's attack type to Electric and increases Attack by (5~20)%. While in party, makes it easier to fish up talented Pals. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Lapure": {
+   "skill": "Long-Sleeved Hurray",
+   "desc": "While in party, reduces the Partner Skill cooldowns for other party Pals by (10~50)%. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Eidrolon": {
+   "skill": "Liberated Pterosaur",
+   "desc": "Can be ridden as a flying mount. This Pal's Attack and Movement Speed increase by (2~6)% for each other Dragonor Dark Pal in your party.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Eidrolon Ignis": {
+   "skill": "Resentful Pterosaur",
+   "desc": "Can be ridden as a flying mount. This Pal's Attack and Movement Speed increase by (2~6)% or each other Dragon or Fire Pal in your party. (Excluding Eidrolon Ignis)",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Dynamoff": {
+   "skill": "Electro-Massage Incubation",
+   "desc": "Can be ridden as a flying mount. While at a base, shortens the time it takes to incubate eggs by (20~40)%. (Does not stack)",
+   "tags": [
+    "base",
+    "mount"
+   ]
+  },
+  "Tropicaw": {
+   "skill": "Flower Dance",
+   "desc": "While in party, extends the invincibility period during dodge rolls and dodge steps by (15~30)%. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Flaracle": {
+   "skill": "Burning Future",
+   "desc": "While in party, when the player attacks an enemy afflicted with Burn, the enemy explodes, dealing damage equal to (40~60)% of the player's attack damage to nearby enemies. (Does not stack.)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Ophydia": {
+   "skill": "Glorious Mist",
+   "desc": "Can be ridden. While in party, the player's attacks inflict Soak (2~6). (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Dupin": {
+   "skill": "Trick-Loving Fluffle",
+   "desc": "While in party, when the player's Health falls below 50%, Dupin generates an explosion around the player (Fire / Power: (100~200) / Burn buildup: 777). Additionally, while the player's Health is below 50%, the player's Attack is increased by (30~50)%. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Roujay": {
+   "skill": "Dark-Nester",
+   "desc": "Can be ridden as a flying mount. While in party, increases player's and Pals' damage to enemies afflicted with Blind by (50~65)%. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Venusa": {
+   "skill": "Snake's Sagacity",
+   "desc": "While in party, the player's attacks inflict Blind (2~6). (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Mycora": {
+   "skill": "Charming Spore",
+   "desc": "While at a base, increases the Medicine Production Work Suitability Level for all other Base Pals by +1. (Does not stack)",
+   "tags": [
+    "base"
+   ]
+  },
+  "Loomen": {
+   "skill": "Lantern Enchantment",
+   "desc": "While in party, the player's arrows explode on contact, dealing additional damage equal to (15~30)% of the player's attack damage. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Wistella": {
+   "skill": "Hidden Dark Energy",
+   "desc": "While in party, increases Defense of Dark Pals by (15~30)%. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Solenne": {
+   "skill": "Untainted Maiden",
+   "desc": "While in party, increases the player's Attack by (30~80)% if all Pals in party are different species. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Renjishi": {
+   "skill": "Stage Combat",
+   "desc": "While in party, the player's attacks inflict Burn (2~6). (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Aegidron": {
+   "skill": "Indestructible Fortress",
+   "desc": "Can be ridden. While in party, player and party Pals take (60~80)% less damage from explosive attacks, and are immune to Stun. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Grizzbolt": {
+   "skill": "Yellow Tank",
+   "desc": "Can be ridden. Can rapidly fire a minigun while mounted.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Lyleen": {
+   "skill": "Harvest Goddess",
+   "desc": "When activated, the queen's soothing graces restore the Health of the player and Party Pals by (80~90)%.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Lyleen Noct": {
+   "skill": "Goddess of the Tranquil Light",
+   "desc": "When activated, the queen's soothing graces restore the Health of the player and Party Pals by (85~95)%.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Orserk": {
+   "skill": "Ferocious Thunder Dragon",
+   "desc": "While in party, hitting an enemy with a bullet increases the Attack and Defense of the Pal fighting alongside you by (1~5)% for 5 seconds. This effect stacks up to 30 times. (Does not stack.)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Faleris": {
+   "skill": "Scorching Predator",
+   "desc": "Can be ridden as a flying mount. While in party, Ice Pals drop (40~80)% more items when defeated. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Faleris Aqua": {
+   "skill": "Tidal Predator",
+   "desc": "Can be ridden as a flying mount. While in party, Fire Pals drop (40~80)% more items when defeated. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Shadowbeak": {
+   "skill": "Modified DNA",
+   "desc": "Can be ridden as a flying mount. While flying, Movement Speed is increased. Enhances Dark attacks by (15~30)% while mounted.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Selyne": {
+   "skill": "Celestial Darkness",
+   "desc": "Can be ridden as a flying mount. While mounted, enhances Neutral and Dark attacks by (15~30)%.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Bastigor": {
+   "skill": "Blizzard Crash",
+   "desc": "Can be ridden. While mounted, delivers crushing blows with a hammer forged from Ice.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Shaolong": {
+   "skill": "Azure Sovereign",
+   "desc": "Can be ridden as a flying mount. This Pal's Attack increases by (4~8)% for each other Dragon Pal in your party.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Silvance": {
+   "skill": "Spore Stalwart",
+   "desc": "While in party, when the player attacks an enemy afflicted with Ivy-Covered, the enemy explodes, dealing additional damage equal to (40~60)% of the player's attack damage. (Does not stack) Also grants immunity to the World Tree's Explosive Spores to both the player and their Pals.",
+   "tags": [
+    "party"
+   ]
+  },
+  "Dandilord": {
+   "skill": "Mist Stalwart",
+   "desc": "When activated, the player's attacks inflict Poison (2~6). While in party, grants the player and party Pals immunity to Poison, and nullifies the effects of toxic gas in the World Tree area. (Does not stack)",
+   "tags": [
+    "party",
+    "active"
+   ]
+  },
+  "Bellanoir": {
+   "skill": "Nightmare Iris",
+   "desc": "When activated, attacks targeted enemy with Nightmare Ray. When this Pal uses Nightmare Ray, it has a x(1.1~2.5) damage multiplier.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Bellanoir Libero": {
+   "skill": "Nightmare Stare",
+   "desc": "When activated, attacks targeted enemy with Nightmare Bloom. When this Pal uses Nightmare Bloom, it has a x(1.1~2.5) damage multiplier.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Xenolord": {
+   "skill": "Meteor Wings",
+   "desc": "Can be ridden as a flying mount. While in party, damage done by Partner Skills of weapon-wielding Pals increases by (20~50)%. (Does not stack)",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Hartalis": {
+   "skill": "Sacred Barrier",
+   "desc": "Can be ridden. While mounted, it generates a barrier that blocks all attacks. Can triple jump while mounted.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Paladius": {
+   "skill": "Holy Knight of the Firmament",
+   "desc": "Can be ridden. Can triple jump while mounted. Activate Spear Thrust to have Necromus stay by your side and attack enemies in tandem.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Necromus": {
+   "skill": "Dark Knight of the Abyss",
+   "desc": "Can be ridden. Can double jump while mounted. When Twin Spears skill is activated, a Paladius in your party will appear and attack alongside you.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Frostallion": {
+   "skill": "Icy Steed",
+   "desc": "Can be ridden as a flying mount. While mounted, changes the player's attack type to Ice, inflict Freeze (2~6), increases Attack by (10~40)%.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Frostallion Noct": {
+   "skill": "Black Steed",
+   "desc": "Can be ridden as a flying mount. While mounted, changes the player's attack type to Dark, inflict Blind (2~6), increases Attack by (10~40)%.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Neptilius": {
+   "skill": "Sentinel of the Great Sea",
+   "desc": "While in party, it follows up the player's attacks with Water spear strikes. Can be ridden to travel on water. While mounted, it can leap high into the air over water.",
+   "tags": [
+    "party",
+    "mount"
+   ]
+  },
+  "Jetragon": {
+   "skill": "Aerial Missile",
+   "desc": "Can be ridden as a flying mount. Can rapidly fire a missile launcher while mounted.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Panthalus": {
+   "skill": "Resonant Guardian",
+   "desc": "Can be ridden as a flying mount. Only 1 can be summoned to a base. While at a base, it constantly patrols the skies and bombards intruders from high above.",
+   "tags": [
+    "base",
+    "mount"
+   ]
+  },
+  "Astralym": {
+   "skill": "-",
+   "desc": "This Pal's abilities are still being investigated.",
+   "tags": [
+    "passive"
+   ]
+  },
+  "Blue Slime": {
+   "skill": "Slime Body",
+   "desc": "Can be ridden. Can jump high into the air while mounted.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Cave Bat": {
+   "skill": "Bat Backup",
+   "desc": "While in party, appears near the player. Automatically picks up nearby items.",
+   "tags": [
+    "party"
+   ]
+  },
+  "Demon Eye": {
+   "skill": "Demonic Sight",
+   "desc": "While in party, increases Attack of Dark Pals by (15~30)%. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Enchanted Sword": {
+   "skill": "Enchant",
+   "desc": "While in party, Dark Pals drop (40~80)% more items when defeated. (Does not stack)",
+   "tags": [
+    "party"
+   ]
+  },
+  "Eye of Cthulhu": {
+   "skill": "Mad Eye Lunge",
+   "desc": "When activated, Eye of Cthulhu charges and attacks targeted enemy.",
+   "tags": [
+    "active"
+   ]
+  },
+  "Green Slime": {
+   "skill": "Slime Body",
+   "desc": "Can be ridden. Can jump high into the air while mounted.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Illuminant Bat": {
+   "skill": "Bat Backup",
+   "desc": "While in party, appears near the player. Automatically picks up nearby items.",
+   "tags": [
+    "party"
+   ]
+  },
+  "Illuminant Slime": {
+   "skill": "Slime Body",
+   "desc": "Can be ridden. Can jump high into the air while mounted.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Purple Slime": {
+   "skill": "Slime Body",
+   "desc": "Can be ridden. Can jump high into the air while mounted.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Rainbow Slime": {
+   "skill": "Slime Body",
+   "desc": "Can be ridden. Can jump high into the air while mounted.",
+   "tags": [
+    "mount"
+   ]
+  },
+  "Red Slime": {
+   "skill": "Slime Body",
+   "desc": "Can be ridden. Can jump high into the air while mounted.",
+   "tags": [
+    "mount"
+   ]
+  }
+ }
+}

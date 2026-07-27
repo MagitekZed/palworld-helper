@@ -53,6 +53,11 @@ your browser's localStorage, with JSON Export/Import for backups.
   Crops, or Crafting & power. Auto-fill staffs open slots proportionally to the
   purpose's recipe (a mining base gets ~60% miners, plus haulers and fire pals for
   on-site smelting), interleaved so a thin roster still yields a working miniature
+- **Aura pals** — v1.0 has one pal per work type whose partner skill grants *every
+  other pal at the base* +1 in that job (Tetroise → Mining, Ribbuny → Handiwork,
+  Wumpo → Transporting…). Specialty auto-fill grabs the ones matching its top jobs
+  first — best value per slot — and the crew panel lists them with status, so you
+  know which to go catch
 - **Self-sufficient mode** — optionally staff a raw-food farm first (planting /
   watering / gathering scaled by work *levels*, so elite pals need fewer bodies),
   plus haulers, handiwork, and a medic — a satellite base that needs no supply runs.

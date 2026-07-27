@@ -50,6 +50,31 @@ const BASICS_COUNTS = cap => ({
 });
 const BASICS_COUNT_WEIGHT = 2.5; // one count-slot ≈ this many food levels when scoring multi-job picks
 
+/* Aura pals: partner skills that raise one work suitability level by +1 for
+   every OTHER pal at the base (one per work type in v1.0). They don't stack, so
+   at most one of each. Derived from the partner data so a re-scrape updates it. */
+const AURA_BY_WORK = (() => {
+  const m = {};
+  for (const p of PALS) {
+    const desc = p.partner && p.partner.desc;
+    if (!desc) continue;
+    for (const hit of desc.matchAll(/increases the (.+?) Work Suitability Level/g)) {
+      const w = hit[1].trim();
+      if (WORKS.includes(w) && !m[w]) m[w] = p.name;
+    }
+  }
+  return m;
+})();
+// the purpose's most important jobs that have an aura pal, best share first
+const AURA_MAX = 3;
+const auraJobsFor = recipe => Object.entries(recipe)
+  .sort((a, b) => b[1] - a[1])
+  .map(([w]) => w)
+  .filter(w => AURA_BY_WORK[w])
+  .slice(0, AURA_MAX);
+// don't spend half a tiny outpost on auras
+const auraBudget = cap => Math.max(1, Math.min(AURA_MAX, Math.floor(cap / 5)));
+
 /* ================= state ================= */
 const LS_ROSTER_V1 = 'palplanner.roster.v1'; // legacy: array of owned names
 const LS_ROSTER = 'palplanner.roster.v2';    // { name: copies }
@@ -874,6 +899,12 @@ function renderEditor(view, base) {
         isNight(p) ? el('span', { class: 'night', title: 'Works through the night' }, '🌙') : null,
         status,
         qtyStepper(() => crewQty(base, entry.name), n => { setCrewQty(base, entry.name, n); persist(); }, refresh),
+        (() => {
+          const aw = Object.keys(AURA_BY_WORK).filter(w => AURA_BY_WORK[w] === p.name);
+          return aw.length
+            ? el('span', { class: 'pskill', title: `${p.partner.skill} — +1 ${aw.join(' / ')} for every other pal at this base` }, '✦')
+            : '';
+        })(),
         el('span', { class: 'work-chips' }, sortedWorks(p).map(([w, l]) => workChip(w, l, p)), foodChip(p)),
         el('button', { class: 'rm', title: 'Remove from crew', onclick: () => { setCrewQty(base, entry.name, 0); persist(); refresh(); } }, '✕')
       ));
@@ -904,15 +935,29 @@ function renderEditor(view, base) {
       el('button', { class: 'btn', onclick: () => { autofill(base); refresh(); } }, 'Auto-fill from my roster'),
       el('button', { class: 'ghost', onclick: () => { base.crew = []; persist(); refresh(); } }, 'Clear crew')
     ));
+    if (base.purpose !== 'balanced') {
+      const auras = auraStatus(base, PRESETS[base.purpose].recipe);
+      if (auras.length) {
+        const line = el('div', { class: 'aura-line' },
+          el('span', { class: 'aura-label', title: 'Their partner skills give every OTHER pal at this base +1 in that job. They do not stack, so one of each is enough.' }, '✦ Aura pals:'));
+        auras.forEach((a, i) => {
+          if (i) line.append(' · ');
+          line.append(el('span', { class: 'aura-pal state-' + a.state.replace(/ /g, '-') },
+            el('b', {}, a.name), ` +1 ${a.work}`,
+            a.state === 'in crew' ? ' ✓' : a.state === 'not owned' ? ' (catch one)' : a.state === 'free' ? ' (available)' : ' (elsewhere)'));
+        });
+        crewPanel.append(line);
+      }
+    }
     const recipeText = Object.entries((PRESETS[base.purpose] || PRESETS.balanced).recipe)
       .sort((a, b) => b[1] - a[1]).slice(0, 3).map(([w, s]) => `${Math.round(s * 100)}% ${w}`).join(' · ');
     crewPanel.append(el('div', { class: 'tips' },
       `Auto-fill adds your best free copies (owned and unassigned) up to the max of ${base.cap}, following the ${(PRESETS[base.purpose] || PRESETS.balanced).label} recipe (${recipeText}…). ` +
       (base.purpose === 'balanced'
         ? 'Balanced spreads across every job with extra handiwork and hauling.'
-        : base.coverBasics
-          ? 'Self-sufficient first staffs food farming (scaled for raw feeding — better pals need fewer bodies), hauling, handiwork and a medic, then fills the specialty.'
-          : 'Focus-only: every slot goes to the specialty — ship food in from another base.') +
+        : 'It takes the aura pals above first (best value per slot), then ' + (base.coverBasics
+          ? 'staffs food farming (scaled for raw feeding — better pals need fewer bodies), hauling, handiwork and a medic, then fills the specialty.'
+          : 'gives every remaining slot to the specialty — ship food in from another base.')) +
       ' It never removes pals you placed, and never adds pals with no relevant work.'));
 
     left.append(crewPanel);
@@ -1090,6 +1135,32 @@ function bestCandidate(base, work) {
   return best;
 }
 
+/* One aura pal for each of the purpose's top jobs (they don't stack, so never
+   two of the same). Runs first: a +1 aura lifts every other worker at the base,
+   including the food crew, so it's the best value per slot. */
+function fillAuras(base, recipe) {
+  let budget = auraBudget(base.cap);
+  for (const w of auraJobsFor(recipe)) {
+    if (!budget || crewTotal(base) >= base.cap) break;
+    const name = AURA_BY_WORK[w];
+    if (crewQty(base, name) > 0) { budget--; continue; } // already here — aura covered
+    if (spareCopies(base, name) <= 0) continue;          // don't own a free one
+    addToCrew(base, name, 1);
+    budget--;
+  }
+}
+
+// aura pals this purpose wants, with why they're not in the crew (for the hint line)
+function auraStatus(base, recipe) {
+  return auraJobsFor(recipe).slice(0, auraBudget(base.cap)).map(w => {
+    const name = AURA_BY_WORK[w];
+    const state = crewQty(base, name) > 0 ? 'in crew'
+      : !isOwned(name) ? 'not owned'
+        : spareCopies(base, name) > 0 ? 'free' : 'assigned elsewhere';
+    return { work: w, name, state };
+  });
+}
+
 function fillRecipe(base, recipe) {
   const filled = {}; // slots added per job by this phase
   const active = new Set(Object.keys(recipe));
@@ -1113,8 +1184,9 @@ function autofill(base) {
       if (!p) break;
       addToCrew(base, p.name, 1);
     }
-  } else if (base.coverBasics) {
-    fillBasics(base);
+  } else {
+    fillAuras(base, preset.recipe); // specialty bases only
+    if (base.coverBasics) fillBasics(base);
   }
   fillRecipe(base, preset.recipe);
   persist();

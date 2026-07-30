@@ -166,7 +166,7 @@ let bases = lsLoad(LS_BASES, [])
   .map(normalizeBase);
 
 let ui = Object.assign(
-  { view: 'roster', baseId: null, search: '', element: '', works: [], tier: '', bonus5: '', pskill: '', ownedOnly: false, sort: 'dex' },
+  { view: 'roster', baseId: null, search: '', element: '', works: [], tier: '', bonus5: '', pskill: '', owned: '', sort: 'dex' },
   lsLoad(LS_UI, {})
 );
 // migrate the old single-work filter (ui.work: string) to ui.works: []
@@ -175,6 +175,10 @@ delete ui.work;
 if (!Array.isArray(ui.works)) ui.works = [];
 ui.works = ui.works.filter(w => WORKS.includes(w));
 if (ui.element && !ELEMENTS.includes(ui.element)) ui.element = ''; // e.g. removed "Rock"
+// migrate the old owned-only checkbox (ui.ownedOnly: bool) to ui.owned: ''|'yes'|'no'
+if (ui.ownedOnly === true && !ui.owned) ui.owned = 'yes';
+delete ui.ownedOnly;
+if (!['', 'yes', 'no'].includes(ui.owned)) ui.owned = '';
 
 function persist() {
   localStorage.setItem(LS_ROSTER, JSON.stringify(roster));
@@ -391,7 +395,8 @@ function matchesFilters(p) {
   if (ui.bonus5 === 'done' && !bonusDone(p.name)) return false;
   if (ui.bonus5 === 'not' && bonusDone(p.name)) return false;
   if (ui.pskill && !(p.partner && p.partner.tags.includes(ui.pskill))) return false;
-  if (ui.ownedOnly && !isOwned(p.name)) return false;
+  if (ui.owned === 'yes' && !isOwned(p.name)) return false;
+  if (ui.owned === 'no' && isOwned(p.name)) return false;
   return true;
 }
 
@@ -487,17 +492,15 @@ function renderRoster() {
     el('option', { value: '' }, 'Any tier'),
     ['S', 'A', 'B', 'C', 'F'].map(t => el('option', { value: t, selected: ui.tier === t ? '' : null }, 'Tier ' + TIER_NAMES[t]))
   );
-  const ownedChk = el('label', { class: 'check' },
-    el('input', {
-      type: 'checkbox', ...(ui.ownedOnly ? { checked: '' } : {}),
-      onchange: e => { ui.ownedOnly = e.target.checked; persist(); renderList(); }
-    }),
-    'Owned only'
+  const ownedSel = el('select',
+    { onchange: e => { ui.owned = e.target.value; persist(); renderList(); } },
+    [['', 'Owned: any'], ['yes', 'Owned only'], ['no', 'Not owned yet']]
+      .map(([v, t]) => el('option', { value: v, selected: ui.owned === v ? '' : null }, t))
   );
   const countPill = el('span', { class: 'count-pill' });
 
   view.append(
-    el('div', { class: 'toolbar' }, searchInput, elementSel, workSel, tierSel, bonusSel, pskillSel, sortSel, ownedChk,
+    el('div', { class: 'toolbar' }, searchInput, elementSel, workSel, tierSel, bonusSel, pskillSel, ownedSel, sortSel,
       el('span', { class: 'spacer' }), countPill),
     listWrap
   );

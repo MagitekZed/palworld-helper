@@ -28,8 +28,9 @@ your browser's localStorage, with JSON Export/Import for backups.
   whole base, like Clovee's +1 Gathering aura)
 - **Search, filters, sorts** — name/#paldex search; filters for element, work
   suitability (multi-select, AND logic), combat tier, 5-catch status, partner-skill
-  type, owned-only; sorts by paldex, name, total/best work levels, combat tier, or
-  5-catch progress
+  type, and owned / not-owned-yet; sorts by paldex, name, total/best work levels,
+  combat tier, or 5-catch progress. Filters combine, so "not owned yet" + a tier or
+  work filter doubles as a targeted catch list
 - **Quick-add** — send any pal straight to a base from its roster row; pal names link
   to paldb.cc for spawn maps and breeding combos
 - 🌙 marks Dark-type pals, which work through the night

@@ -16,8 +16,9 @@
    "Transporting",
    "Farming"
   ],
-  "pal_count": 299,
-  "max_base_level": 8
+  "pal_count": 298,
+  "max_base_level": 8,
+  "excluded": "Astralym (paldex #204) omitted: final story boss, cannot be caught or bred"
  },
  "pals": [
   {
@@ -4835,16 +4836,6 @@
    "elements": [
     "Water"
    ],
-   "works": {},
-   "crossover": false
-  },
-  {
-   "paldex": "204",
-   "name": "Astralym",
-   "slug": "Astralym",
-   "code": "WorldTreeDragon",
-   "icon": "https://cdn.paldb.cc/image/Pal/Texture/PalIcon/Normal/T_WorldTreeDragon_icon_normal.webp",
-   "elements": [],
    "works": {},
    "crossover": false
   },

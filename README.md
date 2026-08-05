@@ -1,7 +1,7 @@
 # Palpedia Tracker and Base Planner
 
 A free fan-made companion tool for [Palworld](https://www.pocketpair.jp/palworld) v1.0:
-track your paldex progress across all 299 pals, then design self-sufficient base crews
+track your paldex progress across all 298 obtainable pals, then design self-sufficient base crews
 with purpose-driven auto-fill and see exactly which pals you still need to catch.
 
 **Live app:** https://magitekzed.github.io/palworld-helper/
@@ -11,7 +11,7 @@ your browser's localStorage, with JSON Export/Import for backups.
 
 ## Palpedia tracker
 
-- **Full v1.0 paldex** — 299 pals (288 numbered + Terraria-collab pals) with the
+- **Full v1.0 paldex** — 298 obtainable pals (287 numbered + Terraria-collab pals) with the
   rebalanced 1–10 work suitability scale
 - **Copy counts** — a +/− stepper per pal tracks how many of each you own
 - **5-catch paldex bonus** — v1.0 grants a bonus at 5 catches of a species. A ★5 badge
@@ -83,7 +83,7 @@ These numbers are computed by this project, not copied from a wiki — treat the
 good defaults, not gospel.
 
 - **Combat tier (S/A/B/C/F):** for each pal we compute rank-percentiles of its base
-  HP, Attack, and Defense across all 299 pals, average the three equally, and bucket
+  HP, Attack, and Defense across all 298 pals, average the three equally, and bucket
   the composite into a pyramid — S = top 10%, A = next 20%, B = middle 40%,
   C = next 20%, F = bottom 10%. Raw stats only: element typing, partner skills, and
   mount abilities are deliberately excluded, so a great utility pal can grade below a
@@ -103,7 +103,7 @@ good defaults, not gospel.
 All game data lives in [`data/`](data/) (JSON + CSV) and is embedded in the app as
 `data.js`:
 
-- Work suitability for all 299 pals (v1.0 rebalanced levels, paldb.cc, 2026-07-13)
+- Work suitability for all 298 pals (v1.0 rebalanced levels, paldb.cc, 2026-07-13)
 - HP / Attack / Defense / Food stats + our derived tier (paldb.cc, 2026-07-16)
 - Ranch produce for the 29 Farming pals
 - Partner skills with trigger-phrase tags (paldb.cc, 2026-07-26)

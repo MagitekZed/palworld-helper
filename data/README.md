@@ -6,16 +6,22 @@ Work suitability for every pal in **Palworld v1.0** (released 2026-07-10).
 
 - `pals_work_suitability.json` — full structured data: paldex number, name, internal codename, elements, work suitabilities with levels.
 - `pals_work_suitability.csv` — same data as a matrix (one column per work type), Excel-friendly.
-- `pals_combat_stats.json` / `.csv` — raw HP / Attack / Defense / Food for all 299 pals plus our derived combat tier (see below).
+- `pals_combat_stats.json` / `.csv` — raw HP / Attack / Defense / Food for all 298 pals plus our derived combat tier (see below).
 
 ## Coverage
 
-299 entries total:
+298 entries total:
 
-- 288 numbered paldex entries (#1–#204 including 84 regional/elemental variants like `121B Jormuntide Ignis`)
+- 287 numbered paldex entries (#1–#204 including 84 regional/elemental variants like `121B Jormuntide Ignis`)
 - 11 unnumbered Terraria-collab pals (Eye of Cthulhu, slimes, bats — all low work levels)
 
-News coverage cites "287 obtainable pals" for 1.0; paldb's data-mined list has 288 numbered entries. The one-off is likely a counting difference around a variant/boss pal, and doesn't affect base planning.
+**Excluded: Astralym (#204).** paldb's data-mined list has 288 numbered entries, but
+Astralym is the final story boss at the Sealed Sanctum — you fight it, you can't catch
+or breed it. Its paldb entry is a placeholder (no elements, no work suitabilities,
+partner skill "-", stats a flat 200/200/200), and those placeholder stats sat at the
+100th percentile of every stat, skewing the derived tier list. Dropping it also
+resolves the count discrepancy noted here previously: 287 numbered entries now matches
+the "287 obtainable pals" figure in 1.0 news coverage exactly.
 
 ## Important 1.0 changes (from official patch notes)
 
@@ -41,10 +47,11 @@ for most pals). Astralym's page omits its Health bar; its raw values (200/200/20
 were read directly.
 
 The **combat tier** (S / A / B / C / F) is *our own* objective grade, not a
-community list. For each stat we compute a rank-percentile across all 299 pals,
+community list. For each stat we compute a rank-percentile across all 298 pals,
 average the three (equal weight), then bucket the composite into a pyramid:
 **S = top 10%, A = next 20%, B = middle 40%, C = next 20%, F = bottom 10%**
-(30 / 60 / 119 / 60 / 30 pals). It reflects raw stats only — element typing,
+(31 / 58 / 120 / 60 / 29 pals — bucket sizes land near those shares rather than
+exactly on them, because pals tied on the composite score can't be split). It reflects raw stats only — element typing,
 partner skills, and mount abilities are deliberately excluded, so a great
 utility/work pal (e.g. Anubis) can grade below a raw stat monster.
 

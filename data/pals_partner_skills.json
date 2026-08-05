@@ -1,6 +1,7 @@
 {
  "meta": {
-  "source": "paldb.cc/en/Partner_Skill, retrieved 2026-07-26; tags derived from trigger phrases (base/ranch/party/active/mount/passive), rules corrected 2026-07-27"
+  "source": "paldb.cc/en/Partner_Skill, retrieved 2026-07-26; tags derived from trigger phrases (base/ranch/party/active/mount/passive), rules corrected 2026-07-27",
+  "excluded": "Astralym (paldex #204) omitted: final story boss, cannot be caught or bred"
  },
  "pals": {
   "Lamball": {
@@ -2120,13 +2121,6 @@
    "tags": [
     "base",
     "mount"
-   ]
-  },
-  "Astralym": {
-   "skill": "-",
-   "desc": "This Pal's abilities are still being investigated.",
-   "tags": [
-    "passive"
    ]
   },
   "Blue Slime": {

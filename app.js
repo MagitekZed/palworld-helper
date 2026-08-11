@@ -78,10 +78,11 @@ const auraBudget = cap => Math.max(1, Math.min(AURA_MAX, Math.floor(cap / 5)));
 /* ================= state ================= */
 const LS_ROSTER_V1 = 'palplanner.roster.v1'; // legacy: array of owned names
 const LS_ROSTER = 'palplanner.roster.v2';    // { name: copies }
-const LS_BASES = 'palplanner.bases.v1';      // crew: [{name, qty}] (legacy: array of names)
+const LS_BASES = 'palplanner.bases.v1';      // crew: [{name, qty, seq}] (legacy: array of names / {name, qty})
 const LS_UI = 'palplanner.ui.v1';
 const LS_BONUS = 'palplanner.bonus5.v1';     // { name: 1 } — 5-catch paldex bonus earned
-const LS_PARTY = 'palplanner.party.v1';      // [{name, nickname, level, stars, passives[4]}] — up to 5
+const LS_PARTY = 'palplanner.party.v1';      // legacy single party — migrated to parties.v1, kept for downgrade safety
+const LS_PARTIES = 'palplanner.parties.v1';  // [{id, name, reserve, members: [{name, nickname, level, stars, passives[4]}]}]
 const LS_PARTY_MEMO = 'palplanner.partymemo.v1'; // { name: last details } — restored on re-add
 const BONUS_AT = 5; // catching this many of a species earns its paldex bonus (v1.0)
 
@@ -92,8 +93,12 @@ function lsLoad(key, fallback) {
   } catch { return fallback; }
 }
 
+/* State loaders. Each is callable again after external localStorage changes
+   (another tab via the 'storage' event, or an undo restore) — never mutate the
+   returned globals from anywhere but the owning handlers. */
+
 // roster: { name: copies owned }
-let roster = (() => {
+function loadRoster() {
   const v2 = lsLoad(LS_ROSTER, null);
   const src = v2 !== null ? v2
     : Object.fromEntries(lsLoad(LS_ROSTER_V1, []).map(n => [n, 1]));
@@ -103,18 +108,22 @@ let roster = (() => {
     if (byName.has(n) && qty > 0) clean[n] = qty;
   }
   return clean;
-})();
+}
+let roster = loadRoster();
 
 // 5-catch bonus: sticky — auto-earned when copies reach BONUS_AT, kept when
 // copies later drop (condensing/selling doesn't undo the in-game bonus).
-let bonus = (() => {
+function loadBonus() {
   const clean = {};
   for (const n of Object.keys(lsLoad(LS_BONUS, {}))) if (byName.has(n)) clean[n] = 1;
   for (const [n, q] of Object.entries(roster)) if (q >= BONUS_AT) clean[n] = 1;
   return clean;
-})();
+}
+let bonus = loadBonus();
 
-// party: up to 5 individual pals, each with hand-tracked details
+// parties: each holds up to 5 individual pals with hand-tracked details.
+// `reserve: true` (the default, and the old single-party behavior) means the
+// party's pals are claimed before bases — not counted as free base labor.
 function normalizeMember(m) {
   if (!m || !byName.has(m.name)) return null;
   const lvl = Math.floor(Number(m.level));
@@ -129,25 +138,48 @@ function normalizeMember(m) {
     passives,
   };
 }
-let party = lsLoad(LS_PARTY, []).map(normalizeMember).filter(Boolean).slice(0, PARTY_SIZE);
-let partyMemo = (() => {
+const normalizeParty = (pt, i) => ({
+  id: String(pt.id || 'p' + Date.now().toString(36) + i),
+  name: String(pt.name || `Party ${i + 1}`).slice(0, 40),
+  reserve: pt.reserve !== false,
+  members: (Array.isArray(pt.members) ? pt.members : []).map(normalizeMember).filter(Boolean).slice(0, PARTY_SIZE),
+});
+function loadParties() {
+  const v1 = lsLoad(LS_PARTIES, null);
+  // non-array valid JSON (hand-edited storage) must not throw — fall through
+  if (Array.isArray(v1)) return v1.filter(pt => pt && typeof pt === 'object').map(normalizeParty);
+  // migrate the legacy single party (kept in storage untouched for downgrade safety)
+  const legacy = lsLoad(LS_PARTY, []).map(normalizeMember).filter(Boolean).slice(0, PARTY_SIZE);
+  return legacy.length ? [normalizeParty({ name: 'Party 1', reserve: true, members: legacy }, 0)] : [];
+}
+let parties = loadParties();
+function loadPartyMemo() {
   const clean = {};
   for (const [n, m] of Object.entries(lsLoad(LS_PARTY_MEMO, {}))) {
     const v = normalizeMember({ ...m, name: n });
     if (v) clean[n] = v;
   }
   return clean;
-})();
+}
+let partyMemo = loadPartyMemo();
 
-// accepts legacy ["A","B"] and current [{name, qty}]; merges duplicates
+// accepts legacy ["A","B"] and current [{name, qty, seq}]; merges duplicates.
+// seq is the assignment-order stamp that decides who claims copies first —
+// merged duplicates keep the EARLIEST seq (first claim wins).
 function normalizeCrew(crew) {
   const m = new Map();
   for (const item of crew) {
     const name = typeof item === 'string' ? item : item && item.name;
     const qty = typeof item === 'string' ? 1 : Math.max(1, Math.floor(Number(item && item.qty) || 1));
-    if (byName.has(name)) m.set(name, (m.get(name) || 0) + qty);
+    const seq = typeof item === 'object' && item && Number.isFinite(Number(item.seq)) ? Number(item.seq) : null;
+    if (!byName.has(name)) continue;
+    const prev = m.get(name);
+    if (prev) {
+      prev.qty += qty;
+      if (seq !== null && (prev.seq === null || seq < prev.seq)) prev.seq = seq;
+    } else m.set(name, { qty, seq });
   }
-  return [...m].map(([name, qty]) => ({ name, qty }));
+  return [...m].map(([name, v]) => ({ name, qty: v.qty, ...(v.seq !== null ? { seq: v.seq } : {}) }));
 }
 
 function clampCap(n) {
@@ -161,9 +193,23 @@ const normalizeBase = b => ({
   coverBasics: b.coverBasics !== false,
 });
 
-let bases = lsLoad(LS_BASES, [])
-  .filter(b => b && b.id && Array.isArray(b.crew))
-  .map(normalizeBase);
+// next assignment-order stamp; entries without one (pre-seq saves and imports)
+// get stamped in base-list order, which reproduces the old base-order allocation
+let nextSeq = 1;
+function stampSeqs(list) {
+  let max = 0;
+  for (const b of list) for (const e of b.crew) if (e.seq) max = Math.max(max, e.seq);
+  nextSeq = max + 1;
+  for (const b of list) for (const e of b.crew) if (!e.seq) e.seq = nextSeq++;
+  return list;
+}
+function loadBases() {
+  const raw = lsLoad(LS_BASES, []);
+  return stampSeqs((Array.isArray(raw) ? raw : [])
+    .filter(b => b && b.id && Array.isArray(b.crew))
+    .map(normalizeBase));
+}
+let bases = loadBases();
 
 let ui = Object.assign(
   { view: 'roster', baseId: null, search: '', element: '', works: [], tier: '', bonus5: '', pskill: '', owned: '', sort: 'dex' },
@@ -180,13 +226,95 @@ if (ui.ownedOnly === true && !ui.owned) ui.owned = 'yes';
 delete ui.ownedOnly;
 if (!['', 'yes', 'no'].includes(ui.owned)) ui.owned = '';
 
-function persist() {
-  localStorage.setItem(LS_ROSTER, JSON.stringify(roster));
-  localStorage.setItem(LS_BASES, JSON.stringify(bases));
-  localStorage.setItem(LS_UI, JSON.stringify(ui));
-  localStorage.setItem(LS_BONUS, JSON.stringify(bonus));
-  localStorage.setItem(LS_PARTY, JSON.stringify(party));
-  localStorage.setItem(LS_PARTY_MEMO, JSON.stringify(partyMemo));
+/* ---- persistence + undo history ----
+   persist(label) saves the DATA keys; a label also records an undo snapshot of
+   the pre-change state (read from localStorage, which every mutation path keeps
+   current). persistUI() saves only the view/filter state — no snapshot, and the
+   storage-sync listener ignores it so tabs keep independent views. */
+const DATA_KEYS = [LS_ROSTER, LS_BASES, LS_BONUS, LS_PARTIES, LS_PARTY_MEMO];
+const HISTORY_MAX = 5;
+const HISTORY_COALESCE_MS = 3000; // rapid same-label actions (stepper clicks) undo as one
+let history = []; // in-memory, per tab: [{label, at, extAt, data: {key: rawJSONString|null}}]
+let externalWrites = 0; // bumped whenever another tab's write is applied here
+
+function pushHistory(label) {
+  const at = Date.now();
+  const last = history[history.length - 1];
+  if (last && last.label === label && last.extAt === externalWrites && at - last.at < HISTORY_COALESCE_MS) { last.at = at; return; }
+  const data = {};
+  for (const k of DATA_KEYS) data[k] = localStorage.getItem(k);
+  history.push({ label, at, extAt: externalWrites, data });
+  if (history.length > HISTORY_MAX) history.shift();
+  paintUndo();
+}
+
+// restore to before history[i]; discards it and everything after it
+function undoTo(i) {
+  const entry = history[i];
+  if (!entry) return;
+  // snapshots are whole-state: if another tab wrote since this one was taken,
+  // restoring would silently discard that tab's work — ask first
+  if (externalWrites > entry.extAt &&
+    !confirm('Another tab saved changes after this point — undoing here will discard them too. Undo anyway?')) return;
+  history = history.slice(0, i);
+  closeModal();
+  try {
+    for (const [k, v] of Object.entries(entry.data)) {
+      if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v);
+    }
+  } catch { warnSaveFailure(); }
+  reloadData();
+  if (ui.baseId && !bases.find(b => b.id === ui.baseId)) ui.baseId = null;
+  persistUI();
+  paintUndo();
+  render();
+}
+
+let saveWarned = false;
+function warnSaveFailure() {
+  if (saveWarned) return;
+  saveWarned = true;
+  document.body.append(el('div', { class: 'save-warn' },
+    '⚠ Changes are NOT being saved — browser storage is blocked or full. Use Export to back up your data.'));
+}
+
+function persist(label) {
+  if (label) pushHistory(label);
+  // serialize first, then write; on a mid-sequence failure (quota), roll back
+  // the keys already written so storage is never left half old / half new —
+  // other tabs adopt whatever lands here via the storage event
+  const values = [
+    [LS_ROSTER, JSON.stringify(roster)],
+    [LS_BASES, JSON.stringify(bases)],
+    [LS_BONUS, JSON.stringify(bonus)],
+    [LS_PARTIES, JSON.stringify(parties)],
+    [LS_PARTY_MEMO, JSON.stringify(partyMemo)],
+  ];
+  const prev = values.map(([k]) => [k, localStorage.getItem(k)]);
+  const written = [];
+  try {
+    for (const [k, v] of values) { localStorage.setItem(k, v); written.push(k); }
+  } catch {
+    try {
+      for (const [k, v] of prev) {
+        if (!written.includes(k)) continue;
+        if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v);
+      }
+    } catch { /* rollback is best-effort */ }
+    warnSaveFailure();
+  }
+}
+function persistUI() {
+  try { localStorage.setItem(LS_UI, JSON.stringify(ui)); } catch { /* view state only */ }
+}
+
+// re-read every data global from localStorage (undo restore / another tab wrote)
+function reloadData() {
+  roster = loadRoster();
+  bonus = loadBonus();
+  parties = loadParties();
+  partyMemo = loadPartyMemo();
+  bases = loadBases();
 }
 
 /* ================= helpers ================= */
@@ -208,10 +336,10 @@ function el(tag, attrs = {}, ...children) {
 
 const copiesOf = name => roster[name] || 0;
 const isOwned = name => copiesOf(name) > 0;
-function setCopies(name, n) {
+function setCopies(name, n, label) {
   if (n > 0) roster[name] = n; else delete roster[name];
   if (n >= BONUS_AT) bonus[name] = 1; // sticky: earned for good
-  persist();
+  persist(label || `Roster: ${name}`);
 }
 const uniqueOwned = () => Object.keys(roster).length;
 const totalCopies = () => Object.values(roster).reduce((a, b) => a + b, 0);
@@ -223,22 +351,35 @@ const crewTotal = base => base.crew.reduce((s, e) => s + e.qty, 0);
 const crewQty = (base, name) => (crewEntry(base, name) || { qty: 0 }).qty;
 function addToCrew(base, name, n = 1) {
   const e = crewEntry(base, name);
-  if (e) e.qty += n; else base.crew.push({ name, qty: n });
+  // an increment keeps the entry's original claim stamp (its first-add order)
+  if (e) e.qty += n; else base.crew.push({ name, qty: n, seq: nextSeq++ });
 }
 function setCrewQty(base, name, qty) {
   if (qty <= 0) base.crew = base.crew.filter(e => e.name !== name);
   else crewEntry(base, name).qty = qty;
 }
-const partyCount = name => party.reduce((s, m) => s + (m.name === name ? 1 : 0), 0);
+// copies claimed by reserve parties (reserve = not available as base labor)
+const partyCount = name => parties.reduce((s, pt) =>
+  s + (pt.reserve ? pt.members.reduce((c, m) => c + (m.name === name ? 1 : 0), 0) : 0), 0);
+// total members of `name` across all parties (for chips/warnings)
+const inAnyParty = name => parties.reduce((s, pt) =>
+  s + pt.members.reduce((c, m) => c + (m.name === name ? 1 : 0), 0), 0);
 
-/* Owned copies are allocated to the PARTY first, then to bases in list order
-   (the first base on the Bases screen gets first claim). A copy assigned to
-   one place is never counted as available to another. */
+/* Owned copies are allocated to RESERVE PARTIES first, then to base crew
+   entries in the order the assignments were made (each entry's seq stamp) —
+   NOT base-list order. A copy assigned to one place is never counted as
+   available to another. */
 function allocatedTo(base, name) {
   let remaining = Math.max(0, copiesOf(name) - partyCount(name));
+  const claims = [];
   for (const b of bases) {
-    const take = Math.min(crewQty(b, name), remaining);
-    if (b.id === base.id) return take;
+    const e = crewEntry(b, name);
+    if (e) claims.push({ id: b.id, qty: e.qty, seq: e.seq || 0 });
+  }
+  claims.sort((a, b) => a.seq - b.seq);
+  for (const c of claims) {
+    const take = Math.min(c.qty, remaining);
+    if (c.id === base.id) return take;
     remaining -= take;
   }
   return 0;
@@ -297,7 +438,7 @@ function bonusBadge(p, onAfter) {
     onclick: e => {
       e.stopPropagation();
       if (done) delete bonus[p.name]; else bonus[p.name] = 1;
-      persist(); onAfter();
+      persist(`★5 toggle: ${p.name}`); onAfter();
     }
   }, done ? '★5' : `${Math.min(copies, BONUS_AT)}/${BONUS_AT}`);
 }
@@ -429,10 +570,10 @@ function renderRoster() {
 
   const searchInput = el('input', {
     type: 'search', placeholder: 'Search name or #paldex…', value: ui.search,
-    oninput: e => { ui.search = e.target.value.trim(); persist(); renderList(); }
+    oninput: e => { ui.search = e.target.value.trim(); persistUI(); renderList(); }
   });
   const elementSel = el('select',
-    { onchange: e => { ui.element = e.target.value; persist(); renderList(); } },
+    { onchange: e => { ui.element = e.target.value; persistUI(); renderList(); } },
     el('option', { value: '' }, 'Any element'),
     ELEMENTS.map(x => el('option', { value: x, selected: ui.element === x ? '' : null }, x))
   );
@@ -451,7 +592,7 @@ function renderRoster() {
       cb.addEventListener('change', () => {
         ui.works = cb.checked ? [...ui.works, w] : ui.works.filter(x => x !== w);
         btn.firstChild.textContent = btnLabel();
-        persist(); renderList();
+        persistUI(); renderList();
       });
       panel.append(el('label', { class: 'multi-row' }, cb, ' ', w));
     }
@@ -461,7 +602,7 @@ function renderRoster() {
         ui.works = [];
         panel.querySelectorAll('input').forEach(c => { c.checked = false; });
         btn.firstChild.textContent = btnLabel();
-        persist(); renderList();
+        persistUI(); renderList();
       }
     }, 'Clear'));
     wrap.append(btn, panel);
@@ -472,40 +613,53 @@ function renderRoster() {
     return wrap;
   })();
   const sortSel = el('select',
-    { onchange: e => { ui.sort = e.target.value; persist(); renderList(); } },
+    { onchange: e => { ui.sort = e.target.value; persistUI(); renderList(); } },
     [['dex', 'Sort: Paldex'], ['name', 'Sort: Name'], ['total', 'Sort: Total levels'], ['best', 'Sort: Best level'], ['tier', 'Sort: Combat tier'], ['bonus', 'Sort: 5-catch progress']]
       .map(([v, t]) => el('option', { value: v, selected: ui.sort === v ? '' : null }, t))
   );
   const bonusSel = el('select',
-    { onchange: e => { ui.bonus5 = e.target.value; persist(); renderList(); } },
+    { onchange: e => { ui.bonus5 = e.target.value; persistUI(); renderList(); } },
     [['', '5-catch: any'], ['done', '5-catch: done ★'], ['not', '5-catch: not yet']]
       .map(([v, t]) => el('option', { value: v, selected: ui.bonus5 === v ? '' : null }, t))
   );
   const pskillSel = el('select',
-    { onchange: e => { ui.pskill = e.target.value; persist(); renderList(); } },
+    { onchange: e => { ui.pskill = e.target.value; persistUI(); renderList(); } },
     [['', 'Partner skill: any'], ['base', 'While at base'], ['ranch', 'Ranch drops'], ['party', 'In party'],
      ['active', 'When activated'], ['mount', 'Mount / ride'], ['passive', 'Always-on']]
       .map(([v, t]) => el('option', { value: v, selected: ui.pskill === v ? '' : null }, t))
   );
   const tierSel = el('select',
-    { onchange: e => { ui.tier = e.target.value; persist(); renderList(); } },
+    { onchange: e => { ui.tier = e.target.value; persistUI(); renderList(); } },
     el('option', { value: '' }, 'Any tier'),
     ['S', 'A', 'B', 'C', 'F'].map(t => el('option', { value: t, selected: ui.tier === t ? '' : null }, 'Tier ' + TIER_NAMES[t]))
   );
   const ownedSel = el('select',
-    { onchange: e => { ui.owned = e.target.value; persist(); renderList(); } },
+    { onchange: e => { ui.owned = e.target.value; persistUI(); renderList(); } },
     [['', 'Owned: any'], ['yes', 'Owned only'], ['no', 'Not owned yet']]
       .map(([v, t]) => el('option', { value: v, selected: ui.owned === v ? '' : null }, t))
   );
+  const hasActiveFilters = () =>
+    !!(ui.search || ui.element || ui.works.length || ui.tier || ui.bonus5 || ui.pskill || ui.owned);
+  const resetBtn = el('button', {
+    class: 'ghost reset-filters', type: 'button',
+    title: 'Clear the search and every filter (sort is kept)',
+    onclick: () => {
+      Object.assign(ui, { search: '', element: '', works: [], tier: '', bonus5: '', pskill: '', owned: '' });
+      persistUI();
+      renderRoster(); // rebuild the toolbar so every control shows its cleared state
+    }
+  }, 'Reset filters');
   const countPill = el('span', { class: 'count-pill' });
 
   view.append(
     el('div', { class: 'toolbar' }, searchInput, elementSel, workSel, tierSel, bonusSel, pskillSel, ownedSel, sortSel,
-      el('span', { class: 'spacer' }), countPill),
+      resetBtn, el('span', { class: 'spacer' }), countPill),
     listWrap
   );
+  resetBtn.hidden = !hasActiveFilters();
 
   function renderList() {
+    resetBtn.hidden = !hasActiveFilters();
     const pals = sortPals(PALS.filter(matchesFilters));
     countPill.innerHTML = '';
     countPill.append('Own ', el('b', {}, String(uniqueOwned())), ` / ${PALS.length}`,
@@ -540,7 +694,7 @@ function renderRoster() {
         elementChips(p),
         combatCluster(p),
         bonusBadge(p, () => renderList()),
-        partyCount(p.name) ? el('span', { class: 'party-chip', title: 'In your party — not counted as free base labor' },
+        partyCount(p.name) ? el('span', { class: 'party-chip', title: 'In a reserve party — not counted as free base labor' },
           '⚔' + (partyCount(p.name) > 1 ? '×' + partyCount(p.name) : '')) : '',
         el('span', { class: 'work-chips' }, sortedWorks(p).map(([w, l]) => {
           const chip = workChip(w, l, p);
@@ -564,33 +718,87 @@ function renderRoster() {
 }
 
 /* ================= party view ================= */
-function addToParty(name) {
-  if (party.length >= PARTY_SIZE || !byName.has(name)) return;
-  party.push(partyMemo[name] ? { ...partyMemo[name], name } : normalizeMember({ name }));
-  persist(); render(); renderHeaderStats();
+function newParty() {
+  parties.push(normalizeParty({ name: `Party ${parties.length + 1}`, reserve: true, members: [] }, parties.length));
+  persist('New party'); render();
 }
-function removeFromParty(i) {
-  const m = party[i];
+function addToParty(pt, name) {
+  if (pt.members.length >= PARTY_SIZE || !byName.has(name)) return;
+  pt.members.push(partyMemo[name] ? { ...partyMemo[name], name } : normalizeMember({ name }));
+  persist(`Party: add ${name}`); render(); renderHeaderStats();
+}
+function removeFromParty(pt, i) {
+  const m = pt.members[i];
   if (!m) return;
   partyMemo[m.name] = { ...m }; // remember details for re-add
-  party.splice(i, 1);
-  persist(); render(); renderHeaderStats();
+  pt.members.splice(i, 1);
+  persist(`Party: remove ${m.name}`); render(); renderHeaderStats();
 }
 
 function renderParty() {
   const view = $('#view');
   view.innerHTML = '';
+  if (!parties.length) {
+    view.append(el('div', { class: 'panel party-summary' },
+      el('h3', {}, 'Parties'),
+      el('div', { class: 'tips' },
+        'Track your travel teams as individuals — nickname, level, condense stars, passives. ' +
+        'A party marked "reserve" claims your copies before any base can use them, so a pal in it never counts as free base labor.'),
+      el('button', { class: 'btn', onclick: newParty }, '+ New party')));
+    return;
+  }
+  parties.forEach((pt, pi) => view.append(partyBlock(pt, pi)));
+  view.append(el('div', { class: 'party-add-row' },
+    el('button', { class: 'ghost', onclick: newParty }, '+ New party')));
+}
+
+function partyBlock(pt, pi) {
+  const block = el('div', { class: 'party-block' });
+  const party = pt.members; // keeps the member-card code below unchanged
+
+  block.append(el('div', { class: 'party-block-head' },
+    el('input', {
+      class: 'base-name party-name', value: pt.name, maxlength: '40',
+      onchange: e => { pt.name = e.target.value.trim() || `Party ${pi + 1}`; e.target.value = pt.name; persist('Rename party'); }
+    }),
+    el('span', { class: 'hint' }, `${party.length} / ${PARTY_SIZE}`),
+    el('label', {
+      class: 'check reserve-check',
+      title: 'Reserve: copies in this party are claimed before bases — they never count as free base labor. Untick for a wishlist/theory team that should not affect base planning.'
+    },
+      el('input', {
+        type: 'checkbox', ...(pt.reserve ? { checked: '' } : {}),
+        onchange: e => { pt.reserve = e.target.checked; persist(`Party reserve ${e.target.checked ? 'on' : 'off'}: ${pt.name}`); render(); }
+      }),
+      '⚔ reserve copies'),
+    el('button', {
+      class: 'rm', title: 'Delete this party',
+      onclick: () => {
+        if (party.length && !confirm(`Delete "${pt.name}" (${party.length} member${party.length === 1 ? '' : 's'})? Member details are remembered for re-adding.`)) return;
+        // re-read storage after the blocking dialog (see Delete base), then
+        // re-resolve this party by id — indices may have shifted
+        reloadData();
+        const idx = parties.findIndex(x => x.id === pt.id);
+        if (idx !== -1) {
+          for (const m of parties[idx].members) partyMemo[m.name] = { ...m };
+          parties.splice(idx, 1);
+          persist(`Delete ${pt.name}`);
+        }
+        render(); renderHeaderStats();
+      }
+    }, '✕')
+  ));
 
   const summary = el('div', { class: 'panel party-summary' });
   const grid = el('div', { class: 'party-grid' });
-  view.append(summary, grid);
+  block.append(summary, grid);
 
   function paintSummary() {
     summary.innerHTML = '';
-    summary.append(el('h3', {}, `Party (${party.length} / ${PARTY_SIZE})`));
     if (!party.length) {
-      summary.append(el('div', { class: 'tips' },
-        'Your active travel team. Party pals are claimed before any base can use them — a copy in your party never counts as free base labor.'));
+      summary.append(el('div', { class: 'tips' }, pt.reserve
+        ? 'Party pals are claimed before any base can use them — a copy in a reserve party never counts as free base labor.'
+        : 'Not a reserve party — these picks stay available to bases.'));
       return;
     }
     const members = party.map(m => byName.get(m.name)).filter(Boolean);
@@ -619,11 +827,11 @@ function renderParty() {
   function memberCard(m, i) {
     const p = byName.get(m.name);
     const card = el('div', { class: 'party-card' });
-    const short = partyCount(m.name) > copiesOf(m.name);
+    const short = pt.reserve && partyCount(m.name) > copiesOf(m.name);
 
     const nick = el('input', {
       class: 'nick', type: 'text', maxlength: '30', placeholder: 'Nickname…', value: m.nickname,
-      onchange: e => { m.nickname = e.target.value.trim(); persist(); }
+      onchange: e => { m.nickname = e.target.value.trim(); persist(`Edit ${m.nickname || m.name}`); }
     });
     card.append(el('div', { class: 'party-head' },
       palIcon(p, 'pal-icon party-icon'),
@@ -631,7 +839,7 @@ function renderParty() {
         el('div', {},
           el('span', { class: 'pal-id' }, dexLabel(p)), ' ',
           el('a', { href: 'https://paldb.cc/en/' + p.slug, target: '_blank', rel: 'noopener' }, p.name))),
-      el('button', { class: 'rm', title: 'Remove from party (details are remembered)', onclick: () => removeFromParty(i) }, '✕')
+      el('button', { class: 'rm', title: 'Remove from party (details are remembered)', onclick: () => removeFromParty(pt, i) }, '✕')
     ));
 
     card.append(el('div', { class: 'party-row' }, elementChips(p), combatCluster(p), foodChip(p)));
@@ -643,7 +851,7 @@ function renderParty() {
         stars.append(el('button', {
           class: 'star' + (m.stars >= s ? ' on' : ''),
           title: `Condenser rank ${s}★` + (m.stars === s ? ' (click to clear)' : ''),
-          onclick: () => { m.stars = m.stars === s ? s - 1 : s; persist(); paintStars(); }
+          onclick: () => { m.stars = m.stars === s ? s - 1 : s; persist(`Edit ${m.nickname || m.name}`); paintStars(); }
         }, m.stars >= s ? '★' : '☆'));
       }
     };
@@ -656,7 +864,7 @@ function renderParty() {
           const v = Math.floor(Number(e.target.value));
           m.level = Number.isFinite(v) && v >= 1 ? Math.min(v, 100) : 0;
           e.target.value = m.level || '';
-          persist(); paintSummary();
+          persist(`Edit ${m.nickname || m.name}`); paintSummary();
         }
       })),
       stars
@@ -666,7 +874,7 @@ function renderParty() {
     m.passives.forEach((val, pi) => {
       passWrap.append(el('input', {
         type: 'text', maxlength: '40', placeholder: 'passive ' + (pi + 1), value: val,
-        onchange: e => { m.passives[pi] = e.target.value.trim(); persist(); }
+        onchange: e => { m.passives[pi] = e.target.value.trim(); persist(`Edit ${m.nickname || m.name}`); }
       }));
     });
     card.append(passWrap);
@@ -694,7 +902,7 @@ function renderParty() {
       for (const p of matches) {
         drop.append(el('div', {
           class: 'pick-row',
-          onmousedown: e => { e.preventDefault(); addToParty(p.name); }
+          onmousedown: e => { e.preventDefault(); addToParty(pt, p.name); }
         },
           palIcon(p, 'pal-icon'),
           el('span', { class: 'pal-id' }, dexLabel(p)),
@@ -717,6 +925,7 @@ function renderParty() {
   paintSummary();
   party.forEach((m, i) => grid.append(memberCard(m, i)));
   for (let i = party.length; i < PARTY_SIZE; i++) grid.append(emptyCard());
+  return block;
 }
 
 /* ================= quick add to base ================= */
@@ -727,7 +936,7 @@ function tryQuickAdd(base, p, btn) {
     return false;
   }
   addToCrew(base, p.name, 1);
-  persist();
+  persist(`Add ${p.name} to ${base.name}`);
   if (btn) {
     const original = btn.textContent;
     btn.textContent = `✓ ${base.name}`;
@@ -776,7 +985,14 @@ function newBase() {
   const base = { id: 'b' + Date.now().toString(36), name: `Base ${bases.length + 1}`, crew: [], cap: CAP_DEFAULT, purpose: 'balanced', coverBasics: true };
   bases.push(base);
   ui.baseId = base.id;
-  persist(); renderHeaderStats(); render();
+  persist('New base'); persistUI(); renderHeaderStats(); render();
+}
+
+function moveBase(i, dir) {
+  const j = i + dir;
+  if (j < 0 || j >= bases.length) return;
+  [bases[i], bases[j]] = [bases[j], bases[i]];
+  persist('Reorder bases'); render();
 }
 
 function renderBases() {
@@ -786,12 +1002,15 @@ function renderBases() {
   if (base) return renderEditor(view, base);
 
   const grid = el('div', { class: 'grid-cards' });
-  for (const b of bases) {
+  bases.forEach((b, i) => {
     const total = crewTotal(b);
     const missing = baseShortfall(b);
     const det = coverageDetail(b);
     const covered = WORKS.filter(w => det[w].levels.length > 0).length;
-    grid.append(el('div', { class: 'base-card', onclick: () => { ui.baseId = b.id; persist(); render(); } },
+    grid.append(el('div', { class: 'base-card', onclick: () => { ui.baseId = b.id; persistUI(); render(); } },
+      el('div', { class: 'base-order', title: 'Change display order (does not change who gets your copies — those go in the order you assigned them)' },
+        el('button', { class: 'ghost ord', disabled: i === 0 ? '' : null, onclick: e => { e.stopPropagation(); moveBase(i, -1); } }, '↑'),
+        el('button', { class: 'ghost ord', disabled: i === bases.length - 1 ? '' : null, onclick: e => { e.stopPropagation(); moveBase(i, 1); } }, '↓')),
       el('h3', {}, b.name),
       el('div', { class: 'meta', title: crewFood(b) ? FOOD_TIP : null },
         (b.purpose !== 'balanced' ? `${PRESETS[b.purpose].label} · ` : '') +
@@ -800,7 +1019,7 @@ function renderBases() {
         ? el('div', { class: 'missing' }, `⚠ ${missing} cop${missing === 1 ? 'y' : 'ies'} still to catch`)
         : el('div', { class: 'meta', style: 'color: var(--ok)' }, total ? '✓ full crew owned' : 'empty')
     ));
-  }
+  });
   grid.append(el('div', { class: 'base-card new', onclick: newBase }, '+ New base'));
   view.append(grid);
   if (!bases.length) {
@@ -812,23 +1031,27 @@ function renderBases() {
 /* ================= base editor ================= */
 function renderEditor(view, base) {
   const head = el('div', { class: 'editor-head' },
-    el('button', { class: 'ghost', onclick: () => { ui.baseId = null; persist(); render(); } }, '← All bases'),
+    el('button', { class: 'ghost', onclick: () => { ui.baseId = null; persistUI(); render(); } }, '← All bases'),
     el('input', {
       class: 'base-name', value: base.name, maxlength: '40',
-      onchange: e => { base.name = e.target.value.trim() || 'Unnamed base'; e.target.value = base.name; persist(); renderHeaderStats(); }
+      onchange: e => { base.name = e.target.value.trim() || 'Unnamed base'; e.target.value = base.name; persist('Rename base'); renderHeaderStats(); }
     }),
     el('label', { class: 'cap-field', title: 'Maximum workers at this base — raise it as you upgrade the base in-game' },
       'Max workers',
       el('input', {
         type: 'number', min: '1', max: String(CAP_MAX), value: String(base.cap),
-        onchange: e => { base.cap = clampCap(e.target.value); e.target.value = String(base.cap); persist(); refresh(); }
+        onchange: e => { base.cap = clampCap(e.target.value); e.target.value = String(base.cap); persist('Change max workers'); refresh(); }
       })
     ),
     el('button', {
       class: 'btn warn-btn', onclick: () => {
-        if (confirm(`Delete "${base.name}"? This cannot be undone.`)) {
+        if (confirm(`Delete "${base.name}"? (Undo in the top bar can bring it back.)`)) {
+          // the dialog blocks the event loop — another tab may have written while
+          // it was open, so re-read storage before mutating (its storage event
+          // is still queued and would otherwise be clobbered)
+          reloadData();
           bases = bases.filter(b => b.id !== base.id);
-          ui.baseId = null; persist(); renderHeaderStats(); render();
+          ui.baseId = null; persist(`Delete ${base.name}`); persistUI(); renderHeaderStats(); render();
         }
       }
     }, 'Delete base')
@@ -840,7 +1063,7 @@ function renderEditor(view, base) {
 
   function refresh() { left.innerHTML = ''; right.innerHTML = ''; buildLeft(); buildRight(); }
 
-  function addPal(name) { addToCrew(base, name, 1); persist(); refresh(); }
+  function addPal(name) { addToCrew(base, name, 1); persist(`Add ${name}`); refresh(); }
 
   /* ---- crew panel (left) ---- */
   function buildLeft() {
@@ -913,7 +1136,7 @@ function renderEditor(view, base) {
         el('b', {}, p.name),
         isNight(p) ? el('span', { class: 'night', title: 'Works through the night' }, '🌙') : null,
         status,
-        qtyStepper(() => crewQty(base, entry.name), n => { setCrewQty(base, entry.name, n); persist(); }, refresh),
+        qtyStepper(() => crewQty(base, entry.name), n => { setCrewQty(base, entry.name, n); persist(`Crew: ${entry.name} (${base.name})`); }, refresh),
         (() => {
           const aw = Object.keys(AURA_BY_WORK).filter(w => AURA_BY_WORK[w] === p.name);
           return aw.length
@@ -921,7 +1144,7 @@ function renderEditor(view, base) {
             : '';
         })(),
         el('span', { class: 'work-chips' }, sortedWorks(p).map(([w, l]) => workChip(w, l, p)), foodChip(p)),
-        el('button', { class: 'rm', title: 'Remove from crew', onclick: () => { setCrewQty(base, entry.name, 0); persist(); refresh(); } }, '✕')
+        el('button', { class: 'rm', title: 'Remove from crew', onclick: () => { setCrewQty(base, entry.name, 0); persist(`Remove ${entry.name}`); refresh(); } }, '✕')
       ));
     }
     crewPanel.append(list);
@@ -934,13 +1157,13 @@ function renderEditor(view, base) {
     const basicsChk = el('label', { class: 'check', title: 'Adds a food-farm crew (planting/watering/gathering, raw-food scale), haulers, handiwork and a medic before filling the specialty — so the base needs no supply runs' },
       el('input', {
         type: 'checkbox', ...(base.coverBasics ? { checked: '' } : {}),
-        onchange: e => { base.coverBasics = e.target.checked; persist(); }
+        onchange: e => { base.coverBasics = e.target.checked; persist('Toggle self-sufficient'); }
       }),
       'self-sufficient (grows its own food)'
     );
     basicsChk.hidden = base.purpose === 'balanced';
     const purposeSel = el('select',
-      { onchange: e => { base.purpose = e.target.value; basicsChk.hidden = base.purpose === 'balanced'; persist(); refresh(); } },
+      { onchange: e => { base.purpose = e.target.value; basicsChk.hidden = base.purpose === 'balanced'; persist('Change purpose'); refresh(); } },
       Object.entries(PRESETS).map(([v, pr]) =>
         el('option', { value: v, selected: base.purpose === v ? '' : null }, 'Purpose: ' + pr.label))
     );
@@ -948,7 +1171,7 @@ function renderEditor(view, base) {
       purposeSel,
       basicsChk,
       el('button', { class: 'btn', onclick: () => { autofill(base); refresh(); } }, 'Auto-fill from my roster'),
-      el('button', { class: 'ghost', onclick: () => { base.crew = []; persist(); refresh(); } }, 'Clear crew')
+      el('button', { class: 'ghost', onclick: () => { base.crew = []; persist(`Clear crew — ${base.name}`); refresh(); } }, 'Clear crew')
     ));
     if (base.purpose !== 'balanced') {
       const auras = auraStatus(base, PRESETS[base.purpose].recipe);
@@ -1080,7 +1303,7 @@ function renderEditor(view, base) {
       }
       needPanel.append(list);
       needPanel.append(el('div', { class: 'tips' },
-        'Pal names link to paldb.cc for spawn locations and breeding combos. Owned copies are assigned to bases in the order they appear on the Bases screen — "elsewhere" means an earlier base has claimed them.'));
+        'Pal names link to paldb.cc for spawn locations and breeding combos. Owned copies go to reserve parties first, then to crews in the order you assigned them — "elsewhere" means an earlier assignment claimed them.'));
     }
 
     right.append(covPanel, needPanel);
@@ -1214,7 +1437,7 @@ function autofill(base) {
     if (base.coverBasics) fillBasics(base);
   }
   fillRecipe(base, preset.recipe);
-  persist();
+  persist(`Auto-fill ${base.name}`);
 }
 
 /* ================= work modal ================= */
@@ -1268,7 +1491,7 @@ function openWorkModal(work, base, onChange) {
         el('button', {
           class: 'add-btn',
           onclick: () => {
-            addToCrew(base, p.name, 1); persist(); onChange();
+            addToCrew(base, p.name, 1); persist(`Add ${p.name}`); onChange();
             crewChip.hidden = false;
             crewChip.textContent = `in crew ×${crewQty(base, p.name)}`;
           }
@@ -1295,18 +1518,23 @@ $('#tabs').addEventListener('click', e => {
   const btn = e.target.closest('.tab');
   if (!btn) return;
   ui.view = btn.dataset.view;
-  persist(); render();
+  persistUI(); render();
 });
 
 $('#modal-close').addEventListener('click', closeModal);
 $('#modal-root').addEventListener('click', e => { if (e.target.classList.contains('modal-backdrop')) closeModal(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-/* export / import — accepts both current and pre-count backup formats */
+/* export / import — accepts current (v2, parties) and both legacy formats */
 $('#btn-export').addEventListener('click', () => {
-  const blob = new Blob([JSON.stringify({ exportedAt: new Date().toISOString(), roster, bases, bonus, party, partyMemo }, null, 2)],
-    { type: 'application/json' });
-  const a = el('a', { href: URL.createObjectURL(blob), download: 'palpedia-tracker-backup.json' });
+  const payload = {
+    version: 2, exportedAt: new Date().toISOString(),
+    roster, bases, bonus, parties, partyMemo,
+    // legacy field so pre-parties versions of the app can still import this file
+    party: (parties.find(pt => pt.reserve) || parties[0] || { members: [] }).members,
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const a = el('a', { href: URL.createObjectURL(blob), download: `palpedia-backup-${new Date().toISOString().slice(0, 10)}.json` });
   document.body.append(a); a.click(); a.remove();
 });
 $('#btn-import').addEventListener('click', () => $('#import-file').click());
@@ -1327,26 +1555,94 @@ $('#import-file').addEventListener('change', async e => {
       }
     } else throw new Error('bad shape');
     if (!Array.isArray(data.bases)) throw new Error('bad shape');
+    // NOTE: not stamped yet — stampSeqs mutates the global nextSeq, which must
+    // not change if the user cancels the confirm below
     const newBases = data.bases.filter(b => b && b.id && Array.isArray(b.crew))
       .map(normalizeBase);
+    const newParties = Array.isArray(data.parties)
+      ? data.parties.filter(pt => pt && typeof pt === 'object').map(normalizeParty)
+      : Array.isArray(data.party) && data.party.length
+        ? [normalizeParty({ name: 'Party 1', reserve: true, members: data.party }, 0)]
+        : [];
     const copies = Object.values(newRoster).reduce((a, b) => a + b, 0);
-    if (!confirm(`Import ${Object.keys(newRoster).length} owned pals (${copies} copies) and ${newBases.length} bases? This replaces your current data.`)) return;
+    const partyN = newParties.reduce((s, pt) => s + pt.members.length, 0);
+    if (!confirm(
+      `Import ${Object.keys(newRoster).length} owned pals (${copies} copies), ${newBases.length} bases and ${partyN} party pals?\n\n` +
+      `This REPLACES your current roster, bases, parties and ★5 marks ` +
+      `(you have ${uniqueOwned()} pals, ${bases.length} bases, ${parties.reduce((s, pt) => s + pt.members.length, 0)} party pals). ` +
+      `Undo in the top bar can restore them.`)) return;
     roster = newRoster;
-    bases = newBases;
+    bases = stampSeqs(newBases);
     bonus = {};
     for (const n of Object.keys(data.bonus || {})) if (byName.has(n)) bonus[n] = 1;
     for (const [n, q] of Object.entries(roster)) if (q >= BONUS_AT) bonus[n] = 1;
-    party = (Array.isArray(data.party) ? data.party : []).map(normalizeMember).filter(Boolean).slice(0, PARTY_SIZE);
+    parties = newParties;
     partyMemo = {};
     for (const [n, m] of Object.entries(data.partyMemo || {})) {
       const v = normalizeMember({ ...m, name: n });
       if (v) partyMemo[n] = v;
     }
     ui.baseId = null;
-    persist(); render();
+    persist('Import backup'); persistUI(); render();
   } catch {
     alert('Could not read that file — expected a backup exported from this planner.');
   }
 });
 
+/* ================= undo (top bar) ================= */
+const undoBtn = $('#btn-undo');
+const undoHistBtn = $('#btn-undo-hist');
+const undoPanel = $('#undo-panel');
+
+function timeAgo(at) {
+  const s = Math.round((Date.now() - at) / 1000);
+  return s < 5 ? 'just now' : s < 60 ? `${s}s ago` : s < 3600 ? `${Math.round(s / 60)}m ago` : `${Math.round(s / 3600)}h ago`;
+}
+function paintUndo() {
+  const last = history[history.length - 1];
+  undoBtn.disabled = !last;
+  undoBtn.title = last ? `Undo: ${last.label}` : 'Nothing to undo yet (tracks your last 5 changes, this tab only)';
+  undoHistBtn.disabled = !last;
+  undoPanel.innerHTML = '';
+  if (!history.length) {
+    undoPanel.append(el('div', { class: 'undo-empty' }, 'No changes yet.'));
+    return;
+  }
+  [...history].reverse().forEach((h, ri) => {
+    const i = history.length - 1 - ri;
+    undoPanel.append(el('button', { class: 'undo-row', onclick: () => { undoPanel.hidden = true; undoTo(i); } },
+      el('span', { class: 'undo-label' }, h.label),
+      el('span', { class: 'undo-when' }, timeAgo(h.at))));
+  });
+  undoPanel.append(el('div', { class: 'undo-hint' }, 'Click an entry to undo it and everything after it.'));
+}
+undoBtn.addEventListener('click', () => { undoPanel.hidden = true; undoTo(history.length - 1); });
+undoHistBtn.addEventListener('click', () => { paintUndo(); undoPanel.hidden = !undoPanel.hidden; });
+document.addEventListener('mousedown', e => {
+  if (!undoPanel.hidden && !undoPanel.contains(e.target) && e.target !== undoHistBtn) undoPanel.hidden = true;
+});
+
+/* ================= multi-tab sync =================
+   Another tab wrote palplanner data: re-read it and re-render IMMEDIATELY, so
+   this tab can never save stale state over it. (An earlier design deferred the
+   reload while an input was focused — that left an unbounded window where this
+   tab's next save clobbered the other tab; an interrupted keystroke is the
+   lesser evil, and only happens when both tabs edit at the same moment.)
+   View state (palplanner.ui.v1) is NOT synced — each tab keeps its own
+   tab/filters/open base. Open modals are closed: their buttons hold references
+   to pre-reload objects and would silently edit detached state. */
+function applyExternalChange() {
+  externalWrites++;
+  closeModal();
+  reloadData();
+  if (ui.baseId && !bases.find(b => b.id === ui.baseId)) { ui.baseId = null; persistUI(); }
+  paintUndo();
+  render();
+}
+window.addEventListener('storage', e => {
+  if (e.key !== null && (!e.key.startsWith('palplanner.') || e.key === LS_UI)) return;
+  applyExternalChange();
+});
+
+paintUndo();
 render();

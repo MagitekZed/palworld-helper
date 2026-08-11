@@ -7,7 +7,9 @@ with purpose-driven auto-fill and see exactly which pals you still need to catch
 **Live app:** https://magitekzed.github.io/palworld-helper/
 
 No build step, no dependencies, no accounts — plain HTML/CSS/JS. Everything saves to
-your browser's localStorage, with JSON Export/Import for backups.
+your browser's localStorage, with JSON Export/Import for backups, **undo for your
+last five changes** (top bar, with a history dropdown), and live sync between open
+tabs — a change in one tab shows up in the others instead of being overwritten.
 
 **No ads, no tracking, no sign-up, nothing to install.** The app makes zero network
 requests after the page loads — all 298 pals, their stats, and every icon ship with it.
@@ -39,13 +41,15 @@ Your roster never leaves your browser, and it works offline once loaded.
   to paldb.cc for spawn maps and breeding combos
 - 🌙 marks Dark-type pals, which work through the night
 
-## Party
+## Parties
 
-- **Five slots** for your active travel team, tracked as *individuals*: nickname,
+- **Multiple parties**, each with five slots, tracked as *individuals*: nickname,
   level, condenser star rank (0–4★), and four free-text passive slots per pal —
   handy for planning surgery-table builds
-- **Party claims copies first** — a pal in your party is never counted as free base
-  labor; bases show it as "to catch" if you don't own a spare
+- **Reserve parties claim copies first** — each party has a "⚔ reserve copies"
+  checkbox. A pal in a reserve party is never counted as free base labor (bases
+  show it as "to catch" if you don't own a spare); untick it for wishlist or
+  theory teams that shouldn't affect base planning
 - **Summary strip** — tier lineup, average level, combined 🍖, and element coverage:
   which enemy elements your five hit for bonus damage and where you have no edge
   (chart from the v1.0 in-game elements guide)
@@ -77,7 +81,10 @@ Your roster never leaves your browser, and it works offline once loaded.
 - **Crew food total** — 🍖 sum on base cards and the crew panel, so you can compare
   how expensive bases are to feed
 - **Cross-base allocation** — a copy assigned to one base is never double-counted as
-  available to another (bases claim copies in list order)
+  available to another. Copies are claimed in the order you assigned them: if a pal
+  has been in Base 3 for a week and you add another slot for it to Base 1, Base 3
+  keeps its copy and Base 1 shows the shortfall. Base cards can be reordered (display
+  only)
 - **Catch list** — per-base shortfalls with a "Caught one!" button that updates your
   roster in place
 

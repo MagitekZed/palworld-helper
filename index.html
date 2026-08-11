@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Palpedia Tracker and Base Planner</title>
-<link rel="stylesheet" href="styles.css?v=17">
+<link rel="stylesheet" href="styles.css?v=18">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏕️</text></svg>">
 </head>
 <body>
@@ -22,6 +22,11 @@
     <button data-view="bases" class="tab">Bases</button>
   </nav>
   <div class="top-actions">
+    <span class="undo-wrap">
+      <button id="btn-undo" class="ghost" disabled>↶ Undo</button>
+      <button id="btn-undo-hist" class="ghost undo-caret" title="Recent changes (last 5, this tab)" disabled>▾</button>
+      <div id="undo-panel" class="undo-panel" hidden></div>
+    </span>
     <button id="btn-export" class="ghost" title="Download roster + bases as a JSON backup">Export</button>
     <button id="btn-import" class="ghost" title="Restore from a JSON backup">Import</button>
     <input type="file" id="import-file" accept="application/json" hidden>
@@ -47,6 +52,6 @@
 </footer>
 
 <script src="data.js?v=11"></script>
-<script src="app.js?v=19"></script>
+<script src="app.js?v=20"></script>
 </body>
 </html>

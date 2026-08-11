@@ -1,6 +1,7 @@
 /* ---------- base ---------- */
 * { box-sizing: border-box; }
 :root {
+  color-scheme: dark; /* native controls (checkboxes, spinners, default buttons) render dark */
   --bg: #0e131a;
   --panel: #161e28;
   --panel-2: #1c2734;
@@ -337,8 +338,9 @@ span.bonus.done { cursor: default; }
 .status.have { background: #123527; color: var(--ok); }
 .status.need { background: #3a2c10; color: var(--warn); }
 .status.increw { background: #122a35; color: #67c9ee; }
-.crew-row .rm { margin-left: 4px; background: none; border: none; color: var(--muted); font-size: 15px; }
-.crew-row .rm:hover { color: var(--danger); }
+/* remove buttons (✕) — crew rows, party cards, party delete */
+.rm { margin-left: 4px; background: none; border: none; color: var(--muted); font-size: 15px; }
+.rm:hover { color: var(--danger); }
 .crew-row .work-chips { margin-left: auto; }
 
 .cov-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; }
@@ -485,4 +487,55 @@ span.bonus.done { cursor: default; }
 
   /* prevent iOS zoom-on-focus (inputs must be >= 16px) */
   input, select { font-size: 16px; }
+}
+
+/* ---------- undo (top bar) ---------- */
+.undo-wrap { position: relative; display: inline-flex; gap: 2px; }
+.undo-wrap .ghost:disabled { opacity: 0.45; cursor: default; }
+.undo-caret { padding-left: 7px; padding-right: 7px; }
+.undo-panel {
+  position: absolute; right: 0; top: calc(100% + 6px); z-index: 40;
+  min-width: 240px; background: var(--panel-2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 6px; box-shadow: 0 10px 28px rgba(0,0,0,0.45);
+  display: flex; flex-direction: column; gap: 2px;
+}
+.undo-panel[hidden] { display: none; }
+.undo-row {
+  display: flex; justify-content: space-between; gap: 12px; width: 100%;
+  background: none; border: none; border-radius: 7px; padding: 7px 9px;
+  text-align: left; font-size: 13.5px;
+}
+.undo-row:hover { background: #223041; }
+.undo-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.undo-when { color: var(--muted); flex-shrink: 0; }
+.undo-empty, .undo-hint { color: var(--muted); font-size: 12.5px; padding: 6px 9px; }
+.undo-hint { border-top: 1px solid var(--border); margin-top: 2px; }
+
+/* ---------- base display-order buttons ---------- */
+.base-card { position: relative; }
+.base-order { position: absolute; top: 10px; right: 10px; display: flex; gap: 2px; }
+.base-order .ord { padding: 1px 7px; font-size: 12px; line-height: 1.5; }
+.base-order .ord:disabled { opacity: 0.3; cursor: default; }
+.base-card h3 { padding-right: 64px; }
+
+/* ---------- multiple parties ---------- */
+.party-block { margin-bottom: 22px; }
+.party-block-head {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 10px;
+}
+.party-block-head .party-name { max-width: 260px; }
+.reserve-check { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 13.5px; }
+.reserve-check input { accent-color: var(--accent); }
+.party-add-row { margin: 6px 0 14px; }
+
+@media (max-width: 700px) {
+  /* anchored dropdown would overflow the left edge on phones — float it instead */
+  .undo-panel { position: fixed; left: 12px; right: 12px; top: 64px; min-width: 0; }
+}
+
+/* ---------- storage-failure banner ---------- */
+.save-warn {
+  position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 60;
+  background: #3b1f24; border: 1px solid var(--danger); color: #fecaca;
+  border-radius: 10px; padding: 10px 14px; font-size: 14px; text-align: center;
 }

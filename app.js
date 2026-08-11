@@ -1572,6 +1572,11 @@ function openWorkModal(work, base, onChange) {
         palIcon(p),
         el('span', { class: 'pal-id' }, dexLabel(p)),
         el('span', { class: 'pal-name' }, p.name),
+        // while-at-base partner skill, when it has one (desktop only — fills the
+        // middle; the pinned aura row already carries its own flag)
+        p.partner && p.partner.tags.includes('base') && p.name !== auraName
+          ? el('span', { class: 'wm-skill', title: `${p.partner.skill} — ${p.partner.desc}` }, '✦ ' + p.partner.skill)
+          : null,
         // compact level badge — the modal title already names the work; the
         // pinned aura pal may have no own level here (Cinnamoth/Farming)
         (p.works[work] || 0) > 0
@@ -1598,7 +1603,15 @@ function openWorkModal(work, base, onChange) {
         work === 'Farming' && p.ranch
           ? el('span', { class: 'ranch-mini', title: p.ranch.map(i => i.name).join(', ') },
             '→ ' + p.ranch.map(i => i.name).join(', '))
-          : null);
+          : null,
+        // what else this pal can do (desktop only) — secondaries decide ties
+        (() => {
+          const others = sortedWorks(p).filter(([w]) => w !== work).slice(0, 3);
+          return others.length
+            ? el('span', { class: 'wm-others', title: 'Other work suitabilities' },
+              'also: ' + others.map(([w, l]) => `${w} ${l}`).join(' · '))
+            : null;
+        })());
       listWrap.append(el('div', { class: 'pal-row wm-row' + (isOwned(p.name) ? ' owned' : '') }, top, sub));
     }
   }

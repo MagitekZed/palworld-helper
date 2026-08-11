@@ -599,8 +599,20 @@ span.bonus.done { cursor: default; }
    stretch to its widest child instead of clamping children to the row width */
 .wm-row { flex-direction: column; flex-wrap: nowrap; align-items: stretch; gap: 7px; }
 .wm-top { display: flex; align-items: center; gap: 10px; min-width: 0; }
-/* the name is the grower — it pushes + Add to the right edge and ellipsizes when tight */
-.wm-top .pal-name { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.wm-top .pal-name { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+/* desktop: a pseudo spacer pushes the badge + Add to the right edge; scoped
+   >700px because on phones the NAME is the grower (see the media block) */
+@media (min-width: 701px) {
+  .wm-top::after { content: ''; flex: 1; }
+}
+.wm-skill {
+  color: #b28dff; font-size: 12px; white-space: nowrap; cursor: default;
+  flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis;
+}
+.wm-others {
+  margin-left: auto; padding-left: 10px; color: var(--muted); font-size: 11.5px;
+  white-space: nowrap; flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis;
+}
 .wm-sub { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; padding-left: 50px; }
 .wm-pill {
   font-size: 12px; padding: 2px 10px; border-radius: 999px; white-space: nowrap;
@@ -617,8 +629,23 @@ span.bonus.done { cursor: default; }
   .wm-sub { padding-left: 0; }
   .wm-top { gap: 8px; }
   .wm-top .pal-id { display: none; } /* the name needs the room more */
+  .wm-top .pal-name { flex: 1 1 0; } /* phone: the name is the grower */
+  .wm-skill, .wm-others { display: none; } /* desktop-only space fillers */
   .wm-row .add-btn { padding: 6px 10px; }
+
+  /* modal sized to the VISIBLE viewport (dvh tracks the address bar), and the
+     page behind can't scroll while a modal is open */
+  .modal { top: 8px; max-height: calc(100dvh - 16px); }
+
+  /* hard containment: no child may force the page wider than the phone.
+     Real-device fonts render wider than the emulator — pin the elastic bits. */
+  .editor-cols > * { min-width: 0; }
+  .panel { max-width: 100%; }
+  .cap-field input { width: 72px; }
+  .picker-wrap input { width: 100%; min-width: 0; }
+  input, select, button { max-width: 100%; }
 }
+body:has(#modal-root:not([hidden])) { overflow: hidden; }
 
 /* ---------- ⋮ menu (phone topbar) ---------- */
 .menu-wrap { position: relative; }

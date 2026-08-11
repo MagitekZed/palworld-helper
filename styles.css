@@ -77,6 +77,9 @@ main { flex: 1; width: 100%; max-width: 1180px; margin: 0 auto; padding: 18px 22
 .toolbar input[type="search"] { min-width: 220px; flex: 1; }
 .toolbar label.check { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 14px; }
 .toolbar .spacer { flex: 1; }
+.filter-set { display: contents; } /* phones re-lay these out; see the media query */
+.filters-toggle { display: none; }
+.filters-toggle.has-active { color: var(--accent); border-color: var(--accent-dim); }
 .count-pill {
   background: var(--panel-2); border: 1px solid var(--border); border-radius: 999px;
   padding: 5px 14px; font-size: 13px; color: var(--muted); white-space: nowrap;
@@ -145,8 +148,11 @@ main { flex: 1; width: 100%; max-width: 1180px; margin: 0 auto; padding: 18px 22
 
 /* ---------- partner skill ---------- */
 .pskill {
-  color: #b28dff; font-size: 15px; cursor: default; flex-shrink: 0;
+  color: #b28dff; font-size: 15px; flex-shrink: 0;
+  background: none; border: none; padding: 0; /* also used as a tap-toggle button */
 }
+button.pskill { cursor: pointer; }
+button.pskill:hover { color: #d4bfff; }
 .pskill-line {
   flex-basis: 100%; font-size: 12.5px; color: var(--muted);
   padding-top: 4px; border-top: 1px dashed var(--border); margin-top: 2px;
@@ -422,35 +428,64 @@ span.bonus.done { cursor: default; }
 
 /* ================= mobile ================= */
 @media (max-width: 700px) {
-  /* header: non-sticky, brand row then tabs + actions row */
-  .topbar { position: static; padding: 10px 14px; gap: 8px 10px; }
+  /* header: brand row, then ONE row of tabs + compact actions (↶ and ⋮) */
+  .topbar { position: static; padding: 10px 14px; gap: 8px 8px; }
   .brand { flex-basis: 100%; }
   .brand h1 { font-size: 17px; }
   .brand-icon { font-size: 24px; }
-  .tabs { margin-left: 0; }
-  .top-actions { margin-left: auto; }
+  .tabs { margin-left: 0; gap: 5px; }
+  .top-actions { margin-left: auto; gap: 5px; }
+  #btn-export, #btn-import, #btn-undo-hist { display: none; } /* live in the ⋮ menu */
+  .undo-word { display: none; } /* ↶ icon only */
+  #btn-undo { font-size: 16px; padding: 5px 11px; }
+  /* .top-actions prefix out-specifies the base .menu-btn{display:none} */
+  .top-actions .menu-btn { display: block; font-size: 18px; line-height: 1.2; padding: 5px 12px; }
+  #mobile-menu { position: fixed; left: 12px; right: 12px; top: 64px; min-width: 0; }
 
   main { padding: 12px 12px 32px; }
 
-  /* toolbar: search gets its own row; the work panel spans the toolbar */
+  /* toolbar: search on its own row, then [Filters (n) ▾][Sort], then the
+     collapsed filter grid; the work panel still spans the toolbar */
   .toolbar { position: relative; padding: 10px; gap: 8px; }
-  .toolbar input[type="search"] { min-width: 100%; }
-  .count-pill { margin-left: auto; }
+  .toolbar input[type="search"] { min-width: 100%; order: 0; }
+  .filters-toggle { display: block; order: 1; flex: 1 1 0; min-width: 0; padding: 8px 10px; }
+  .toolbar > select { order: 2; flex: 1 1 0; min-width: 0; } /* the sort select */
+  .filter-set { order: 3; display: none; flex-basis: 100%; }
+  .toolbar.filters-open .filter-set {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+  }
+  .filter-set select, .filter-set .multi-btn { width: 100%; }
+  .filter-set .reset-filters { grid-column: 1 / -1; }
+  .toolbar .spacer { display: none; }
+  .count-pill { order: 4; margin-left: auto; }
   .multi-wrap { position: static; }
   .multi-panel { left: 10px; right: 10px; top: 100%; min-width: 0; }
 
-  /* pal rows — exactly two lines:
-     line 1: icon · #dex · name · elements ············ stepper
-     line 2: work chips ····························· quick-add */
-  .pal-row { flex-wrap: wrap; row-gap: 8px; padding: 10px 12px; }
+  /* pal rows — two lines (plus the partner-skill text when toggled):
+     line 1: icon · #dex · name(ellipsis) · tier ✦ ······ stepper
+     line 2: elements · ★5 · work chips ················ quick-add
+     line 3 (optional): full partner-skill text */
+  .pal-row { flex-wrap: wrap; row-gap: 8px; column-gap: 8px; padding: 10px 12px; }
   .pal-row .own-toggle { display: none; } /* the +/- stepper covers own/unown */
   .pal-row .pal-icon { width: 34px; height: 34px; }
   .pal-id { width: auto; min-width: 24px; font-size: 11px; }
+  .pal-row .pal-name { flex: 1 1 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+  .pal-row .cbars { display: none; } /* tier letter carries the grade; bars are noise at this size */
   .pal-row .qty-step { order: 1; margin-left: auto; }
   .pal-row::after { content: ''; order: 2; flex-basis: 100%; height: 0; }
+  .pal-row .chips { order: 3; }
+  .pal-row .chips .el-chip { font-size: 10px; padding: 2px 7px; }
   .pal-row .bonus { order: 3; }
-  .pal-row .work-chips { order: 3; flex: 1 1 0; min-width: 0; margin-left: 0; justify-content: flex-start; }
+  .pal-row .party-chip { order: 3; }
+  /* chips scroll sideways instead of stacking — keeps every row exactly 2 lines */
+  .pal-row .work-chips {
+    order: 3; flex: 1 1 0; min-width: 0; margin-left: 0; justify-content: flex-start;
+    flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px;
+  }
+  .pal-row .work-chips::-webkit-scrollbar { display: none; }
+  .pal-row .work-chips .wchip { font-size: 11px; padding: 2px 7px; }
   .pal-row .qadd-btn { order: 4; margin-left: auto; align-self: flex-start; }
+  .pal-row .pskill-line { order: 5; flex-basis: 100%; }
 
   /* crew / catch rows — two lines:
      line 1: icon · name · status ······················ ✕ / add
@@ -459,7 +494,11 @@ span.bonus.done { cursor: default; }
   .crew-row .rm { order: 1; margin-left: auto; }
   .crew-row::after { content: ''; order: 2; flex-basis: 100%; height: 0; }
   .crew-row .qty-step { order: 3; }
-  .crew-row .work-chips { order: 4; flex: 1 1 0; min-width: 0; margin-left: 0; justify-content: flex-start; }
+  .crew-row .work-chips {
+    order: 4; flex: 1 1 0; min-width: 0; margin-left: 0; justify-content: flex-start;
+    flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none;
+  }
+  .crew-row .work-chips::-webkit-scrollbar { display: none; }
   .crew-row .add-btn { order: 5; margin-left: auto; align-self: center; }
   .crew-row .status { white-space: normal; }
 
@@ -539,3 +578,26 @@ span.bonus.done { cursor: default; }
   background: #3b1f24; border: 1px solid var(--danger); color: #fecaca;
   border-radius: 10px; padding: 10px 14px; font-size: 14px; text-align: center;
 }
+
+/* ---------- first-run / backup banners ---------- */
+.banner { position: relative; margin-bottom: 14px; padding-right: 40px; }
+.banner h3 { margin: 0 0 6px; font-size: 15.5px; }
+.banner .banner-x { position: absolute; top: 10px; right: 10px; }
+.banner .add-btn { margin-left: 4px; }
+
+/* ---------- auto-fill "placed nothing" note ---------- */
+.autofill-note {
+  margin-top: 8px; padding: 8px 11px; border-radius: 8px; font-size: 13px;
+  background: #2b2413; border: 1px solid #5c4d1d; color: #fde68a;
+}
+
+/* ---------- aura row in the work modal ---------- */
+.modal-aura {
+  font-size: 11.5px; padding: 3px 9px; border-radius: 999px; white-space: nowrap;
+  color: #b28dff; background: #241c38; border: 1px solid #4a3a75; cursor: default;
+}
+
+/* ---------- ⋮ menu (phone topbar) ---------- */
+.menu-wrap { position: relative; }
+.menu-btn { display: none; }
+.menu-sep { border-top: 1px solid var(--border); margin: 4px 0; }

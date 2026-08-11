@@ -84,6 +84,8 @@ const LS_BONUS = 'palplanner.bonus5.v1';     // { name: 1 } — 5-catch paldex b
 const LS_PARTY = 'palplanner.party.v1';      // legacy single party — migrated to parties.v1, kept for downgrade safety
 const LS_PARTIES = 'palplanner.parties.v1';  // [{id, name, reserve, members: [{name, nickname, level, stars, passives[4]}]}]
 const LS_PARTY_MEMO = 'palplanner.partymemo.v1'; // { name: last details } — restored on re-add
+const LS_WELCOME = 'palplanner.welcome.v1';   // '1' once the first-run banner is dismissed
+const LS_NUDGE = 'palplanner.backupnudge.v1'; // '1' once the backup nudge is dismissed
 const BONUS_AT = 5; // catching this many of a species earns its paldex bonus (v1.0)
 
 function lsLoad(key, fallback) {
@@ -278,8 +280,15 @@ function warnSaveFailure() {
     '⚠ Changes are NOT being saved — browser storage is blocked or full. Use Export to back up your data.'));
 }
 
+let persistenceAsked = false;
 function persist(label) {
   if (label) pushHistory(label);
+  // first real data write this session: ask the browser to protect the origin's
+  // storage from eviction (covers brand-new users, not just returning ones)
+  if (!persistenceAsked && navigator.storage && navigator.storage.persist) {
+    persistenceAsked = true;
+    navigator.storage.persist().catch(() => { /* advisory only */ });
+  }
   // serialize first, then write; on a mid-sequence failure (quota), roll back
   // the keys already written so storage is never left half old / half new —
   // other tabs adopt whatever lands here via the storage event
@@ -562,9 +571,33 @@ function sortPals(list) {
   return copy;
 }
 
+// one-time dismissible banners (raw localStorage flags, not part of app state)
+const flagSet = k => { try { localStorage.setItem(k, '1'); } catch { /* cosmetic */ } };
+const flagGet = k => { try { return !!localStorage.getItem(k); } catch { return true; } };
+
 function renderRoster() {
   const view = $('#view');
   view.innerHTML = '';
+
+  if (!flagGet(LS_WELCOME) && uniqueOwned() === 0 && !bases.length) {
+    const banner = el('div', { class: 'panel banner' },
+      el('button', { class: 'rm banner-x', title: 'Dismiss', onclick: e => { flagSet(LS_WELCOME); e.target.closest('.banner').remove(); } }, '✕'),
+      el('h3', {}, 'Plan your bases from the pals you actually own'),
+      el('div', { class: 'tips' },
+        'The loop: mark your catches below (the +/− counter tracks copies) → create a base on the Bases tab ' +
+        'and pick its purpose → Auto-fill staffs it from your roster → the Catch list shows exactly what you still need. ' +
+        'Everything saves to this browser only — nothing leaves your device. Export makes a backup file.'));
+    view.append(banner);
+  } else if (!flagGet(LS_NUDGE) && totalCopies() >= 20) {
+    const banner = el('div', { class: 'panel banner' },
+      el('button', { class: 'rm banner-x', title: 'Dismiss', onclick: e => { flagSet(LS_NUDGE); e.target.closest('.banner').remove(); } }, '✕'),
+      el('div', { class: 'tips' },
+        'Your roster lives only in this browser — clearing site data (or Safari after a week of no visits) erases it. ',
+        el('button', {
+          class: 'add-btn', onclick: e => { flagSet(LS_NUDGE); $('#btn-export').click(); e.target.closest('.banner').remove(); }
+        }, 'Download a backup')));
+    view.append(banner);
+  }
 
   const listWrap = el('div', { class: 'pal-list' });
 
@@ -640,6 +673,8 @@ function renderRoster() {
   );
   const hasActiveFilters = () =>
     !!(ui.search || ui.element || ui.works.length || ui.tier || ui.bonus5 || ui.pskill || ui.owned);
+  const activeFilterCount = () =>
+    [ui.search, ui.element, ui.tier, ui.bonus5, ui.pskill, ui.owned].filter(Boolean).length + (ui.works.length ? 1 : 0);
   const resetBtn = el('button', {
     class: 'ghost reset-filters', type: 'button',
     title: 'Clear the search and every filter (sort is kept)',
@@ -651,15 +686,27 @@ function renderRoster() {
   }, 'Reset filters');
   const countPill = el('span', { class: 'count-pill' });
 
-  view.append(
-    el('div', { class: 'toolbar' }, searchInput, elementSel, workSel, tierSel, bonusSel, pskillSel, ownedSel, sortSel,
-      resetBtn, el('span', { class: 'spacer' }), countPill),
-    listWrap
-  );
+  // on phones the six filter selects collapse behind this toggle (CSS-only on
+  // desktop: the toggle is hidden and .filter-set lays out as display:contents)
+  const filtersToggle = el('button', { class: 'ghost filters-toggle', type: 'button' });
+  const toolbar = el('div', { class: 'toolbar' }, searchInput, filtersToggle,
+    el('div', { class: 'filter-set' }, elementSel, workSel, tierSel, bonusSel, pskillSel, ownedSel, resetBtn),
+    sortSel, el('span', { class: 'spacer' }), countPill);
+  const paintToggle = () => {
+    const n = activeFilterCount();
+    filtersToggle.textContent = `Filters${n ? ` (${n})` : ''} ▾`;
+    filtersToggle.classList.toggle('has-active', n > 0);
+  };
+  filtersToggle.addEventListener('click', () => toolbar.classList.toggle('filters-open'));
+  if (hasActiveFilters()) toolbar.classList.add('filters-open'); // don't hide active filters
+
+  view.append(toolbar, listWrap);
   resetBtn.hidden = !hasActiveFilters();
+  paintToggle();
 
   function renderList() {
     resetBtn.hidden = !hasActiveFilters();
+    paintToggle();
     const pals = sortPals(PALS.filter(matchesFilters));
     countPill.innerHTML = '';
     countPill.append('Own ', el('b', {}, String(uniqueOwned())), ` / ${PALS.length}`,
@@ -675,6 +722,17 @@ function renderRoster() {
     for (const p of pals) {
       const owned = isOwned(p.name);
       const row = el('div', { class: 'pal-row' + (owned ? ' owned' : '') });
+      // partner skill: ✦ is a tap-toggle for the full text (tooltips don't
+      // exist on touch); the line auto-shows while the partner-skill filter is on
+      let pskillBtn = '', pskillLine = '';
+      if (p.partner) {
+        pskillLine = el('span', { class: 'pskill-line', ...(ui.pskill ? {} : { hidden: '' }) },
+          el('b', {}, p.partner.skill), ' — ' + p.partner.desc);
+        pskillBtn = el('button', {
+          class: 'pskill', title: `${p.partner.skill} — ${p.partner.desc} (click for details)`,
+          onclick: e => { e.stopPropagation(); pskillLine.hidden = !pskillLine.hidden; }
+        }, '✦');
+      }
       row.append(
         el('input', {
           type: 'checkbox', class: 'own-toggle',
@@ -701,15 +759,12 @@ function renderRoster() {
           if (ui.works.includes(w)) chip.classList.add('hl');
           return chip;
         })),
-        p.partner ? el('span', {
-          class: 'pskill', title: `${p.partner.skill} — ${p.partner.desc}`
-        }, '✦') : '',
+        pskillBtn,
         el('button', {
           class: 'add-btn qadd-btn', title: 'Quick-add to a base',
           onclick: e => quickAddToBase(p, e.target)
         }, '+ base'),
-        ui.pskill && p.partner ? el('span', { class: 'pskill-line' },
-          el('b', {}, p.partner.skill), ' — ' + p.partner.desc) : ''
+        pskillLine
       );
       listWrap.append(row);
     }
@@ -1029,6 +1084,7 @@ function renderBases() {
 }
 
 /* ================= base editor ================= */
+let autofillNote = null; // {baseId, text} — transient "auto-fill placed nothing" explainer
 function renderEditor(view, base) {
   const head = el('div', { class: 'editor-head' },
     el('button', { class: 'ghost', onclick: () => { ui.baseId = null; persistUI(); render(); } }, '← All bases'),
@@ -1170,9 +1226,35 @@ function renderEditor(view, base) {
     crewPanel.append(el('div', { class: 'autofill-row' },
       purposeSel,
       basicsChk,
-      el('button', { class: 'btn', onclick: () => { autofill(base); refresh(); } }, 'Auto-fill from my roster'),
+      el('button', {
+        class: 'btn', onclick: () => {
+          const before = crewTotal(base);
+          autofill(base);
+          if (crewTotal(base) === before) {
+            // name the actual cause: full base / empty roster / no relevant
+            // work among owned pals / everything relevant already claimed
+            const jobs = Object.keys((PRESETS[base.purpose] || PRESETS.balanced).recipe);
+            const anyRelevantOwned = PALS.some(p => isOwned(p.name) && jobs.some(w => (p.works[w] || 0) > 0));
+            autofillNote = {
+              baseId: base.id,
+              text: before >= base.cap
+                ? `This base is already at its max of ${base.cap} workers.`
+                : uniqueOwned() === 0
+                  ? 'Auto-fill only places pals you’ve marked as owned in My Roster — and your roster is empty. Mark your catches first, or add pals by hand (search above, or click a work tile) to build a catch list instead.'
+                  : !anyRelevantOwned
+                    ? `None of your owned pals have the work types this purpose needs (${jobs.slice(0, 3).join(', ')}…). Catch some, or add dream pals by hand to build a catch list.`
+                    : 'Auto-fill added nothing: every owned pal with relevant work is already claimed by a reserve party or another base. Free up copies, catch more, or add pals by hand to build a catch list.'
+            };
+          }
+          refresh();
+        }
+      }, 'Auto-fill from my roster'),
       el('button', { class: 'ghost', onclick: () => { base.crew = []; persist(`Clear crew — ${base.name}`); refresh(); } }, 'Clear crew')
     ));
+    if (autofillNote && autofillNote.baseId === base.id) {
+      crewPanel.append(el('div', { class: 'autofill-note' }, autofillNote.text));
+      autofillNote = null; // shows once; the next rebuild clears it
+    }
     if (base.purpose !== 'balanced') {
       const auras = auraStatus(base, PRESETS[base.purpose].recipe);
       if (auras.length) {
@@ -1460,10 +1542,15 @@ function openWorkModal(work, base, onChange) {
 
   function renderList() {
     listWrap.innerHTML = '';
+    // the aura pal for this work (+1 to every OTHER pal at the base) is pinned
+    // to the top — its own low level undersells what it adds to the whole crew
+    const auraName = AURA_BY_WORK[work];
     const candidates = PALS
-      .filter(p => (p.works[work] || 0) > 0 && (!ownedOnly || isOwned(p.name)))
+      .filter(p => (p.works[work] || 0) > 0 && p.name !== auraName && (!ownedOnly || isOwned(p.name)))
       .sort((a, b) => (b.works[work] - a.works[work]) || (totalLevels(b) - totalLevels(a)))
       .slice(0, 25);
+    const auraPal = auraName && (!ownedOnly || isOwned(auraName)) ? byName.get(auraName) : null;
+    if (auraPal) candidates.unshift(auraPal);
     if (!candidates.length) {
       listWrap.append(el('div', { class: 'empty-note' }, `You don't own any pal with ${work} yet.`));
       return;
@@ -1476,7 +1563,14 @@ function openWorkModal(work, base, onChange) {
         el('span', { class: 'pal-id' }, dexLabel(p)),
         el('span', { class: 'pal-name' }, p.name),
         isNight(p) ? el('span', { class: 'night', title: 'Works through the night' }, '🌙') : null,
-        el('span', { class: `wchip lv${p.works[work]}` }, `${work} `, el('b', {}, String(p.works[work]))),
+        // the pinned aura pal may have no own level in this work (Cinnamoth/Farming)
+        (p.works[work] || 0) > 0
+          ? el('span', { class: `wchip lv${p.works[work]}` }, `${work} `, el('b', {}, String(p.works[work])))
+          : null,
+        p.name === auraName ? el('span', {
+          class: 'aura-flag modal-aura',
+          title: `${p.partner.skill} — +1 ${work} for every OTHER pal at this base (does not stack). Its own level undersells it: one of these lifts the whole crew.`
+        }, '✦ +1 to all others') : null,
         foodChip(p),
         work === 'Farming' && p.ranch
           ? el('span', { class: 'ranch-mini', title: p.ranch.map(i => i.name).join(', ') },
@@ -1598,28 +1692,55 @@ function timeAgo(at) {
   const s = Math.round((Date.now() - at) / 1000);
   return s < 5 ? 'just now' : s < 60 ? `${s}s ago` : s < 3600 ? `${Math.round(s / 60)}m ago` : `${Math.round(s / 3600)}h ago`;
 }
+function historyRows(panel) {
+  if (!history.length) {
+    panel.append(el('div', { class: 'undo-empty' }, 'No changes to undo yet.'));
+    return;
+  }
+  [...history].reverse().forEach(h => {
+    // resolve the entry's index at CLICK time — the list may have shifted
+    // (HISTORY_MAX eviction) while this panel sat open
+    panel.append(el('button', {
+      class: 'undo-row', onclick: () => {
+        panel.hidden = true;
+        const i = history.indexOf(h);
+        if (i !== -1) undoTo(i);
+      }
+    },
+      el('span', { class: 'undo-label' }, h.label),
+      el('span', { class: 'undo-when' }, timeAgo(h.at))));
+  });
+  panel.append(el('div', { class: 'undo-hint' }, 'Click an entry to undo it and everything after it.'));
+}
 function paintUndo() {
   const last = history[history.length - 1];
   undoBtn.disabled = !last;
   undoBtn.title = last ? `Undo: ${last.label}` : 'Nothing to undo yet (tracks your last 5 changes, this tab only)';
   undoHistBtn.disabled = !last;
   undoPanel.innerHTML = '';
-  if (!history.length) {
-    undoPanel.append(el('div', { class: 'undo-empty' }, 'No changes yet.'));
-    return;
-  }
-  [...history].reverse().forEach((h, ri) => {
-    const i = history.length - 1 - ri;
-    undoPanel.append(el('button', { class: 'undo-row', onclick: () => { undoPanel.hidden = true; undoTo(i); } },
-      el('span', { class: 'undo-label' }, h.label),
-      el('span', { class: 'undo-when' }, timeAgo(h.at))));
-  });
-  undoPanel.append(el('div', { class: 'undo-hint' }, 'Click an entry to undo it and everything after it.'));
+  historyRows(undoPanel);
 }
 undoBtn.addEventListener('click', () => { undoPanel.hidden = true; undoTo(history.length - 1); });
 undoHistBtn.addEventListener('click', () => { paintUndo(); undoPanel.hidden = !undoPanel.hidden; });
+
+/* the phone topbar collapses history/export/import behind a ⋮ menu */
+const menuBtn = $('#btn-menu');
+const menuPanel = $('#mobile-menu');
+menuBtn.addEventListener('click', () => {
+  if (!menuPanel.hidden) { menuPanel.hidden = true; return; }
+  menuPanel.innerHTML = '';
+  historyRows(menuPanel);
+  menuPanel.append(
+    el('div', { class: 'menu-sep' }),
+    el('button', { class: 'undo-row', onclick: () => { menuPanel.hidden = true; $('#btn-export').click(); } },
+      el('span', { class: 'undo-label' }, 'Export backup')),
+    el('button', { class: 'undo-row', onclick: () => { menuPanel.hidden = true; $('#btn-import').click(); } },
+      el('span', { class: 'undo-label' }, 'Import backup')));
+  menuPanel.hidden = false;
+});
 document.addEventListener('mousedown', e => {
   if (!undoPanel.hidden && !undoPanel.contains(e.target) && e.target !== undoHistBtn) undoPanel.hidden = true;
+  if (!menuPanel.hidden && !menuPanel.contains(e.target) && e.target !== menuBtn) menuPanel.hidden = true;
 });
 
 /* ================= multi-tab sync =================
@@ -1640,9 +1761,16 @@ function applyExternalChange() {
   render();
 }
 window.addEventListener('storage', e => {
-  if (e.key !== null && (!e.key.startsWith('palplanner.') || e.key === LS_UI)) return;
+  // only actual data keys — not ui state, not banner-dismiss flags
+  if (e.key !== null && !DATA_KEYS.includes(e.key)) return;
   applyExternalChange();
 });
 
 paintUndo();
 render();
+
+// ask the browser not to evict this origin's storage (Safari clears unvisited
+// sites after ~7 days otherwise); best-effort, needs no permission prompt
+if ((uniqueOwned() || bases.length) && navigator.storage && navigator.storage.persist) {
+  navigator.storage.persist().catch(() => { /* advisory only */ });
+}

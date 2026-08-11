@@ -9,6 +9,10 @@ with purpose-driven auto-fill and see exactly which pals you still need to catch
 No build step, no dependencies, no accounts — plain HTML/CSS/JS. Everything saves to
 your browser's localStorage, with JSON Export/Import for backups.
 
+**No ads, no tracking, no sign-up, nothing to install.** The app makes zero network
+requests after the page loads — all 298 pals, their stats, and every icon ship with it.
+Your roster never leaves your browser, and it works offline once loaded.
+
 ## Palpedia tracker
 
 - **Full v1.0 paldex** — 298 obtainable pals (287 numbered + Terraria-collab pals) with the
@@ -119,6 +123,14 @@ Serve the folder from any static server (or just open `index.html`):
 ```
 python -m http.server 8123
 ```
+
+## Feedback
+
+Found a wrong number, a missing pal, or something that breaks? Open an
+[issue](https://github.com/MagitekZed/palworld-helper/issues) — bug reports and
+corrections to the game data are both welcome. The derived numbers (combat tiers, farm
+sizing) are tuned from play experience, so real numbers from your own bases are useful
+too.
 
 ## Legal
 

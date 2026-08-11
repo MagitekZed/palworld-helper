@@ -1,3 +1,11 @@
 __pycache__/
 .DS_Store
 Thumbs.db
+
+# Personal working notes. Contains third-party guide content (YouTube transcripts,
+# community wikis) synthesized for private reference only — not ours to republish.
+notes/
+Temp/
+
+# Local dev/assistant config
+.claude/

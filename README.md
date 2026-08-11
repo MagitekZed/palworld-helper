@@ -120,8 +120,9 @@ All game data lives in [`data/`](data/) (JSON + CSV) and is embedded in the app 
 - Partner skills with trigger-phrase tags (paldb.cc, 2026-07-26)
 
 See [`data/README.md`](data/README.md) for scrape details, caveats, and cross-checks.
-Pal and item icons are self-hosted in [`icons/`](icons/) (originally obtained via
-paldb.cc's mirrors of the game assets) so the app puts no load on paldb.cc.
+Pal, item, and work-suitability icons are self-hosted in [`icons/`](icons/)
+(originally obtained via paldb.cc's mirrors of the game assets) so the app puts no
+load on paldb.cc.
 
 ## Running locally
 

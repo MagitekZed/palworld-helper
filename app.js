@@ -409,6 +409,10 @@ const baseShortfall = base => base.crew.reduce((s, e) => s + shortfallOf(base, e
 const crewFood = base => base.crew.reduce((s, e) => s + ((byName.get(e.name) || {}).food || 0) * e.qty, 0);
 const FOOD_TIP = 'Combined Food stat of this crew (higher = hunger drains faster, so the base needs more berry plots / feed)';
 
+// in-game work suitability icons (self-hosted in icons/work/, via paldb)
+const WORK_ICON = Object.fromEntries(WORKS.map(w =>
+  [w, 'icons/work/' + w.toLowerCase().replace(/ /g, '-') + '.webp']));
+
 const isNight = p => p.elements.includes('Dark');
 const dexLabel = p => p.paldex ? '#' + p.paldex : '★';
 const totalLevels = p => Object.values(p.works).reduce((a, b) => a + b, 0);
@@ -937,7 +941,11 @@ function partyBlock(pt, pi) {
     card.append(el('div', { class: 'party-row party-works' }, sortedWorks(p).map(([w, l]) => workChip(w, l, p))));
     if (short) {
       card.append(el('div', { class: 'party-warn' },
-        `⚠ You own ${copiesOf(m.name)} but ${partyCount(m.name)} are in the party — catch another or remove one.`));
+        `⚠ You own ${copiesOf(m.name)} but ${partyCount(m.name)} are in the party — `,
+        el('button', {
+          class: 'add-btn', title: 'Adds a copy to your roster',
+          onclick: () => { setCopies(m.name, copiesOf(m.name) + 1, `Roster: ${m.name}`); renderHeaderStats(); render(); }
+        }, 'Caught one!')));
     }
     return card;
   }
@@ -1577,11 +1585,6 @@ function openWorkModal(work, base, onChange) {
         p.partner && p.partner.tags.includes('base') && p.name !== auraName
           ? el('span', { class: 'wm-skill', title: `${p.partner.skill} — ${p.partner.desc}` }, '✦ ' + p.partner.skill)
           : null,
-        // compact level badge — the modal title already names the work; the
-        // pinned aura pal may have no own level here (Cinnamoth/Farming)
-        (p.works[work] || 0) > 0
-          ? el('span', { class: `lv-badge lv${p.works[work]}`, title: `${work} ${p.works[work]}` }, el('b', {}, String(p.works[work])))
-          : null,
         el('button', {
           class: 'add-btn',
           onclick: () => {
@@ -1604,12 +1607,18 @@ function openWorkModal(work, base, onChange) {
           ? el('span', { class: 'ranch-mini', title: p.ranch.map(i => i.name).join(', ') },
             '→ ' + p.ranch.map(i => i.name).join(', '))
           : null,
-        // what else this pal can do (desktop only) — secondaries decide ties
+        // every work suitability as an in-game icon chip; the modal's work
+        // leads the strip and is featured
         (() => {
-          const others = sortedWorks(p).filter(([w]) => w !== work).slice(0, 3);
-          return others.length
-            ? el('span', { class: 'wm-others', title: 'Other work suitabilities' },
-              'also: ' + others.map(([w, l]) => `${w} ${l}`).join(' · '))
+          const entries = sortedWorks(p);
+          const featured = entries.filter(([w]) => w === work);
+          const rest = entries.filter(([w]) => w !== work);
+          const chip = ([w, l], feat) => el('span', {
+            class: `wk-chip lv${l}` + (feat ? ' feat' : ''), title: `${w} ${l}`
+          }, el('img', { src: WORK_ICON[w], alt: w, loading: 'lazy' }), el('b', {}, String(l)));
+          return entries.length
+            ? el('span', { class: 'wk-strip' },
+              featured.map(e => chip(e, true)), rest.map(e => chip(e, false)))
             : null;
         })());
       listWrap.append(el('div', { class: 'pal-row wm-row' + (isOwned(p.name) ? ' owned' : '') }, top, sub));

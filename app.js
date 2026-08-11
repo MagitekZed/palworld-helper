@@ -1555,42 +1555,51 @@ function openWorkModal(work, base, onChange) {
       listWrap.append(el('div', { class: 'empty-note' }, `You don't own any pal with ${work} yet.`));
       return;
     }
+    // two normalized lines per row:
+    //   line 1: identity + work level + food ················· + Add
+    //   line 2: ownership pill · in-crew pill · aura pill · ranch produce
     for (const p of candidates) {
-      const crewChip = el('span', { class: 'status increw', ...(crewQty(base, p.name) ? {} : { hidden: '' }) },
+      const crewChip = el('span', { class: 'wm-pill increw', ...(crewQty(base, p.name) ? {} : { hidden: '' }) },
         `in crew ×${crewQty(base, p.name)}`);
-      listWrap.append(el('div', { class: 'pal-row' + (isOwned(p.name) ? ' owned' : '') },
+      const statusText = () => `Owned ×${copiesOf(p.name)} · ${globalFree(p.name)} free`;
+      const statusPill = isOwned(p.name)
+        ? el('span', {
+          class: 'wm-pill have',
+          title: 'Copies you own · copies not already claimed by a reserve party or a base crew'
+        }, statusText())
+        : el('span', { class: 'wm-pill need' }, 'Not owned');
+      const top = el('div', { class: 'wm-top' },
         palIcon(p),
         el('span', { class: 'pal-id' }, dexLabel(p)),
         el('span', { class: 'pal-name' }, p.name),
-        isNight(p) ? el('span', { class: 'night', title: 'Works through the night' }, '🌙') : null,
-        // the pinned aura pal may have no own level in this work (Cinnamoth/Farming)
+        // compact level badge — the modal title already names the work; the
+        // pinned aura pal may have no own level here (Cinnamoth/Farming)
         (p.works[work] || 0) > 0
-          ? el('span', { class: `wchip lv${p.works[work]}` }, `${work} `, el('b', {}, String(p.works[work])))
+          ? el('span', { class: `lv-badge lv${p.works[work]}`, title: `${work} ${p.works[work]}` }, el('b', {}, String(p.works[work])))
           : null,
-        p.name === auraName ? el('span', {
-          class: 'aura-flag modal-aura',
-          title: `${p.partner.skill} — +1 ${work} for every OTHER pal at this base (does not stack). Its own level undersells it: one of these lifts the whole crew.`
-        }, '✦ +1 to all others') : null,
-        foodChip(p),
-        work === 'Farming' && p.ranch
-          ? el('span', { class: 'ranch-mini', title: p.ranch.map(i => i.name).join(', ') },
-            '→ ' + p.ranch.map(i => i.name).join(', '))
-          : null,
-        isOwned(p.name)
-          ? el('span', { class: 'status have' },
-            `owned ×${copiesOf(p.name)}` + (globalFree(p.name) < copiesOf(p.name) ? ` · ${globalFree(p.name)} free` : ''))
-          : el('span', { class: 'status need' }, 'not owned'),
-        crewChip,
-        el('span', { class: 'spacer', style: 'flex:1' }),
         el('button', {
           class: 'add-btn',
           onclick: () => {
             addToCrew(base, p.name, 1); persist(`Add ${p.name}`); onChange();
             crewChip.hidden = false;
             crewChip.textContent = `in crew ×${crewQty(base, p.name)}`;
+            if (isOwned(p.name)) statusPill.textContent = statusText();
           }
-        }, '+ Add')
-      ));
+        }, '+ Add'));
+      const sub = el('div', { class: 'wm-sub' },
+        statusPill,
+        crewChip,
+        isNight(p) ? el('span', { class: 'night', title: 'Dark-type: works through the night' }, '🌙') : null,
+        foodChip(p),
+        p.name === auraName ? el('span', {
+          class: 'aura-flag modal-aura',
+          title: `${p.partner.skill} — +1 ${work} for every OTHER pal at this base (does not stack). Its own level undersells it: one of these lifts the whole crew.`
+        }, '✦ +1 to all others') : null,
+        work === 'Farming' && p.ranch
+          ? el('span', { class: 'ranch-mini', title: p.ranch.map(i => i.name).join(', ') },
+            '→ ' + p.ranch.map(i => i.name).join(', '))
+          : null);
+      listWrap.append(el('div', { class: 'pal-row wm-row' + (isOwned(p.name) ? ' owned' : '') }, top, sub));
     }
   }
   renderList();

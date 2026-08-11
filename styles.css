@@ -594,10 +594,30 @@ span.bonus.done { cursor: default; }
   background: #2b2413; border: 1px solid #5c4d1d; color: #fde68a;
 }
 
-/* ---------- aura row in the work modal ---------- */
+/* ---------- work modal rows: two normalized lines ---------- */
+/* nowrap matters: the mobile .pal-row wrap rule would let a column flex line
+   stretch to its widest child instead of clamping children to the row width */
+.wm-row { flex-direction: column; flex-wrap: nowrap; align-items: stretch; gap: 7px; }
+.wm-top { display: flex; align-items: center; gap: 10px; min-width: 0; }
+/* the name is the grower — it pushes + Add to the right edge and ellipsizes when tight */
+.wm-top .pal-name { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.wm-sub { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; padding-left: 50px; }
+.wm-pill {
+  font-size: 12px; padding: 2px 10px; border-radius: 999px; white-space: nowrap;
+  background: var(--panel-2); border: 1px solid var(--border); color: var(--muted); cursor: default;
+}
+.wm-pill.have { background: #14211f; border-color: #2b584d; color: #7fd8b0; }
+.wm-pill.need { background: #251d10; border-color: #5c4d1d; color: var(--warn); }
+.wm-pill.increw { background: #10201d; border-color: var(--accent-dim); color: var(--accent); }
 .modal-aura {
   font-size: 11.5px; padding: 3px 9px; border-radius: 999px; white-space: nowrap;
   color: #b28dff; background: #241c38; border: 1px solid #4a3a75; cursor: default;
+}
+@media (max-width: 700px) {
+  .wm-sub { padding-left: 0; }
+  .wm-top { gap: 8px; }
+  .wm-top .pal-id { display: none; } /* the name needs the room more */
+  .wm-row .add-btn { padding: 6px 10px; }
 }
 
 /* ---------- ⋮ menu (phone topbar) ---------- */

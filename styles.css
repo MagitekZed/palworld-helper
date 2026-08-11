@@ -457,7 +457,8 @@ span.bonus.done { cursor: default; }
   .filter-set select, .filter-set .multi-btn { width: 100%; }
   .filter-set .reset-filters { grid-column: 1 / -1; }
   .toolbar .spacer { display: none; }
-  .count-pill { order: 4; margin-left: auto; }
+  /* the Own-count gets its own full-width third row so Filters + Sort aren't cramped */
+  .count-pill { order: 4; flex-basis: 100%; text-align: center; margin-left: 0; }
   .multi-wrap { position: static; }
   .multi-panel { left: 10px; right: 10px; top: 100%; min-width: 0; }
 
@@ -583,6 +584,8 @@ span.bonus.done { cursor: default; }
 .banner { position: relative; margin-bottom: 14px; padding-right: 40px; }
 .banner h3 { margin: 0 0 6px; font-size: 15.5px; }
 .banner .banner-x { position: absolute; top: 10px; right: 10px; }
+/* single-line banner: center the ✕ on the text line instead of superscripting it */
+.banner-slim .banner-x { top: 50%; transform: translateY(-50%); }
 .banner .add-btn { margin-left: 4px; }
 
 /* ---------- auto-fill "placed nothing" note ---------- */

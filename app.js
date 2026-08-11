@@ -589,7 +589,7 @@ function renderRoster() {
         'Everything saves to this browser only — nothing leaves your device. Export makes a backup file.'));
     view.append(banner);
   } else if (!flagGet(LS_NUDGE) && totalCopies() >= 20) {
-    const banner = el('div', { class: 'panel banner' },
+    const banner = el('div', { class: 'panel banner banner-slim' },
       el('button', { class: 'rm banner-x', title: 'Dismiss', onclick: e => { flagSet(LS_NUDGE); e.target.closest('.banner').remove(); } }, '✕'),
       el('div', { class: 'tips' },
         'Your roster lives only in this browser — clearing site data (or Safari after a week of no visits) erases it. ',

@@ -1580,6 +1580,11 @@ function openWorkModal(work, base, onChange) {
         palIcon(p),
         el('span', { class: 'pal-id' }, dexLabel(p)),
         el('span', { class: 'pal-name' }, p.name),
+        // the aura flag sits on the top line so every row is exactly two lines
+        p.name === auraName ? el('span', {
+          class: 'aura-flag modal-aura',
+          title: `${p.partner.skill} — +1 ${work} for every OTHER pal at this base (does not stack). Its own level undersells it: one of these lifts the whole crew.`
+        }, '✦ +1 to all others') : null,
         // while-at-base partner skill, when it has one (desktop only — fills the
         // middle; the pinned aura row already carries its own flag)
         p.partner && p.partner.tags.includes('base') && p.name !== auraName
@@ -1599,10 +1604,6 @@ function openWorkModal(work, base, onChange) {
         crewChip,
         isNight(p) ? el('span', { class: 'night', title: 'Dark-type: works through the night' }, '🌙') : null,
         foodChip(p),
-        p.name === auraName ? el('span', {
-          class: 'aura-flag modal-aura',
-          title: `${p.partner.skill} — +1 ${work} for every OTHER pal at this base (does not stack). Its own level undersells it: one of these lifts the whole crew.`
-        }, '✦ +1 to all others') : null,
         work === 'Farming' && p.ranch
           ? el('span', { class: 'ranch-mini', title: p.ranch.map(i => i.name).join(', ') },
             '→ ' + p.ranch.map(i => i.name).join(', '))

@@ -600,11 +600,7 @@ span.bonus.done { cursor: default; }
 .wm-row { flex-direction: column; flex-wrap: nowrap; align-items: stretch; gap: 7px; }
 .wm-top { display: flex; align-items: center; gap: 10px; min-width: 0; }
 .wm-top .pal-name { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
-/* desktop: a pseudo spacer pushes the badge + Add to the right edge; scoped
-   >700px because on phones the NAME is the grower (see the media block) */
-@media (min-width: 701px) {
-  .wm-top::after { content: ''; flex: 1; }
-}
+.wm-top .modal-aura { flex-shrink: 0; }
 .wm-skill {
   color: #b28dff; font-size: 12px; white-space: nowrap; cursor: default;
   flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis;
@@ -642,7 +638,7 @@ span.bonus.done { cursor: default; }
   .wm-top .pal-id { display: none; } /* the name needs the room more */
   .wm-top .pal-name { flex: 1 1 0; } /* phone: the name is the grower */
   .wm-skill { display: none; } /* desktop-only space filler */
-  .wk-strip { margin-left: 0; padding-left: 0; justify-content: flex-start; flex-basis: 100%; }
+  .wk-strip { padding-left: 8px; } /* stays right-aligned on the pills row */
   .wm-row .add-btn { padding: 6px 10px; }
 
   /* modal sized to the VISIBLE viewport (dvh tracks the address bar), and the
